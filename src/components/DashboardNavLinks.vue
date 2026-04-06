@@ -12,23 +12,24 @@ const myroutes = router.getRoutes().find((route) => route.name === 'HomeViewLayo
     <div class="h-16 flex items-center px-6 border-b border-gray-200 bg-red-200">
       <h2>Logo</h2>
     </div>
-    <div class="mt-16">
+    <div class="">
       <aside class="shrink-0 z-50 bg-transparent transition-all duration-300">
         <div class="">
           <!-- Navigation -->
-          <div class="flex flex-col gap-4">
-            <nav class="flex flex-col gap-2">
+          <div class="flex flex-col">
+            <nav class="flex-1 px-4 py-6 space-y-1">
               <router-link
                 v-for="route in myroutes"
                 :key="route.path"
                 :to="route.path"
                 v-slot="{ isActive }"
+                class="flex items-center"
               >
                 <div
-                  class="grid grid-cols-[30px_1fr] transition-all duration-300 p-4 rounded-lg text-gray-400"
+                  class="w-full flex gap-3 px-4 py-3 rounded-lg transition-colors duration-200"
                   :class="
                     isActive
-                      ? 'bg-sidebar-active text-primary-text font-semibold '
+                      ? 'bg-sidebar-active text-primary-text-active font-bold '
                       : 'hover:bg-[#c3ddff]'
                   "
                 >
@@ -37,7 +38,9 @@ const myroutes = router.getRoutes().find((route) => route.name === 'HomeViewLayo
                     class="shrink-0"
                     :class="isActive ? 'text-[#155DFC]' : 'text-[#364153]'"
                   />
-                  <span class="text-sm font-medium">{{ route.name }}</span>
+                  <span class="text-sm" :class="isActive ? 'font-bold ' : ''">{{
+                    route.name
+                  }}</span>
                 </div>
               </router-link>
             </nav>
@@ -48,11 +51,6 @@ const myroutes = router.getRoutes().find((route) => route.name === 'HomeViewLayo
   </div>
 </template>
 
-<style scoped>
-@import url(https://fonts.googleapis.com/css?family=Pacifico:regular);
-.logo {
-  font-family: Pacifico;
-}
-</style>
+<style scoped></style>
 
 <!-- :class="hoveredCardId === card.id ? 'bg-[#4E5257]' : 'bg-[#EBE8E8]'" -->
