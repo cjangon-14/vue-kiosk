@@ -29,16 +29,16 @@ const myroutes = router.getRoutes().find((route) => route.name === 'HomeViewLayo
                   class="w-full flex gap-3 px-4 py-3 rounded-lg transition-colors duration-200"
                   :class="
                     isActive
-                      ? 'bg-sidebar-active text-primary-text-active font-bold '
-                      : 'hover:bg-[#c3ddff]'
+                      ? 'bg-sidebar-active text-primary-text-active font-bold hover:bg-[#d7e8fd] '
+                      : 'hover:bg-gray-100'
                   "
                 >
                   <DynamicIcons
                     :name="route.meta.icon"
                     class="shrink-0"
-                    :class="isActive ? 'text-[#155DFC]' : 'text-[#364153]'"
+                    :class="isActive ? 'text-[#155DFC]' : 'text-primary-text'"
                   />
-                  <span class="text-sm" :class="isActive ? 'font-bold ' : ''">{{
+                  <span class="text-sm" :class="isActive ? 'font-bold ' : 'font-primary-text'">{{
                     route.name
                   }}</span>
                 </div>
