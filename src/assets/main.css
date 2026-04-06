@@ -1,0 +1,18 @@
+@import url(https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
+@import url(https://fonts.googleapis.com/css?family=Kumbh+Sans:100,200,300,regular,500,600,700,800,900);
+@import 'tailwindcss';
+
+@theme {
+  --color-primary-background: #;
+  --color-secondary-background: #;
+  --color-tertiary-background: #;
+  --color-primary-text: #364153;
+  --color-sidebar-active: #eff6ff;
+  --color-sidebar-hover: #fffff;
+  --font-kumbhsans: 'Kumbh Sans', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+}
+
+* {
+  font-family: var(--font-inter);
+}
