@@ -1,39 +1,262 @@
 {
   "stores": [
     {
-      "id": 1,
-      "name": "McDo",
+      "id": "1",
+      "name": "Downtown Store",
+      "kiosksCount": 5,
+      "adminsCount": 3,
       "status": "active",
-      "created_at": "2026-04-06"
-    }
-  ],
-  "users": [
-    {
-      "id": 1,
-      "first_name": "John",
-      "last_name": "Doe",
-      "email": "admin@mail.com",
-      "password": "123456",
-      "role": "super_admin",
-      "store_id": null
+      "lastActivity": "2 hours ago"
     },
     {
-      "id": 2,
-      "first_name": "Jane",
-      "last_name": "Smith",
-      "email": "store@mail.com",
-      "password": "123456",
-      "role": "store_admin",
-      "store_id": 1
+      "id": "2",
+      "name": "Mall Plaza",
+      "kiosksCount": 8,
+      "adminsCount": 4,
+      "status": "active",
+      "lastActivity": "30 minutes ago"
+    },
+    {
+      "id": "3",
+      "name": "Airport Terminal",
+      "kiosksCount": 12,
+      "adminsCount": 6,
+      "status": "active",
+      "lastActivity": "1 hour ago"
+    },
+    {
+      "id": "4",
+      "name": "Shopping Center",
+      "kiosksCount": 6,
+      "adminsCount": 2,
+      "status": "active",
+      "lastActivity": "5 hours ago"
+    },
+    {
+      "id": "5",
+      "name": "Train Station",
+      "kiosksCount": 4,
+      "adminsCount": 2,
+      "status": "inactive",
+      "lastActivity": "2 days ago"
     }
   ],
-  "kiosks": [
+  "admins": {
+    "1": [
+      {
+        "id": "1",
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "2",
+        "firstName": "Jane",
+        "lastName": "Smith",
+        "email": "jane.smith@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "3",
+        "firstName": "Bob",
+        "lastName": "Johnson",
+        "email": "bob.johnson@example.com",
+        "role": "Admin"
+      }
+    ],
+    "2": [
+      {
+        "id": "4",
+        "firstName": "Alice",
+        "lastName": "Williams",
+        "email": "alice.w@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "5",
+        "firstName": "Charlie",
+        "lastName": "Brown",
+        "email": "charlie.b@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "6",
+        "firstName": "Diana",
+        "lastName": "Davis",
+        "email": "diana.d@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "7",
+        "firstName": "Eve",
+        "lastName": "Miller",
+        "email": "eve.m@example.com",
+        "role": "Admin"
+      }
+    ],
+    "3": [
+      {
+        "id": "8",
+        "firstName": "Frank",
+        "lastName": "Wilson",
+        "email": "frank.w@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "9",
+        "firstName": "Grace",
+        "lastName": "Taylor",
+        "email": "grace.t@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "10",
+        "firstName": "Henry",
+        "lastName": "Anderson",
+        "email": "henry.a@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "11",
+        "firstName": "Ivy",
+        "lastName": "Thomas",
+        "email": "ivy.t@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "12",
+        "firstName": "Jack",
+        "lastName": "Moore",
+        "email": "jack.m@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "13",
+        "firstName": "Kate",
+        "lastName": "Martin",
+        "email": "kate.m@example.com",
+        "role": "Admin"
+      }
+    ],
+    "4": [
+      {
+        "id": "14",
+        "firstName": "Leo",
+        "lastName": "Garcia",
+        "email": "leo.g@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "15",
+        "firstName": "Mia",
+        "lastName": "Rodriguez",
+        "email": "mia.r@example.com",
+        "role": "Admin"
+      }
+    ],
+    "5": [
+      {
+        "id": "16",
+        "firstName": "Noah",
+        "lastName": "Martinez",
+        "email": "noah.m@example.com",
+        "role": "Admin"
+      },
+      {
+        "id": "17",
+        "firstName": "Olivia",
+        "lastName": "Hernandez",
+        "email": "olivia.h@example.com",
+        "role": "Admin"
+      }
+    ]
+  },
+
+  "kiosks": {
+    "1": [
+      { "id": "1", "kioskNumber": "K-001", "status": "active", "lastUpdated": "5 minutes ago" },
+      { "id": "2", "kioskNumber": "K-002", "status": "active", "lastUpdated": "10 minutes ago" },
+      { "id": "3", "kioskNumber": "K-003", "status": "offline", "lastUpdated": "2 hours ago" },
+      { "id": "4", "kioskNumber": "K-004", "status": "active", "lastUpdated": "1 minute ago" },
+      { "id": "5", "kioskNumber": "K-005", "status": "maintenance", "lastUpdated": "1 day ago" }
+    ],
+    "2": [
+      { "id": "6", "kioskNumber": "K-006", "status": "active", "lastUpdated": "3 minutes ago" },
+      { "id": "7", "kioskNumber": "K-007", "status": "active", "lastUpdated": "7 minutes ago" },
+      { "id": "8", "kioskNumber": "K-008", "status": "active", "lastUpdated": "15 minutes ago" },
+      { "id": "9", "kioskNumber": "K-009", "status": "active", "lastUpdated": "20 minutes ago" },
+      { "id": "10", "kioskNumber": "K-010", "status": "offline", "lastUpdated": "3 hours ago" },
+      { "id": "11", "kioskNumber": "K-011", "status": "active", "lastUpdated": "5 minutes ago" },
+      { "id": "12", "kioskNumber": "K-012", "status": "active", "lastUpdated": "8 minutes ago" },
+      { "id": "13", "kioskNumber": "K-013", "status": "active", "lastUpdated": "12 minutes ago" }
+    ],
+    "3": [
+      { "id": "14", "kioskNumber": "K-014", "status": "active", "lastUpdated": "2 minutes ago" },
+      { "id": "15", "kioskNumber": "K-015", "status": "active", "lastUpdated": "4 minutes ago" },
+      { "id": "16", "kioskNumber": "K-016", "status": "active", "lastUpdated": "6 minutes ago" },
+      { "id": "17", "kioskNumber": "K-017", "status": "active", "lastUpdated": "8 minutes ago" },
+      { "id": "18", "kioskNumber": "K-018", "status": "active", "lastUpdated": "10 minutes ago" },
+      { "id": "19", "kioskNumber": "K-019", "status": "active", "lastUpdated": "12 minutes ago" },
+      { "id": "20", "kioskNumber": "K-020", "status": "offline", "lastUpdated": "1 hour ago" },
+      { "id": "21", "kioskNumber": "K-021", "status": "active", "lastUpdated": "14 minutes ago" },
+      { "id": "22", "kioskNumber": "K-022", "status": "active", "lastUpdated": "16 minutes ago" },
+      { "id": "23", "kioskNumber": "K-023", "status": "maintenance", "lastUpdated": "5 hours ago" },
+      { "id": "24", "kioskNumber": "K-024", "status": "active", "lastUpdated": "18 minutes ago" },
+      { "id": "25", "kioskNumber": "K-025", "status": "active", "lastUpdated": "20 minutes ago" }
+    ],
+    "4": [
+      { "id": "26", "kioskNumber": "K-026", "status": "active", "lastUpdated": "1 minute ago" },
+      { "id": "27", "kioskNumber": "K-027", "status": "active", "lastUpdated": "3 minutes ago" },
+      { "id": "28", "kioskNumber": "K-028", "status": "active", "lastUpdated": "5 minutes ago" },
+      { "id": "29", "kioskNumber": "K-029", "status": "offline", "lastUpdated": "4 hours ago" },
+      { "id": "30", "kioskNumber": "K-030", "status": "active", "lastUpdated": "7 minutes ago" },
+      { "id": "31", "kioskNumber": "K-031", "status": "active", "lastUpdated": "9 minutes ago" }
+    ],
+    "5": [
+      { "id": "32", "kioskNumber": "K-032", "status": "active", "lastUpdated": "2 minutes ago" },
+      { "id": "33", "kioskNumber": "K-033", "status": "active", "lastUpdated": "4 minutes ago" },
+      { "id": "34", "kioskNumber": "K-034", "status": "maintenance", "lastUpdated": "6 hours ago" },
+      { "id": "35", "kioskNumber": "K-035", "status": "active", "lastUpdated": "6 minutes ago" }
+    ]
+  },
+
+  "recentActivities": [
     {
-      "id": 1,
-      "kiosk_no": "K-001",
-      "status": "active",
-      "store_id": 1,
-      "last_updated": "2026-04-06"
+      "id": "1",
+      "type": "Kiosk Added",
+      "description": "New kiosk K-035 added to Train Station",
+      "timestamp": "2 minutes ago"
+    },
+    {
+      "id": "2",
+      "type": "Admin Created",
+      "description": "Kate Martin added to Airport Terminal",
+      "timestamp": "15 minutes ago"
+    },
+    {
+      "id": "3",
+      "type": "Status Change",
+      "description": "K-020 status changed to Offline",
+      "timestamp": "1 hour ago"
+    },
+    {
+      "id": "4",
+      "type": "Store Created",
+      "description": "New store \"Train Station\" created",
+      "timestamp": "3 hours ago"
+    },
+    {
+      "id": "5",
+      "type": "Kiosk Maintenance",
+      "description": "K-023 scheduled for maintenance",
+      "timestamp": "5 hours ago"
+    },
+    {
+      "id": "6",
+      "type": "Admin Created",
+      "description": "John Doe added as admin to Airport Terminal",
+      "timestamp": "6 hours ago"
     }
   ]
 }

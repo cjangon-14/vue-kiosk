@@ -9,8 +9,8 @@ const myroutes = router.getRoutes().find((route) => route.name === 'HomeViewLayo
 
 <template>
   <div class="w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
-    <div class="h-16 flex items-center px-6 border-b border-gray-200 bg-red-200">
-      <h2>Logo</h2>
+    <div class="h-16 flex items-center justify-between px-6 border-b border-gray-200 bg-red-200">
+      <h2 class="font-semibold text-gray-900">Logo</h2>
     </div>
     <div class="">
       <aside class="shrink-0 z-50 bg-transparent transition-all duration-300">
@@ -36,9 +36,9 @@ const myroutes = router.getRoutes().find((route) => route.name === 'HomeViewLayo
                   <DynamicIcons
                     :name="route.meta.icon"
                     class="shrink-0"
-                    :class="isActive ? 'text-[#155DFC]' : 'text-primary-text'"
+                    :class="isActive ? 'text-[#155DFC]' : 'text-secondary-text'"
                   />
-                  <span class="text-sm" :class="isActive ? 'font-bold ' : 'font-primary-text'">{{
+                  <span class="text-sm" :class="isActive ? 'font-bold ' : 'text-secondary-text'">{{
                     route.name
                   }}</span>
                 </div>

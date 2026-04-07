@@ -1,21 +1,33 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { ref } from 'vue'
+import PageLoader from '@/components/PageLoader.vue'
+
+const router = useRouter()
+const loaderRef = ref(null)
+let loaderStartTime = 0
+
+router.beforeEach(() => {
+  loaderStartTime = Date.now()
+  loaderRef.value?.showLoader()
+})
+
+router.afterEach(() => {
+  const elapsedTime = Date.now() - loaderStartTime
+  const minimumLoadTime = 500 // Minimum time to show loader in ms
+
+  if (elapsedTime < minimumLoadTime) {
+    setTimeout(() => {
+      loaderRef.value?.hideLoader()
+    }, minimumLoadTime - elapsedTime)
+  } else {
+    loaderRef.value?.hideLoader()
+  }
+})
 </script>
 
 <template>
-  <!-- <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header> -->
-
+  <PageLoader ref="loaderRef" />
   <RouterView />
 </template>
 

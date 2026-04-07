@@ -6,12 +6,14 @@
   --color-primary-background: #;
   --color-secondary-background: #;
   --color-tertiary-background: #;
-  --color-primary-text: #364153;
+  --color-primary-text: #1c252e;
+  --color-secondary-text: #637381;
   --color-primary-text-active: #155dfc;
   --color-sidebar-active: #eff6ff;
   --color-sidebar-hover: #fffff;
   --font-kumbhsans: 'Kumbh Sans', sans-serif;
   --font-inter: 'Inter', sans-serif;
+  /* --shadow-container: 0 0 2px 0 rgba(145, 158, 171, 0.2); */
 }
 
 * {
