@@ -98,7 +98,7 @@ const clearNotifications = () => {
           >
             <div class="flex gap-3">
               <!-- Alert Icon -->
-              <div class="flex-shrink-0 mt-1">
+              <div class="shrink-0 mt-1">
                 <div
                   :class="[
                     'w-2 h-2 rounded-full',
