@@ -73,7 +73,7 @@ const handleClose = () => {
       <!-- Content -->
       <div class="p-6">
         <div class="flex gap-4">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"

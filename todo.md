@@ -1,1 +1,2 @@
 -dynamic recent update for recent acitivy and kiosk
+-dynamic data on stores and storedetails

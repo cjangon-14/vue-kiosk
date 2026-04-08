@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { RouterView, useRouter } from 'vue-router'
 import { ref } from 'vue'
 import PageLoader from '@/components/PageLoader.vue'
 

@@ -39,6 +39,14 @@
       "adminsCount": 2,
       "status": "inactive",
       "lastActivity": "2 days ago"
+    },
+    {
+      "id": "VxVIMmgagYQ",
+      "name": "Test",
+      "status": "active",
+      "kiosksCount": 999,
+      "adminsCount": 999,
+      "lastActivity": "just now"
     }
   ],
   "admins": {
@@ -189,6 +197,15 @@
         "firstName": "Olivia",
         "lastName": "Hernandez",
         "email": "olivia.h@example.com",
+        "role": "Admin"
+      }
+    ],
+    "VxVIMmgagYQ": [
+      {
+        "id": "1775632680894",
+        "firstName": "test",
+        "lastName": "test",
+        "email": "test@gmail.com",
         "role": "Admin"
       }
     ]
@@ -412,6 +429,14 @@
         "kioskNumber": "K-035",
         "status": "active",
         "lastUpdated": "6 minutes ago"
+      }
+    ],
+    "VxVIMmgagYQ": [
+      {
+        "id": "1775632688461",
+        "kioskNumber": "k-001",
+        "status": "active",
+        "lastUpdated": "just now"
       }
     ]
   },

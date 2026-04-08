@@ -95,11 +95,11 @@ const handleDeleteAdmin = (admin, event) => {
   isDeleteAdminModalOpen.value = true
 }
 
-const handleEditKiosk = (kiosk, event) => {
-  event.stopPropagation()
-  selectedKiosk.value = { ...kiosk, storeId: route.params.id }
-  isEditKiosksModalOpen.value = true
-}
+// const handleEditKiosk = (kiosk, event) => {
+//   event.stopPropagation()
+//   selectedKiosk.value = { ...kiosk, storeId: route.params.id }
+//   isEditKiosksModalOpen.value = true
+// }
 
 const handleDeleteKiosk = (kiosk, event) => {
   event.stopPropagation()
@@ -132,19 +132,19 @@ const handleDeleteAdminSubmit = (adminId) => {
   selectedAdmin.value = null
 }
 
-const handleEditKioskClose = () => {
-  isEditKiosksModalOpen.value = false
-  selectedKiosk.value = null
-}
+// const handleEditKioskClose = () => {
+//   isEditKiosksModalOpen.value = false
+//   selectedKiosk.value = null
+// }
 
-const handleEditKioskSubmit = (updatedKiosk) => {
-  const index = storeKiosks.value.findIndex((k) => k.id === updatedKiosk.id)
-  if (index !== -1) {
-    storeKiosks.value[index] = updatedKiosk
-  }
-  isEditKiosksModalOpen.value = false
-  selectedKiosk.value = null
-}
+// const handleEditKioskSubmit = (updatedKiosk) => {
+//   const index = storeKiosks.value.findIndex((k) => k.id === updatedKiosk.id)
+//   if (index !== -1) {
+//     storeKiosks.value[index] = updatedKiosk
+//   }
+//   isEditKiosksModalOpen.value = false
+//   selectedKiosk.value = null
+// }
 
 const handleDeleteKioskClose = () => {
   isDeleteKiosksModalOpen.value = false
