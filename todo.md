@@ -1,0 +1,1 @@
+-dynamic recent update for recent acitivy and kiosk

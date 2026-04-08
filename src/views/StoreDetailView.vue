@@ -1,6 +1,12 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import AddAdminModal from '../components/AddAdminModal.vue'
+import AddKiosksModal from '../components/AddKiosksModal.vue'
+import EditAdminModal from '../components/EditAdminModal.vue'
+import EditKiosksModal from '../components/EditKiosksModal.vue'
+import DeleteAdminModal from '../components/DeleteAdminModal.vue'
+import DeleteKiosksModal from '../components/DeleteKiosksModal.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -11,6 +17,13 @@ const storeKiosks = ref([])
 const activeTab = ref('Admins')
 const loading = ref(true)
 const error = ref(null)
+const isAddAdminModalOpen = ref(false)
+const isAddKiosksModalOpen = ref(false)
+const isEditAdminModalOpen = ref(false)
+const isDeleteAdminModalOpen = ref(false)
+const isDeleteKiosksModalOpen = ref(false)
+const selectedAdmin = ref(null)
+const selectedKiosk = ref(null)
 
 const tabs = ['Admins', 'Kiosks']
 
@@ -70,29 +83,152 @@ onMounted(async () => {
   }
 })
 
-const handleEditAdmin = (adminId, event) => {
+const handleEditAdmin = (admin, event) => {
   event.stopPropagation()
-  console.log('Edit admin:', adminId)
+  selectedAdmin.value = { ...admin, storeId: route.params.id }
+  isEditAdminModalOpen.value = true
 }
 
-const handleDeleteAdmin = (adminId, event) => {
+const handleDeleteAdmin = (admin, event) => {
   event.stopPropagation()
-  console.log('Delete admin:', adminId)
+  selectedAdmin.value = admin
+  isDeleteAdminModalOpen.value = true
 }
 
-const handleEditKiosk = (kioskId, event) => {
+const handleEditKiosk = (kiosk, event) => {
   event.stopPropagation()
-  console.log('Edit kiosk:', kioskId)
+  selectedKiosk.value = { ...kiosk, storeId: route.params.id }
+  isEditKiosksModalOpen.value = true
 }
 
-const handleDeleteKiosk = (kioskId, event) => {
+const handleDeleteKiosk = (kiosk, event) => {
   event.stopPropagation()
-  console.log('Delete kiosk:', kioskId)
+  selectedKiosk.value = kiosk
+  isDeleteKiosksModalOpen.value = true
+}
+
+const handleEditAdminClose = () => {
+  isEditAdminModalOpen.value = false
+  selectedAdmin.value = null
+}
+
+const handleEditAdminSubmit = (updatedAdmin) => {
+  const index = storeAdmins.value.findIndex((a) => a.id === updatedAdmin.id)
+  if (index !== -1) {
+    storeAdmins.value[index] = updatedAdmin
+  }
+  isEditAdminModalOpen.value = false
+  selectedAdmin.value = null
+}
+
+const handleDeleteAdminClose = () => {
+  isDeleteAdminModalOpen.value = false
+  selectedAdmin.value = null
+}
+
+const handleDeleteAdminSubmit = (adminId) => {
+  storeAdmins.value = storeAdmins.value.filter((a) => a.id !== adminId)
+  isDeleteAdminModalOpen.value = false
+  selectedAdmin.value = null
+}
+
+const handleEditKioskClose = () => {
+  isEditKiosksModalOpen.value = false
+  selectedKiosk.value = null
+}
+
+const handleEditKioskSubmit = (updatedKiosk) => {
+  const index = storeKiosks.value.findIndex((k) => k.id === updatedKiosk.id)
+  if (index !== -1) {
+    storeKiosks.value[index] = updatedKiosk
+  }
+  isEditKiosksModalOpen.value = false
+  selectedKiosk.value = null
+}
+
+const handleDeleteKioskClose = () => {
+  isDeleteKiosksModalOpen.value = false
+  selectedKiosk.value = null
+}
+
+const handleDeleteKioskSubmit = (kioskId) => {
+  storeKiosks.value = storeKiosks.value.filter((k) => k.id !== kioskId)
+  isDeleteKiosksModalOpen.value = false
+  selectedKiosk.value = null
+}
+
+const handleAddAdminClick = () => {
+  isAddAdminModalOpen.value = true
+}
+
+const handleAddAdminClose = () => {
+  isAddAdminModalOpen.value = false
+}
+
+const handleAddAdminSubmit = async (newAdmin) => {
+  storeAdmins.value.push(newAdmin)
+  isAddAdminModalOpen.value = false
+}
+
+const handleAddKioskClick = () => {
+  isAddKiosksModalOpen.value = true
+}
+
+const handleAddKioskClose = () => {
+  isAddKiosksModalOpen.value = false
+}
+
+const handleAddKioskSubmit = async (newKiosk) => {
+  storeKiosks.value.push(newKiosk)
+  isAddKiosksModalOpen.value = false
+}
+
+const handleAddKiosk = (storeId, event) => {
+  event.stopPropagation()
+  handleAddKioskClick()
 }
 </script>
 
 <template>
   <div class="w-full bg-gray-50 min-h-screen">
+    <AddAdminModal
+      :isOpen="isAddAdminModalOpen"
+      :storeId="route.params.id"
+      @close="handleAddAdminClose"
+      @submit="handleAddAdminSubmit"
+    />
+    <AddKiosksModal
+      :isOpen="isAddKiosksModalOpen"
+      :storeId="route.params.id"
+      @close="handleAddKioskClose"
+      @submit="handleAddKioskSubmit"
+    />
+    <EditAdminModal
+      :isOpen="isEditAdminModalOpen"
+      :admin="selectedAdmin"
+      @close="handleEditAdminClose"
+      @submit="handleEditAdminSubmit"
+    />
+    <EditKiosksModal
+      :isOpen="isEditKiosksModalOpen"
+      :kiosk="selectedKiosk"
+      @close="handleEditKioskClose"
+      @submit="handleEditKioskSubmit"
+    />
+    <DeleteAdminModal
+      :isOpen="isDeleteAdminModalOpen"
+      :adminId="selectedAdmin?.id"
+      :storeId="route.params.id"
+      @close="handleDeleteAdminClose"
+      @submit="handleDeleteAdminSubmit"
+    />
+    <DeleteKiosksModal
+      :isOpen="isDeleteKiosksModalOpen"
+      :kioskId="selectedKiosk?.id"
+      :storeId="route.params.id"
+      @close="handleDeleteKioskClose"
+      @submit="handleDeleteKioskSubmit"
+    />
     <div class="p-12 flex flex-col w-full max-w-7xl mx-auto">
       <!-- Back Button -->
       <button
@@ -137,6 +273,7 @@ const handleDeleteKiosk = (kioskId, event) => {
                 {{ getStatusLabel(store.status) }}
               </span>
             </div>
+
             <div class="flex gap-12 text-lg text-gray-600">
               <span class="font-medium">{{ store.kiosksCount }} Kiosks</span>
               <span class="font-medium">{{ store.adminsCount }} Admins</span>
@@ -169,6 +306,7 @@ const handleDeleteKiosk = (kioskId, event) => {
         <div class="flex justify-end mb-8">
           <button
             class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-200"
+            @click="handleAddAdminClick"
           >
             + Add Admin
           </button>
@@ -199,8 +337,8 @@ const handleDeleteKiosk = (kioskId, event) => {
                 </td>
                 <td class="px-6 py-5 flex gap-3">
                   <button
-                    @click="handleEditAdmin(admin.id, $event)"
-                    class="text-gray-500 hover:text-gray-700 transition"
+                    @click="handleEditAdmin(admin, $event)"
+                    class="text-gray-500 hover:cursor-pointer hover:text-gray-700 transition"
                     title="Edit"
                   >
                     <svg
@@ -215,8 +353,8 @@ const handleDeleteKiosk = (kioskId, event) => {
                     </svg>
                   </button>
                   <button
-                    @click="handleDeleteAdmin(admin.id, $event)"
-                    class="text-red-500 hover:text-red-700 transition"
+                    @click="handleDeleteAdmin(admin, $event)"
+                    class="text-red-500 hover:cursor-pointer hover:text-red-700 transition"
                     title="Delete"
                   >
                     <svg
@@ -293,8 +431,8 @@ const handleDeleteKiosk = (kioskId, event) => {
                   <span class="text-gray-600 text-sm">{{ kiosk.lastUpdated }}</span>
                 </td>
                 <td class="px-6 py-4 flex gap-3">
-                  <button
-                    @click="handleEditKiosk(kiosk.id, $event)"
+                  <!-- <button
+                    @click="handleEditKiosk(kiosk, $event)"
                     class="text-gray-500 hover:text-gray-700 transition"
                     title="Edit"
                   >
@@ -308,10 +446,10 @@ const handleDeleteKiosk = (kioskId, event) => {
                     >
                       <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                     </svg>
-                  </button>
+                  </button> -->
                   <button
-                    @click="handleDeleteKiosk(kiosk.id, $event)"
-                    class="text-red-500 hover:text-red-700 transition"
+                    @click="handleDeleteKiosk(kiosk, $event)"
+                    class="text-red-500 hover:text-red-700 transition hover:cursor-pointer"
                     title="Delete"
                   >
                     <svg

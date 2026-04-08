@@ -2,6 +2,9 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useFetchData } from '../composables/useFetchData'
+import AddStoreModal from '../components/AddStoreModal.vue'
+import EditStoreModal from '../components/EditStoreModal.vue'
+import DeleteStoreModal from '../components/DeleteStoreModal.vue'
 
 const router = useRouter()
 const { fetchStoresAndKiosks, loading } = useFetchData()
@@ -9,6 +12,10 @@ const { fetchStoresAndKiosks, loading } = useFetchData()
 const stores = ref([])
 const searchQuery = ref('')
 const selectedStatus = ref('All Status')
+const isAddStoreModalOpen = ref(false)
+const isEditStoreModalOpen = ref(false)
+const isDeleteStoreModalOpen = ref(false)
+const selectedStore = ref(null)
 
 const statuses = ['All Status', 'Active', 'Inactive']
 
@@ -48,19 +55,76 @@ const handleViewStore = (storeId, event) => {
   navigateToStore(storeId)
 }
 
-const handleEditStore = (storeId, event) => {
+const handleEditStore = (store, event) => {
   event.stopPropagation()
-  console.log('Edit store:', storeId)
+  selectedStore.value = store
+  isEditStoreModalOpen.value = true
 }
 
-const handleDeleteStore = (storeId, event) => {
+const handleDeleteStore = (store, event) => {
   event.stopPropagation()
-  console.log('Delete store:', storeId)
+  selectedStore.value = store
+  isDeleteStoreModalOpen.value = true
+}
+
+const handleEditStoreClose = () => {
+  isEditStoreModalOpen.value = false
+  selectedStore.value = null
+}
+
+const handleEditStoreSubmit = (updatedStore) => {
+  const index = stores.value.findIndex((s) => s.id === updatedStore.id)
+  if (index !== -1) {
+    stores.value[index] = updatedStore
+  }
+  isEditStoreModalOpen.value = false
+  selectedStore.value = null
+}
+
+const handleDeleteStoreClose = () => {
+  isDeleteStoreModalOpen.value = false
+  selectedStore.value = null
+}
+
+const handleDeleteStoreSubmit = (storeId) => {
+  stores.value = stores.value.filter((s) => s.id !== storeId)
+  isDeleteStoreModalOpen.value = false
+  selectedStore.value = null
+}
+
+const handleAddStoreClick = () => {
+  isAddStoreModalOpen.value = true
+}
+
+const handleAddStoreClose = () => {
+  isAddStoreModalOpen.value = false
+}
+
+const handleAddStoreSubmit = async (newStore) => {
+  stores.value.push(newStore)
+  isAddStoreModalOpen.value = false
 }
 </script>
 
 <template>
   <div class="flex ml-64 pt-16 bg-gray-50 min-h-screen">
+    <AddStoreModal
+      :isOpen="isAddStoreModalOpen"
+      @close="handleAddStoreClose"
+      @submit="handleAddStoreSubmit"
+    />
+    <EditStoreModal
+      :isOpen="isEditStoreModalOpen"
+      :store="selectedStore"
+      @close="handleEditStoreClose"
+      @submit="handleEditStoreSubmit"
+    />
+    <DeleteStoreModal
+      :isOpen="isDeleteStoreModalOpen"
+      :storeId="selectedStore?.id"
+      @close="handleDeleteStoreClose"
+      @submit="handleDeleteStoreSubmit"
+    />
     <RouterView />
     <div v-if="!$route.params.id" class="p-8 flex flex-col w-full max-w-7xl mx-auto">
       <!-- Header Section -->
@@ -70,6 +134,7 @@ const handleDeleteStore = (storeId, event) => {
           <p class="text-gray-600 mt-1">Manage all your store locations</p>
         </div>
         <button
+          @click="handleAddStoreClick"
           class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-200"
         >
           + Create Store
@@ -156,7 +221,7 @@ const handleDeleteStore = (storeId, event) => {
               <td class="px-6 py-4 flex gap-3">
                 <button
                   @click="handleViewStore(store.id, $event)"
-                  class="text-blue-500 hover:text-blue-700 transition"
+                  class="text-blue-500 hover:cursor-pointer hover:text-blue-700 transition"
                   title="View"
                 >
                   <svg
@@ -172,8 +237,8 @@ const handleDeleteStore = (storeId, event) => {
                   </svg>
                 </button>
                 <button
-                  @click="handleEditStore(store.id, $event)"
-                  class="text-gray-500 hover:text-gray-700 transition"
+                  @click="handleEditStore(store, $event)"
+                  class="text-gray-500 hover:cursor-pointer hover:text-gray-700 transition"
                   title="Edit"
                 >
                   <svg
@@ -188,8 +253,8 @@ const handleDeleteStore = (storeId, event) => {
                   </svg>
                 </button>
                 <button
-                  @click="handleDeleteStore(store.id, $event)"
-                  class="text-red-500 hover:text-red-700 transition"
+                  @click="handleDeleteStore(store, $event)"
+                  class="text-red-500 hover:cursor-pointer hover:text-red-700 transition"
                   title="Delete"
                 >
                   <svg

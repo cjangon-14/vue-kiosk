@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { AlertCircle, CheckCircle2, CircleCheck } from '@lucide/vue'
+import { AlertCircle, CircleCheck } from '@lucide/vue'
 import { useFetchData } from '../composables/useFetchData'
 
 const router = useRouter()
@@ -120,7 +120,7 @@ const navigateToStoreDetail = (storeId) => {
             <td class="py-4 px-6">
               <button
                 @click.stop="navigateToStoreDetail(store.id)"
-                class="text-blue-600 hover:text-blue-800 font-medium text-sm transition"
+                class="text-blue-600 hover:text-blue-800 hover:cursor-pointer font-medium text-sm transition"
               >
                 View Details
               </button>
