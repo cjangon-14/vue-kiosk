@@ -70,7 +70,7 @@ const calculateTrendValue = (current, previous) => {
             <Monitor class="w-5 h-5 text-gray-900" />
             <h2 class="text-xl font-bold text-gray-900">System Metrics</h2>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid -cols-4 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <StatCard title="Total Stores" :value="stats.totalStores" :icon="Store" color="blue" />
             <StatCard
               title="Total Kiosks"

@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { AlertCircle, CheckCircle2, CircleCheck } from '@lucide/vue'
 import { useFetchData } from '../composables/useFetchData'
 
+const router = useRouter()
 const { loading, error, fetchStoresAndKiosks, getStoresWithIssues } = useFetchData()
 const storesWithIssues = ref([])
 
@@ -21,13 +23,13 @@ const getStoreStatus = (store) => {
 
 const getStatusColor = (store) => {
   return store.status === 'active'
-    ? 'bg-green-50 text-green-700 border-green-200'
+    ? 'bg-green-100 text-green-700 border-green-200'
     : 'bg-gray-100 text-gray-700 border-gray-200'
 }
 
-// const getStatusIcon = (store) => {
-//   return store.status === 'active' ? CheckCircle2 : AlertCircle
-// }
+const navigateToStoreDetail = (storeId) => {
+  router.push(`/stores/${storeId}`)
+}
 </script>
 
 <template>
@@ -83,6 +85,7 @@ const getStatusColor = (store) => {
           <tr
             v-for="store in storesWithIssues"
             :key="store.id"
+            @click="navigateToStoreDetail(store.id)"
             class="border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer group"
           >
             <td class="py-4 px-6 text-gray-900 font-medium flex items-center gap-2">
@@ -115,9 +118,12 @@ const getStatusColor = (store) => {
             </td>
             <td class="py-4 px-6 text-gray-900">{{ store.kiosksCount }}</td>
             <td class="py-4 px-6">
-              <a href="#" class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+              <button
+                @click.stop="navigateToStoreDetail(store.id)"
+                class="text-blue-600 hover:text-blue-800 font-medium text-sm transition"
+              >
                 View Details
-              </a>
+              </button>
             </td>
           </tr>
         </tbody>

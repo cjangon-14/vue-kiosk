@@ -1,5 +1,5 @@
 export const dashboardRoute = {
-  path: 'dashboard',
+  path: '/dashboard',
   name: 'Dashboard',
   component: () => import('@/views/DashboardView.vue'),
   meta: { icon: 'dashboard' },

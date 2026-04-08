@@ -32,10 +32,10 @@ onMounted(async () => {
       <div
         v-for="alert in priorityAlerts"
         :key="alert.id"
-        class="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 cursor-pointer"
+        class="bg-linear-to-br from-red-50 to-red-100 border border-red-200 rounded-lg p-4 hover:shadow-md transition-all duration-300 cursor-pointer"
       >
         <div class="flex items-start gap-3">
-          <AlertTriangle class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+          <AlertTriangle class="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
           <div class="flex-1 min-w-0">
             <p class="font-semibold text-gray-900 truncate">{{ alert.name }}</p>
             <p class="text-sm text-red-700 mt-1">
@@ -47,7 +47,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-8"></div>
+    <div class="h-px bg-linear-to-r from-transparent via-gray-200 to-transparent mb-8"></div>
   </div>
 </template>
 
