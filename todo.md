@@ -1,2 +1,3 @@
--dynamic recent update for recent acitivy and kiosk
--dynamic data on stores and storedetails
+-dynamic recent update for recent acitivy and kiosk (time)
+-dynamic count data on stores and storedetails
+-edit store handle incomplete data on submit
