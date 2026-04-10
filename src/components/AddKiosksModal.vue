@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { useFetchData } from '../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {
@@ -10,9 +11,14 @@ const props = defineProps({
     type: [String, Number],
     required: true,
   },
+  existingKiosks: {
+    type: Array,
+    default: () => [],
+  },
 })
 
 const emit = defineEmits(['close', 'submit'])
+const { addRecentActivity, updateStoreLastActivity } = useFetchData()
 
 const formData = ref({
   kioskNumber: '',
@@ -27,6 +33,12 @@ const validateForm = () => {
 
   if (!formData.value.kioskNumber.trim()) {
     errors.value.kioskNumber = 'Kiosk number is required'
+  } else if (
+    props.existingKiosks.some(
+      (k) => k.kioskNumber.toLowerCase() === formData.value.kioskNumber.toLowerCase(),
+    )
+  ) {
+    errors.value.kioskNumber = 'A kiosk with this number already exists in this store'
   }
 
   return Object.keys(errors.value).length === 0
@@ -50,7 +62,7 @@ const handleSubmit = async () => {
       id: Date.now().toString(),
       kioskNumber: formData.value.kioskNumber,
       status: 'active',
-      lastUpdated: 'just now',
+      lastUpdated: new Date().toISOString(),
     }
 
     // 4. PATCH the specific key with the updated array
@@ -63,6 +75,12 @@ const handleSubmit = async () => {
     })
 
     if (!response.ok) throw new Error('Failed to update')
+
+    // Update store's last activity
+    await updateStoreLastActivity(props.storeId)
+
+    // Add recent activity
+    await addRecentActivity('Kiosk Added', `New kiosk ${formData.value.kioskNumber} added`)
 
     emit('submit', newKioskData)
     handleClose()
@@ -81,10 +99,7 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div
-    v-if="isOpen"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-  >
+  <div v-if="isOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4">
@@ -108,7 +123,7 @@ const handleClose = () => {
             type="text"
             placeholder="e.g., K-001"
             :class="[
-              'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
+              'w-full px-4 py-2 border rounded-lg  focus:outline-none focus:ring-2 focus:ring-blue-500',
               errors.kioskNumber ? 'border-red-500' : 'border-gray-300',
             ]"
           />
@@ -139,14 +154,14 @@ const handleClose = () => {
         <button
           @click="handleClose"
           :disabled="isSubmitting"
-          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:cursor-pointer hover:bg-gray-50 transition disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           @click="handleSubmit"
           :disabled="isSubmitting"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:cursor-pointer hover:bg-blue-700 transition disabled:opacity-50"
         >
           {{ isSubmitting ? 'Adding...' : 'Add Kiosk' }}
         </button>

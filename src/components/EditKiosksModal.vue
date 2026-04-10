@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
+import { useFetchData } from '../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {
@@ -13,6 +14,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'submit'])
+const { addRecentActivity, updateStoreLastActivity } = useFetchData()
 
 const formData = ref({
   kioskNumber: '',
@@ -51,23 +53,51 @@ const handleSubmit = async () => {
   try {
     isSubmitting.value = true
 
-    const response = await fetch(
-      `http://localhost:3005/kiosks/${props.kiosk.storeId}/${props.kiosk.id}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          kioskNumber: formData.value.kioskNumber,
-          status: formData.value.status,
-        }),
-      },
+    const statusChanged = props.kiosk.status !== formData.value.status
+
+    // 1. Fetch the existing data first
+    const getRes = await fetch(`http://localhost:3005/kiosks`)
+    const currentData = await getRes.json()
+
+    // 2. Get the specific list for this store
+    const storeList = currentData[props.kiosk.storeId] || []
+
+    // 3. Find and update the kiosk
+    const updatedList = storeList.map((kiosk) =>
+      kiosk.id === props.kiosk.id
+        ? {
+            ...kiosk,
+            kioskNumber: formData.value.kioskNumber,
+            status: formData.value.status,
+            lastUpdated: new Date().toISOString(),
+          }
+        : kiosk,
     )
+
+    // 4. PATCH the specific key with the updated array
+    const response = await fetch(`http://localhost:3005/kiosks`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        [props.kiosk.storeId]: updatedList,
+      }),
+    })
 
     if (!response.ok) throw new Error('Failed to update kiosk')
 
-    const updatedKiosk = await response.json()
+    // Update store's last activity
+    await updateStoreLastActivity(props.kiosk.storeId)
+
+    // Add recent activity if status changed
+    if (statusChanged) {
+      const statusDesc =
+        formData.value.status === 'maintenance'
+          ? 'scheduled for maintenance'
+          : `status changed to ${formData.value.status}`
+      await addRecentActivity('Status Change', `${props.kiosk.kioskNumber} ${statusDesc}`)
+    }
+
+    const updatedKiosk = updatedList.find((kiosk) => kiosk.id === props.kiosk.id)
     emit('submit', updatedKiosk)
 
     handleClose()
@@ -86,10 +116,7 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div
-    v-if="isOpen"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-  >
+  <div v-if="isOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4">
@@ -144,14 +171,14 @@ const handleClose = () => {
         <button
           @click="handleClose"
           :disabled="isSubmitting"
-          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:cursor-pointer hover:bg-gray-50 transition disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           @click="handleSubmit"
           :disabled="isSubmitting"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:cursor-pointer hover:bg-blue-700 transition disabled:opacity-50"
         >
           {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
         </button>

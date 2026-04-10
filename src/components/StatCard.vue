@@ -5,11 +5,11 @@ defineProps({
   icon: Object,
   color: {
     type: String,
-    default: 'gray',
+    default: 'blue',
   },
   trend: {
     type: String,
-    default: null, // 'up' or 'down'
+    default: null,
   },
   trendValue: {
     type: String,
@@ -17,65 +17,86 @@ defineProps({
   },
 })
 
-const colorClasses = {
-  blue: 'bg-gradient-to-br from-white to-blue-50 text-primary-text rounded-xl p-6 border border-blue-100',
-  green:
-    'bg-gradient-to-br from-white to-green-50 text-primary-text rounded-xl p-6 border border-green-100',
-  purple:
-    'bg-gradient-to-br from-white to-purple-50 text-primary-text rounded-xl p-6 border border-purple-100',
-  red: 'bg-gradient-to-br from-white to-red-50 text-primary-text rounded-xl p-6 border border-red-100',
+const gradients = {
+  blue: 'from-blue-500 to-blue-600',
+  green: 'from-emerald-500 to-emerald-600',
+  purple: 'from-purple-500 to-purple-600',
+  red: 'from-red-500 to-red-600',
+}
+
+const lightBgs = {
+  blue: 'from-blue-50 to-blue-100/50',
+  green: 'from-emerald-50 to-emerald-100/50',
+  purple: 'from-purple-50 to-purple-100/50',
+  red: 'from-red-50 to-red-100/50',
 }
 
 const iconBgClasses = {
-  blue: 'bg-blue-50',
-  green: 'bg-green-50',
-  purple: 'bg-purple-50',
-  red: 'bg-red-50',
-}
-
-const iconColorClasses = {
-  blue: 'text-blue-600',
-  green: 'text-green-600',
-  purple: 'text-purple-600',
-  red: 'text-red-600',
+  blue: 'bg-blue-100 text-blue-600',
+  green: 'bg-emerald-100 text-emerald-600',
+  purple: 'bg-purple-100 text-purple-600',
+  red: 'bg-red-100 text-red-600',
 }
 
 const trendColorClasses = {
-  up: 'text-green-600',
-  down: 'text-red-600',
+  up: 'text-emerald-600 bg-emerald-50',
+  down: 'text-red-600 bg-red-50',
 }
 </script>
 
 <template>
   <div
-    :class="[
-      'rounded-lg border p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-fade-in',
-      colorClasses[color],
-    ]"
+    class="relative overflow-hidden rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-smooth group cursor-default animate-slide-in"
   >
-    <div class="flex items-center justify-between">
-      <div>
-        <p class="text-sm font-medium text-primary-text opacity-75">{{ title }}</p>
-        <div class="flex items-center gap-2 mt-2">
-          <p class="text-4xl font-bold">{{ value }}</p>
+    <!-- Gradient background -->
+    <div :class="`absolute inset-0 bg-gradient-to-br ${lightBgs[color]} opacity-40`"></div>
+
+    <!-- Gradient accent in top-right -->
+    <div
+      :class="`absolute
+      -top-12
+      -right-12
+      w-32
+      h-32
+      bg-gradient-to-br
+      ${gradients[color]}
+      rounded-full
+      opacity-5
+      group-hover:opacity-10
+      transition-smooth`"
+    ></div>
+
+    <!-- Content -->
+    <div class="relative z-10 flex items-start justify-between">
+      <div class="flex-1">
+        <p class="text-sm font-medium text-gray-600 mb-2">{{ title }}</p>
+        <div class="flex items-end gap-3">
+          <p class="text-5xl font-bold text-gray-900 font-sans tracking-tight">
+            {{ value }}
+          </p>
           <div
             v-if="trend"
-            :class="['flex items-center gap-1 text-sm font-semibold', trendColorClasses[trend]]"
+            :class="[
+              'px-2.5 py-1 rounded-full text-xs font-semibold mb-1 flex items-center gap-1',
+              trendColorClasses[trend],
+            ]"
           >
             <span>{{ trend === 'up' ? '↑' : '↓' }}</span>
             <span v-if="trendValue">{{ trendValue }}</span>
           </div>
         </div>
       </div>
-      <div :class="['p-3 rounded-lg', iconBgClasses[color]]">
-        <component :is="icon" :class="['w-6 h-6', iconColorClasses[color]]" />
+      <div
+        :class="['p-3 rounded-xl transition-smooth group-hover:scale-110', iconBgClasses[color]]"
+      >
+        <component :is="icon" class="w-6 h-6" />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-@keyframes fadeIn {
+@keyframes slideIn {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -86,7 +107,23 @@ const trendColorClasses = {
   }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out;
+.animate-slide-in {
+  animation: slideIn 0.4s ease-out backwards;
+}
+
+.animate-slide-in:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.animate-slide-in:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.animate-slide-in:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.animate-slide-in:nth-child(4) {
+  animation-delay: 0.4s;
 }
 </style>

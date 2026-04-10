@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
+import { useFetchData } from '../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {
@@ -13,12 +14,12 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'submit'])
+const { addRecentActivity, updateStoreLastActivity } = useFetchData()
 
 const formData = ref({
   firstName: '',
   lastName: '',
   email: '',
-  role: 'Admin',
 })
 
 const errors = ref({})
@@ -32,7 +33,6 @@ watch(
         firstName: newVal.firstName,
         lastName: newVal.lastName,
         email: newVal.email,
-        role: newVal.role,
       }
     }
   },
@@ -70,25 +70,47 @@ const handleSubmit = async () => {
   try {
     isSubmitting.value = true
 
-    const response = await fetch(
-      `http://localhost:3005/admins/${props.admin.storeId}/${props.admin.id}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName: formData.value.firstName,
-          lastName: formData.value.lastName,
-          email: formData.value.email,
-          role: formData.value.role,
-        }),
-      },
+    // 1. Fetch the existing data first
+    const getRes = await fetch(`http://localhost:3005/admins`)
+    const currentData = await getRes.json()
+
+    // 2. Get the specific list for this store
+    const storeList = currentData[props.admin.storeId] || []
+
+    // 3. Find and update the admin
+    const updatedList = storeList.map((admin) =>
+      admin.id === props.admin.id
+        ? {
+            ...admin,
+            firstName: formData.value.firstName,
+            lastName: formData.value.lastName,
+            email: formData.value.email,
+            role: 'Admin',
+          }
+        : admin,
     )
+
+    // 4. PATCH the specific key with the updated array
+    const response = await fetch(`http://localhost:3005/admins`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        [props.admin.storeId]: updatedList,
+      }),
+    })
 
     if (!response.ok) throw new Error('Failed to update admin')
 
-    const updatedAdmin = await response.json()
+    // Update store's last activity
+    await updateStoreLastActivity(props.admin.storeId)
+
+    // Add recent activity
+    await addRecentActivity(
+      'Admin Updated',
+      `${formData.value.firstName} ${formData.value.lastName} admin info updated`,
+    )
+
+    const updatedAdmin = updatedList.find((admin) => admin.id === props.admin.id)
     emit('submit', updatedAdmin)
 
     handleClose()
@@ -107,10 +129,7 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div
-    v-if="isOpen"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-  >
+  <div v-if="isOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4">
@@ -174,19 +193,6 @@ const handleClose = () => {
           />
           <p v-if="errors.email" class="text-sm text-red-500 mt-1">{{ errors.email }}</p>
         </div>
-
-        <!-- Role Field -->
-        <div class="mb-6">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
-          <select
-            v-model="formData.role"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="Admin">Admin</option>
-            <option value="Manager">Manager</option>
-            <option value="Operator">Operator</option>
-          </select>
-        </div>
       </div>
 
       <!-- Footer -->
@@ -194,14 +200,14 @@ const handleClose = () => {
         <button
           @click="handleClose"
           :disabled="isSubmitting"
-          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:cursor-pointer hover:bg-gray-50 transition disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           @click="handleSubmit"
           :disabled="isSubmitting"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:cursor-pointer hover:bg-blue-700 transition disabled:opacity-50"
         >
           {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
         </button>

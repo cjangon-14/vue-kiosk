@@ -1,6 +1,7 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useFetchData } from '../composables/useFetchData'
 import AddAdminModal from '../components/AddAdminModal.vue'
 import AddKiosksModal from '../components/AddKiosksModal.vue'
 import EditAdminModal from '../components/EditAdminModal.vue'
@@ -10,6 +11,7 @@ import DeleteKiosksModal from '../components/DeleteKiosksModal.vue'
 
 const router = useRouter()
 const route = useRoute()
+const { fetchStoresAndKiosks } = useFetchData()
 
 const store = ref(null)
 const storeAdmins = ref([])
@@ -57,22 +59,10 @@ onMounted(async () => {
     if (!storeRes.ok) throw new Error('Failed to fetch store')
     store.value = await storeRes.json()
 
-    // Fetch all admins and filter by store ID
-    const adminsRes = await fetch(`http://localhost:3005/admins`)
-    if (!adminsRes.ok) throw new Error('Failed to fetch admins')
-    const allAdmins = await adminsRes.json()
-    storeAdmins.value = allAdmins[storeId] || []
-
-    // Fetch all kiosks and filter by store ID
-    try {
-      const kiosksRes = await fetch(`http://localhost:3005/kiosks`)
-      if (kiosksRes.ok) {
-        const allKiosks = await kiosksRes.json()
-        storeKiosks.value = allKiosks[storeId] || []
-      }
-    } catch {
-      storeKiosks.value = []
-    }
+    // Fetch all data using composable
+    const { admins, kiosks } = await fetchStoresAndKiosks()
+    storeAdmins.value = admins[storeId] || []
+    storeKiosks.value = kiosks[storeId] || []
 
     error.value = null
   } catch (err) {
@@ -187,6 +177,37 @@ const handleAddKiosk = (storeId, event) => {
   event.stopPropagation()
   handleAddKioskClick()
 }
+
+// 1. Create a reactive 'now' state
+const now = ref(Date.now())
+let intervalId = null
+
+const getTimeAgo = (dateString) => {
+  if (!dateString) return 'never'
+  const past = new Date(dateString)
+  if (isNaN(past.getTime())) return 'invalid date'
+  // Use the reactive 'now' value instead of new Date()
+  const seconds = Math.floor((now.value - past) / 1000)
+
+  if (seconds < 60) return 'just now'
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return `${minutes}m ago`
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `${hours}h ago`
+  return `${Math.floor(hours / 24)}d ago`
+}
+
+onMounted(() => {
+  // 2. Update 'now' every 60 seconds
+  intervalId = setInterval(() => {
+    now.value = Date.now()
+  }, 60000)
+})
+
+onUnmounted(() => {
+  // 3. Stop the timer when leaving the page
+  if (intervalId) clearInterval(intervalId)
+})
 </script>
 
 <template>
@@ -200,6 +221,7 @@ const handleAddKiosk = (storeId, event) => {
     <AddKiosksModal
       :isOpen="isAddKiosksModalOpen"
       :storeId="route.params.id"
+      :existingKiosks="storeKiosks"
       @close="handleAddKioskClose"
       @submit="handleAddKioskSubmit"
     />
@@ -229,11 +251,11 @@ const handleAddKiosk = (storeId, event) => {
       @close="handleDeleteKioskClose"
       @submit="handleDeleteKioskSubmit"
     />
-    <div class="p-12 flex flex-col w-full max-w-7xl mx-auto">
+    <div class="mt-18">
       <!-- Back Button -->
       <button
         @click="goBackToStores"
-        class="text-blue-600 hover:text-blue-700 mb-8 flex items-center gap-2 font-medium transition"
+        class="text-blue-600 hover:cursor-pointer hover:text-blue-700 mb-8 flex items-center gap-2 font-medium transition"
       >
         <svg
           width="20"
@@ -247,7 +269,8 @@ const handleAddKiosk = (storeId, event) => {
         </svg>
         Back to Stores
       </button>
-
+    </div>
+    <div class="p-12 mt-8 flex flex-col w-full max-w-7xl mx-auto">
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-12">
         <p class="text-gray-500">Loading store details...</p>
@@ -275,8 +298,8 @@ const handleAddKiosk = (storeId, event) => {
             </div>
 
             <div class="flex gap-12 text-lg text-gray-600">
-              <span class="font-medium">{{ store.kiosksCount }} Kiosks</span>
-              <span class="font-medium">{{ store.adminsCount }} Admins</span>
+              <span class="font-medium">{{ storeKiosks.length }} Kiosks</span>
+              <span class="font-medium">{{ storeAdmins.length }} Admins</span>
             </div>
           </div>
         </div>
@@ -290,7 +313,7 @@ const handleAddKiosk = (storeId, event) => {
             :key="tab"
             @click="activeTab = tab"
             :class="[
-              'pb-4 px-2 text-lg font-semibold transition border-b-2',
+              'pb-4 px-2 text-lg font-semibold hover:cursor-pointer transition border-b-2',
               activeTab === tab
                 ? 'text-blue-600 border-blue-600'
                 : 'text-gray-600 border-transparent hover:text-gray-900',
@@ -305,7 +328,7 @@ const handleAddKiosk = (storeId, event) => {
       <div v-if="activeTab === 'Admins' && store && !loading">
         <div class="flex justify-end mb-8">
           <button
-            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-200"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-200 hover:cursor-pointer"
             @click="handleAddAdminClick"
           >
             + Add Admin
@@ -390,7 +413,7 @@ const handleAddKiosk = (storeId, event) => {
         <div class="flex justify-end">
           <button
             @click="handleAddKiosk(store.id, $event)"
-            class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 mb-4 rounded-md transition"
+            class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 mb-4 rounded-md transition hover:cursor-pointer"
           >
             Add Kiosk
           </button>
@@ -415,7 +438,7 @@ const handleAddKiosk = (storeId, event) => {
             <tbody class="divide-y divide-gray-200">
               <tr v-for="kiosk in storeKiosks" :key="kiosk.id" class="hover:bg-gray-50 transition">
                 <td class="px-6 py-5">
-                  <span class="text-gray-900 font-medium">{{ kiosk.kioskNumber }}</span>
+                  <span class="text-gray-900 font-medium uppercase">{{ kiosk.kioskNumber }}</span>
                 </td>
                 <td class="px-6 py-5">
                   <span
@@ -428,7 +451,7 @@ const handleAddKiosk = (storeId, event) => {
                   </span>
                 </td>
                 <td class="px-6 py-5">
-                  <span class="text-gray-600 text-sm">{{ kiosk.lastUpdated }}</span>
+                  <span class="text-gray-600 text-sm">{{ getTimeAgo(kiosk.lastUpdated) }}</span>
                 </td>
                 <td class="px-6 py-4 flex gap-3">
                   <!-- <button

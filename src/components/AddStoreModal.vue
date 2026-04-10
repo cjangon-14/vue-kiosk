@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { useFetchData } from '../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {
@@ -9,6 +10,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'submit'])
+const { addRecentActivity } = useFetchData()
 
 const formData = ref({
   name: '',
@@ -40,7 +42,7 @@ const handleSubmit = async () => {
       status: formData.value.status,
       kiosksCount: 0,
       adminsCount: 0,
-      lastActivity: 'just now',
+      lastActivity: new Date().toISOString(),
     }
 
     const response = await fetch('http://localhost:3005/stores', {
@@ -54,6 +56,10 @@ const handleSubmit = async () => {
     if (!response.ok) throw new Error('Failed to create store')
 
     const newStore = await response.json()
+
+    // Add recent activity
+    await addRecentActivity('Store Created', `New store "${formData.value.name}" created`)
+
     emit('submit', newStore || newStoreData)
 
     handleClose()
@@ -73,10 +79,7 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div
-    v-if="isOpen"
-    class="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center z-50"
-  >
+  <div v-if="isOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4">

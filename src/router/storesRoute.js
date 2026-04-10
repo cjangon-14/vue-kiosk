@@ -2,7 +2,7 @@ export const storesRoute = {
   path: '/stores',
   name: 'Stores',
   component: () => import('@/views/StoresView.vue'),
-  meta: { icon: 'stores' },
+  meta: { category: 'Management', title: 'Stores', icon: 'stores' },
   children: [
     {
       path: ':id',

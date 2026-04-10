@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { useFetchData } from '../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {
@@ -13,12 +14,12 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'submit'])
+const { addRecentActivity, updateStoreLastActivity } = useFetchData()
 
 const formData = ref({
   firstName: '',
   lastName: '',
   email: '',
-  role: 'Admin',
 })
 
 const errors = ref({})
@@ -82,6 +83,15 @@ const handleSubmit = async () => {
 
     if (!response.ok) throw new Error('Failed to update')
 
+    // Update store's last activity
+    await updateStoreLastActivity(props.storeId)
+
+    // Add recent activity
+    await addRecentActivity(
+      'Admin Created',
+      `${formData.value.firstName} ${formData.value.lastName} added as admin`,
+    )
+
     emit('submit', newEntry)
     handleClose()
   } catch (error) {
@@ -92,17 +102,14 @@ const handleSubmit = async () => {
 }
 
 const handleClose = () => {
-  formData.value = { firstName: '', lastName: '', email: '', role: 'Admin' }
+  formData.value = { firstName: '', lastName: '', email: '' }
   errors.value = {}
   emit('close')
 }
 </script>
 
 <template>
-  <div
-    v-if="isOpen"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-  >
+  <div v-if="isOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4">
@@ -186,14 +193,14 @@ const handleClose = () => {
         <button
           @click="handleClose"
           :disabled="isSubmitting"
-          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:cursor-pointer hover:bg-gray-50 transition disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           @click="handleSubmit"
           :disabled="isSubmitting"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:cursor-pointer hover:bg-blue-700 transition disabled:opacity-50"
         >
           {{ isSubmitting ? 'Adding...' : 'Add Admin' }}
         </button>

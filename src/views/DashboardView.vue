@@ -48,27 +48,31 @@ const calculateTrendValue = (current, previous) => {
 </script>
 
 <template>
-  <div class="flex ml-64 pt-16 min-h-screen bg-gray-50">
+  <div class="flex ml-64 min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
     <div class="p-8 flex flex-col mx-auto w-[85%]">
-      <div class="space-y-10 h-full">
-        <!-- Breadcrumb -->
-        <nav class="flex items-center gap-2 text-sm text-gray-600 mb-4">
-          <span class="font-medium text-gray-900">Dashboard</span>
-          <span>→</span>
-          <span>Overview</span>
-        </nav>
+      <div class="space-y-8 h-full">
+        <!-- Header Section -->
+        <div class="animate-fade-in">
+          <div class="mb-12"></div>
 
-        <!-- Quick Stats Bar -->
-        <!-- <div class="h-1 bg-linear-to-r from-blue-500 via-purple-500 to-red-500 rounded-full"></div> -->
+          <!-- Breadcrumb -->
+          <nav class="flex items-center gap-2 text-sm text-gray-600">
+            <span class="font-semibold text-gray-900">Dashboard</span>
+            <span class="text-gray-400">→</span>
+            <span class="text-gray-600">Overview</span>
+          </nav>
+        </div>
 
-        <!-- Priority Alerts -->
-        <!-- <PriorityAlerts /> -->
-
-        <!-- Key Metrics with Icon Accents -->
-        <div>
-          <div class="flex items-center gap-2 mb-6">
-            <Monitor class="w-5 h-5 text-gray-900" />
-            <h2 class="text-xl font-bold text-gray-900">System Metrics</h2>
+        <!-- System Metrics Section -->
+        <div style="animation-delay: 0.1s" class="animate-slide-in">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="p-2 bg-blue-100 rounded-lg">
+              <Monitor class="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold text-gray-900">System Metrics</h2>
+              <p class="text-sm text-gray-500">Real-time overview of your infrastructure</p>
+            </div>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <StatCard title="Total Stores" :value="stats.totalStores" :icon="Store" color="blue" />
@@ -97,17 +101,17 @@ const calculateTrendValue = (current, previous) => {
           </div>
         </div>
 
-        <!-- Visual Divider -->
-        <div class="h-px bg-linear-to-r from-transparent via-gray-200 to-transparent"></div>
+        <!-- Divider -->
+        <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
 
         <!-- Stores with Issues -->
-        <div>
+        <div style="animation-delay: 0.2s" class="animate-slide-in">
           <StoresWithIssues />
         </div>
 
         <!-- Recent Activity -->
-        <div>
-          <RecentActivity />
+        <div style="animation-delay: 0.3s" class="animate-slide-in">
+          <RecentActivity :show-pagination="false" :max-items="5" />
         </div>
       </div>
     </div>

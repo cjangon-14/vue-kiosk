@@ -6,7 +6,7 @@
       "kiosksCount": 5,
       "adminsCount": 3,
       "status": "active",
-      "lastActivity": "2 hours ago"
+      "lastActivity": "2026-04-10T06:41:42.465Z"
     },
     {
       "id": "2",
@@ -14,7 +14,7 @@
       "kiosksCount": 8,
       "adminsCount": 4,
       "status": "active",
-      "lastActivity": "30 minutes ago"
+      "lastActivity": "2025-11-10T03:09:36.390Z"
     },
     {
       "id": "3",
@@ -22,7 +22,7 @@
       "kiosksCount": 12,
       "adminsCount": 6,
       "status": "active",
-      "lastActivity": "1 hour ago"
+      "lastActivity": "2025-12-10T03:09:36.390Z"
     },
     {
       "id": "4",
@@ -30,7 +30,7 @@
       "kiosksCount": 6,
       "adminsCount": 2,
       "status": "active",
-      "lastActivity": "5 hours ago"
+      "lastActivity": "2026-01-10T03:09:36.390Z"
     },
     {
       "id": "5",
@@ -38,7 +38,7 @@
       "kiosksCount": 4,
       "adminsCount": 2,
       "status": "inactive",
-      "lastActivity": "2 days ago"
+      "lastActivity": "2026-02-10T03:09:36.390Z"
     },
     {
       "id": "VxVIMmgagYQ",
@@ -46,14 +46,54 @@
       "status": "active",
       "kiosksCount": 999,
       "adminsCount": 999,
-      "lastActivity": "just now"
+      "lastActivity": "2026-03-10T03:09:36.390Z"
+    },
+    {
+      "id": "RZ8WN81SM1Q",
+      "name": "testest",
+      "status": "inactive",
+      "kiosksCount": 0,
+      "adminsCount": 0,
+      "lastActivity": "2026-04-10T06:44:49.742Z"
+    },
+    {
+      "id": "YlK8AtkFuoI",
+      "name": "teeeeeeeeeeeeeeeeeeee",
+      "status": "active",
+      "kiosksCount": 0,
+      "adminsCount": 0,
+      "lastActivity": "2026-04-10T06:18:49.512Z"
+    },
+    {
+      "id": "wdzqHQDECxE",
+      "name": "test2",
+      "status": "active",
+      "kiosksCount": 0,
+      "adminsCount": 0,
+      "lastActivity": "2026-04-10T06:19:15.935Z"
+    },
+    {
+      "id": "CxuPaLentZU",
+      "name": "teeeeeeee",
+      "status": "active",
+      "kiosksCount": 0,
+      "adminsCount": 0,
+      "lastActivity": "2026-04-10T06:19:31.815Z"
+    },
+    {
+      "id": "JmTGPEtlkvo",
+      "name": "testttt",
+      "status": "inactive",
+      "kiosksCount": 0,
+      "adminsCount": 0,
+      "lastActivity": "2026-04-10T06:27:55.724Z"
     }
   ],
   "admins": {
     "1": [
       {
         "id": "1",
-        "firstName": "John",
+        "firstName": "John1",
         "lastName": "Doe",
         "email": "john.doe@example.com",
         "role": "Admin"
@@ -91,6 +131,13 @@
         "firstName": "rtew",
         "lastName": "test",
         "email": "teeest@gmail.com",
+        "role": "Admin"
+      },
+      {
+        "id": "1775802001313",
+        "firstName": "john",
+        "lastName": "milagros",
+        "email": "test@g.com",
         "role": "Admin"
       }
     ],
@@ -208,6 +255,15 @@
         "email": "test@gmail.com",
         "role": "Admin"
       }
+    ],
+    "RZ8WN81SM1Q": [
+      {
+        "id": "1775803474935",
+        "firstName": "johnny1",
+        "lastName": "doey",
+        "email": "jd@g.com",
+        "role": "Admin"
+      }
     ]
   },
   "kiosks": {
@@ -216,31 +272,49 @@
         "id": "2",
         "kioskNumber": "K-002",
         "status": "active",
-        "lastUpdated": "10 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "3",
         "kioskNumber": "K-003",
         "status": "offline",
-        "lastUpdated": "2 hours ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "4",
         "kioskNumber": "K-004",
         "status": "active",
-        "lastUpdated": "1 minute ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "5",
         "kioskNumber": "K-005",
         "status": "maintenance",
-        "lastUpdated": "1 day ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "1775629180518",
         "kioskNumber": "k-987",
         "status": "active",
-        "lastUpdated": "just now"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
+      },
+      {
+        "id": "1775800447873",
+        "kioskNumber": "k-999",
+        "status": "active",
+        "lastUpdated": "2026-04-10T05:54:07.873Z"
+      },
+      {
+        "id": "1775800751823",
+        "kioskNumber": "k-998",
+        "status": "active",
+        "lastUpdated": "2026-04-10T05:59:11.823Z"
+      },
+      {
+        "id": "1775802021919",
+        "kioskNumber": "k-009",
+        "status": "active",
+        "lastUpdated": "2026-04-10T06:20:21.919Z"
       }
     ],
     "2": [
@@ -248,49 +322,49 @@
         "id": "6",
         "kioskNumber": "K-006",
         "status": "active",
-        "lastUpdated": "3 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "7",
         "kioskNumber": "K-007",
         "status": "active",
-        "lastUpdated": "7 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "8",
         "kioskNumber": "K-008",
         "status": "active",
-        "lastUpdated": "15 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "9",
         "kioskNumber": "K-009",
         "status": "active",
-        "lastUpdated": "20 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "10",
         "kioskNumber": "K-010",
         "status": "offline",
-        "lastUpdated": "3 hours ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "11",
         "kioskNumber": "K-011",
         "status": "active",
-        "lastUpdated": "5 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "12",
         "kioskNumber": "K-012",
         "status": "active",
-        "lastUpdated": "8 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "13",
         "kioskNumber": "K-013",
         "status": "active",
-        "lastUpdated": "12 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       }
     ],
     "3": [
@@ -298,73 +372,73 @@
         "id": "14",
         "kioskNumber": "K-014",
         "status": "active",
-        "lastUpdated": "2 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "15",
         "kioskNumber": "K-015",
         "status": "active",
-        "lastUpdated": "4 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "16",
         "kioskNumber": "K-016",
         "status": "active",
-        "lastUpdated": "6 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "17",
         "kioskNumber": "K-017",
         "status": "active",
-        "lastUpdated": "8 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "18",
         "kioskNumber": "K-018",
         "status": "active",
-        "lastUpdated": "10 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "19",
         "kioskNumber": "K-019",
         "status": "active",
-        "lastUpdated": "12 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "20",
         "kioskNumber": "K-020",
         "status": "offline",
-        "lastUpdated": "1 hour ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "21",
         "kioskNumber": "K-021",
         "status": "active",
-        "lastUpdated": "14 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "22",
         "kioskNumber": "K-022",
         "status": "active",
-        "lastUpdated": "16 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "23",
         "kioskNumber": "K-023",
         "status": "maintenance",
-        "lastUpdated": "5 hours ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "24",
         "kioskNumber": "K-024",
         "status": "active",
-        "lastUpdated": "18 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "25",
         "kioskNumber": "K-025",
         "status": "active",
-        "lastUpdated": "20 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       }
     ],
     "4": [
@@ -372,37 +446,37 @@
         "id": "26",
         "kioskNumber": "K-026",
         "status": "active",
-        "lastUpdated": "1 minute ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "27",
         "kioskNumber": "K-027",
         "status": "active",
-        "lastUpdated": "3 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "28",
         "kioskNumber": "K-028",
         "status": "active",
-        "lastUpdated": "5 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "29",
         "kioskNumber": "K-029",
         "status": "offline",
-        "lastUpdated": "4 hours ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "30",
         "kioskNumber": "K-030",
         "status": "active",
-        "lastUpdated": "7 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "31",
         "kioskNumber": "K-031",
         "status": "active",
-        "lastUpdated": "9 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       }
     ],
     "5": [
@@ -410,25 +484,25 @@
         "id": "32",
         "kioskNumber": "K-032",
         "status": "active",
-        "lastUpdated": "2 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "33",
         "kioskNumber": "K-033",
         "status": "active",
-        "lastUpdated": "4 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "34",
         "kioskNumber": "K-034",
         "status": "maintenance",
-        "lastUpdated": "6 hours ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "35",
         "kioskNumber": "K-035",
         "status": "active",
-        "lastUpdated": "6 minutes ago"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       }
     ],
     "VxVIMmgagYQ": [
@@ -436,7 +510,7 @@
         "id": "1775632688461",
         "kioskNumber": "k-001",
         "status": "active",
-        "lastUpdated": "just now"
+        "lastUpdated": "2026-04-10T03:09:36.390Z"
       }
     ]
   },
@@ -445,37 +519,85 @@
       "id": "1",
       "type": "Kiosk Added",
       "description": "New kiosk K-035 added to Train Station",
-      "timestamp": "2 minutes ago"
+      "timestamp": "2026-04-10T03:09:36.390Z"
     },
     {
       "id": "2",
       "type": "Admin Created",
       "description": "Kate Martin added to Airport Terminal",
-      "timestamp": "15 minutes ago"
+      "timestamp": "2026-04-10T03:09:36.390Z"
     },
     {
       "id": "3",
       "type": "Status Change",
       "description": "K-020 status changed to Offline",
-      "timestamp": "1 hour ago"
+      "timestamp": "2026-04-10T03:09:36.390Z"
     },
     {
       "id": "4",
       "type": "Store Created",
       "description": "New store \"Train Station\" created",
-      "timestamp": "3 hours ago"
+      "timestamp": "2026-04-10T03:09:36.390Z"
     },
     {
       "id": "5",
       "type": "Kiosk Maintenance",
       "description": "K-023 scheduled for maintenance",
-      "timestamp": "5 hours ago"
+      "timestamp": "2026-04-10T03:09:36.390Z"
     },
     {
       "id": "6",
       "type": "Admin Created",
       "description": "John Doe added as admin to Airport Terminal",
-      "timestamp": "6 hours ago"
+      "timestamp": "2026-04-10T03:09:36.390Z"
+    },
+    {
+      "id": "TA4w7ScxbYM",
+      "type": "Store Created",
+      "description": "New store \"test2\" created",
+      "timestamp": "2026-04-10T06:19:15.948Z"
+    },
+    {
+      "id": "dxupV3pC46A",
+      "type": "Store Created",
+      "description": "New store \"teeeeeeee\" created",
+      "timestamp": "2026-04-10T06:19:31.827Z"
+    },
+    {
+      "id": "aPezePRWtU0",
+      "type": "Admin Created",
+      "description": "john milagros added as admin",
+      "timestamp": "2026-04-10T06:20:01.323Z"
+    },
+    {
+      "id": "qO7ZVta-bhg",
+      "type": "Kiosk Added",
+      "description": "New kiosk k-009 added",
+      "timestamp": "2026-04-10T06:20:21.931Z"
+    },
+    {
+      "id": "6E_6VJjFuR4",
+      "type": "Store Created",
+      "description": "New store \"testttt\" created",
+      "timestamp": "2026-04-10T06:20:35.714Z"
+    },
+    {
+      "id": "oesGdTN9jgI",
+      "type": "Status Change",
+      "description": "testttt status changed to inactive",
+      "timestamp": "2026-04-10T06:27:55.741Z"
+    },
+    {
+      "id": "tjAkZVBYTTk",
+      "type": "Admin Created",
+      "description": "johnny doey added as admin",
+      "timestamp": "2026-04-10T06:44:34.963Z"
+    },
+    {
+      "id": "yNMeJyTyUH4",
+      "type": "Admin Updated",
+      "description": "johnny1 doey admin info updated",
+      "timestamp": "2026-04-10T06:44:49.752Z"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

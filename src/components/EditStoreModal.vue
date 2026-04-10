@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
+import { useFetchData } from '../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {
@@ -13,6 +14,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'submit'])
+const { addRecentActivity } = useFetchData()
 
 const formData = ref({
   name: '',
@@ -51,18 +53,30 @@ const handleSubmit = async () => {
   try {
     isSubmitting.value = true
 
+    const statusChanged = props.store.status !== formData.value.status
+
     const response = await fetch(`http://localhost:3005/stores/${props.store.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: formData.value.name,
-        status: formData.value.status,
+        ...props.store, // 1. Keep existing ID, counts, etc.
+        name: formData.value.name, // 2. Overwrite with new name
+        status: formData.value.status, // 3. Overwrite with new status
+        lastActivity: new Date().toISOString(), // 4. Update activity time
       }),
     })
 
     if (!response.ok) throw new Error('Failed to update store')
+
+    // Add recent activity if status changed
+    if (statusChanged) {
+      await addRecentActivity(
+        'Status Change',
+        `${props.store.name} status changed to ${formData.value.status}`,
+      )
+    }
 
     const updatedStore = await response.json()
     emit('submit', updatedStore)
@@ -83,10 +97,7 @@ const handleClose = () => {
 </script>
 
 <template>
-  <div
-    v-if="isOpen"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-  >
+  <div v-if="isOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4">
@@ -138,14 +149,14 @@ const handleClose = () => {
         <button
           @click="handleClose"
           :disabled="isSubmitting"
-          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:cursor-pointer hover:bg-gray-50 transition disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           @click="handleSubmit"
           :disabled="isSubmitting"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:cursor-pointer transition disabled:opacity-50"
         >
           {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
         </button>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useFetchData } from '../composables/useFetchData'
 import AddStoreModal from '../components/AddStoreModal.vue'
@@ -16,6 +16,8 @@ const isAddStoreModalOpen = ref(false)
 const isEditStoreModalOpen = ref(false)
 const isDeleteStoreModalOpen = ref(false)
 const selectedStore = ref(null)
+const admins = ref({})
+const kiosks = ref({})
 
 const statuses = ['All Status', 'Active', 'Inactive']
 
@@ -36,15 +38,6 @@ const getStatusColor = (status) => {
 const getStatusLabel = (status) => {
   return status.charAt(0).toUpperCase() + status.slice(1)
 }
-
-onMounted(async () => {
-  try {
-    const { stores: fetchedStores } = await fetchStoresAndKiosks()
-    stores.value = fetchedStores
-  } catch (err) {
-    console.error('Failed to load stores', err)
-  }
-})
 
 const navigateToStore = (storeId) => {
   router.push(`/stores/${storeId}`)
@@ -104,10 +97,55 @@ const handleAddStoreSubmit = async (newStore) => {
   stores.value.push(newStore)
   isAddStoreModalOpen.value = false
 }
+onMounted(async () => {
+  try {
+    const {
+      stores: fetchedStores,
+      admins: fetchedAdmins,
+      kiosks: fetchedKiosks,
+    } = await fetchStoresAndKiosks()
+    stores.value = fetchedStores
+    admins.value = fetchedAdmins
+    kiosks.value = fetchedKiosks
+  } catch (err) {
+    console.error('Failed to load stores', err)
+  }
+})
+
+// 1. Create a reactive 'now' state
+const now = ref(Date.now())
+let intervalId = null
+
+const getTimeAgo = (dateString) => {
+  if (!dateString) return 'never'
+  const past = new Date(dateString)
+  if (isNaN(past.getTime())) return 'invalid date'
+  // Use the reactive 'now' value instead of new Date()
+  const seconds = Math.floor((now.value - past) / 1000)
+
+  if (seconds < 60) return 'just now'
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return `${minutes}m ago`
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `${hours}h ago`
+  return `${Math.floor(hours / 24)}d ago`
+}
+
+onMounted(() => {
+  // 2. Update 'now' every 60 seconds
+  intervalId = setInterval(() => {
+    now.value = Date.now()
+  }, 60000)
+})
+
+onUnmounted(() => {
+  // 3. Stop the timer when leaving the page
+  if (intervalId) clearInterval(intervalId)
+})
 </script>
 
 <template>
-  <div class="flex ml-64 pt-16 bg-gray-50 min-h-screen">
+  <div class="flex ml-64 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
     <AddStoreModal
       :isOpen="isAddStoreModalOpen"
       @close="handleAddStoreClose"
@@ -128,24 +166,18 @@ const handleAddStoreSubmit = async (newStore) => {
     <RouterView />
     <div v-if="!$route.params.id" class="p-8 flex flex-col w-full max-w-7xl mx-auto">
       <!-- Header Section -->
-      <div class="flex justify-between items-center mb-8">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-900">Stores</h1>
-          <p class="text-gray-600 mt-1">Manage all your store locations</p>
-        </div>
-        <button
-          @click="handleAddStoreClick"
-          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-sm transition duration-200"
-        >
-          + Create Store
-        </button>
+      <div class="mb-8 animate-fade-in">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">Stores</h1>
+        <p class="text-gray-600 font-medium">
+          Manage all your store locations and view real-time metrics
+        </p>
       </div>
 
       <!-- Search and Filter Section -->
-      <div class="flex gap-4 mb-6">
+      <div class="flex gap-4 mb-8">
         <div class="flex-1 relative">
           <svg
-            class="absolute left-3 top-3 text-gray-400"
+            class="absolute left-4 top-3.5 text-gray-400"
             width="20"
             height="20"
             viewBox="0 0 20 20"
@@ -158,22 +190,31 @@ const handleAddStoreSubmit = async (newStore) => {
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Search stores..."
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Search stores by name..."
+            class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-smooth placeholder-gray-500"
           />
         </div>
         <select
           v-model="selectedStatus"
-          class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-700"
+          class="px-4 py-3 border border-gray-200 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 font-medium transition-smooth hover:cursor-pointer hover:shadow-md"
         >
           <option v-for="status in statuses" :key="status" :value="status">
             {{ status }}
           </option>
         </select>
+        <button
+          @click="handleAddStoreClick"
+          class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg hover:cursor-pointer transition-smooth"
+        >
+          <span>+</span>
+          <span>Create Store</span>
+        </button>
       </div>
 
       <!-- Table Section -->
-      <div class="bg-white rounded-lg shadow overflow-hidden">
+      <div
+        class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-smooth overflow-hidden animate-slide-in"
+      >
         <table class="w-full">
           <thead class="bg-gray-50 border-b border-gray-200">
             <tr>
@@ -200,10 +241,10 @@ const handleAddStoreSubmit = async (newStore) => {
                 <span class="text-gray-900 font-medium">{{ store.name }}</span>
               </td>
               <td class="px-6 py-4">
-                <span class="text-gray-700">{{ store.kiosksCount }}</span>
+                <span class="text-gray-700">{{ kiosks[String(store.id)]?.length || 0 }}</span>
               </td>
               <td class="px-6 py-4">
-                <span class="text-gray-700">{{ store.adminsCount }}</span>
+                <span class="text-gray-700">{{ admins[String(store.id)]?.length || 0 }}</span>
               </td>
               <td class="px-6 py-4">
                 <span
@@ -216,7 +257,7 @@ const handleAddStoreSubmit = async (newStore) => {
                 </span>
               </td>
               <td class="px-6 py-4">
-                <span class="text-gray-600 text-sm">{{ store.lastActivity }}</span>
+                <span class="text-gray-600 text-sm">{{ getTimeAgo(store.lastActivity) }}</span>
               </td>
               <td class="px-6 py-4 flex gap-3">
                 <button
