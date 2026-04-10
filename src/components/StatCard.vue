@@ -49,7 +49,7 @@ const trendColorClasses = {
     class="relative overflow-hidden rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-smooth group cursor-default animate-slide-in"
   >
     <!-- Gradient background -->
-    <div :class="`absolute inset-0 bg-gradient-to-br ${lightBgs[color]} opacity-40`"></div>
+    <div :class="`absolute inset-0 bg-linear-to-br ${lightBgs[color]} opacity-40`"></div>
 
     <!-- Gradient accent in top-right -->
     <div
@@ -58,7 +58,7 @@ const trendColorClasses = {
       -right-12
       w-32
       h-32
-      bg-gradient-to-br
+      bg-linear-to-br
       ${gradients[color]}
       rounded-full
       opacity-5

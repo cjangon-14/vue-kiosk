@@ -143,7 +143,7 @@ onUnmounted(() => {
     class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-smooth overflow-hidden"
   >
     <!-- Header -->
-    <div class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+    <div class="px-6 py-5 border-b border-gray-100 bg-linear-to-r from-gray-50 to-white">
       <div class="flex items-center gap-3 justify-between">
         <div class="flex items-center gap-3">
           <div class="p-2 bg-blue-100 rounded-lg">

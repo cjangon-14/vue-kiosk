@@ -35,7 +35,7 @@ const categorizedRoutes = computed(() => {
   >
     <!-- Logo Header -->
     <div
-      class="h-16 flex items-center px-6 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-blue-700"
+      class="h-16 flex items-center px-6 border-b border-gray-200 bg-linear-to-r from-blue-600 to-blue-700"
     >
       <div class="flex items-center gap-3">
         <div
