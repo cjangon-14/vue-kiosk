@@ -166,12 +166,7 @@ onUnmounted(() => {
     <RouterView />
     <div v-if="!$route.params.id" class="p-8 flex flex-col w-full max-w-7xl mx-auto">
       <!-- Header Section -->
-      <div class="mb-8 animate-fade-in">
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">Stores</h1>
-        <p class="text-gray-600 font-medium">
-          Manage all your store locations and view real-time metrics
-        </p>
-      </div>
+      <div class="mb-12 animate-fade-in"></div>
 
       <!-- Search and Filter Section -->
       <div class="flex gap-4 mb-8">
