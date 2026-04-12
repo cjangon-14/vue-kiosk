@@ -34,7 +34,7 @@ const navigateToStoreDetail = (storeId) => {
 
 <template>
   <div
-    class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-smooth overflow-hidden"
+    class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-smooth overflow-hidden h-auto"
   >
     <!-- Header -->
     <div class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-red-50/50 to-white">
@@ -143,7 +143,7 @@ const navigateToStoreDetail = (storeId) => {
             <!-- Offline Kiosks -->
             <td class="py-4 px-6">
               <span
-                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-100 text-red-700 text-sm font-semibold"
+                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-100 text-red-700 text-xs font-medium transition-smooth"
               >
                 <AlertCircle class="w-4 h-4" />
                 {{ store.offlineKiosks }} Offline
@@ -153,7 +153,7 @@ const navigateToStoreDetail = (storeId) => {
             <!-- Total Kiosks -->
             <td class="py-4 px-6">
               <span
-                class="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700"
+                class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700"
               >
                 {{ store.kiosksCount }} Total
               </span>

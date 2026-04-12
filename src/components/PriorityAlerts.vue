@@ -28,7 +28,7 @@ onMounted(async () => {
       </span>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
       <div
         v-for="alert in priorityAlerts"
         :key="alert.id"
@@ -47,7 +47,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="h-px bg-linear-to-r from-transparent via-gray-200 to-transparent mb-8"></div>
+    <div class="h-px bg-linear-to-r from-transparent via-gray-200 to-transparent mb-4"></div>
   </div>
 </template>
 

@@ -48,12 +48,12 @@ const calculateTrendValue = (current, previous) => {
 </script>
 
 <template>
-  <div class="flex ml-64 min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+  <div class="flex ml-64 bg-gradient-to-br from-gray-50 to-gray-100">
     <div class="p-8 flex flex-col mx-auto w-[85%]">
-      <div class="space-y-8 h-full">
+      <div class="space-y-6 h-auto">
         <!-- Header Section -->
         <div class="animate-fade-in">
-          <div class="mb-12"></div>
+          <div class="mb-6"></div>
 
           <!-- Breadcrumb -->
           <nav class="flex items-center gap-2 text-sm text-gray-600">
@@ -102,7 +102,7 @@ const calculateTrendValue = (current, previous) => {
         </div>
 
         <!-- Divider -->
-        <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+        <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-2"></div>
 
         <!-- Stores with Issues -->
         <div style="animation-delay: 0.2s" class="animate-slide-in">

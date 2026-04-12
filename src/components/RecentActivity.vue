@@ -250,7 +250,7 @@ onUnmounted(() => {
     <!-- Pagination Controls -->
     <div
       v-if="activities.length > 0 && showPagination"
-      class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between"
+      class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between hover:cursor-pointer transition-smooth"
     >
       <div class="text-sm text-gray-600">
         Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
@@ -260,7 +260,7 @@ onUnmounted(() => {
         <button
           @click="previousPage"
           :disabled="currentPage === 1"
-          class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition hover:cursor-pointer transition-smooth"
         >
           Previous
         </button>
@@ -270,7 +270,7 @@ onUnmounted(() => {
             :key="page"
             @click="goToPage(page)"
             :class="[
-              'px-3 py-1 text-sm rounded-lg transition',
+              'px-3 py-1 text-sm rounded-lg transition hover:cursor-pointer transition-smooth',
               page === currentPage
                 ? 'bg-blue-600 text-white'
                 : 'border border-gray-300 hover:bg-gray-50',
@@ -282,7 +282,7 @@ onUnmounted(() => {
         <button
           @click="nextPage"
           :disabled="currentPage === totalPages"
-          class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition hover:cursor-pointer transition-smooth"
         >
           Next
         </button>
