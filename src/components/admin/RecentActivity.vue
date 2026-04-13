@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { UserPlus, AlertTriangle, Home, Wrench, Activity, MonitorUp, UserCog } from '@lucide/vue'
-import { useFetchData } from '../composables/useFetchData'
+import { useFetchData } from '../../composables/useFetchData'
 
 const props = defineProps({
   showPagination: {
@@ -11,6 +11,10 @@ const props = defineProps({
   maxItems: {
     type: Number,
     default: null,
+  },
+  showViewAllLink: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -287,6 +291,18 @@ onUnmounted(() => {
           Next
         </button>
       </div>
+    </div>
+
+    <!-- View All Link (Dashboard only) -->
+    <div
+      v-if="activities.length > 0 && showViewAllLink && !showPagination"
+      class="px-6 py-3 border-t border-gray-100 flex justify-end"
+    >
+      <router-link
+        to="/activity"
+        class="text-xs text-blue-600 hover:text-blue-700 font-semibold hover:underline"
+        >View All →</router-link
+      >
     </div>
   </div>
 </template>

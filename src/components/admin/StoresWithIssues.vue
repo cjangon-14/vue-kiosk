@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { AlertCircle, CircleCheck } from '@lucide/vue'
-import { useFetchData } from '../composables/useFetchData'
+import { useFetchData } from '../../composables/useFetchData'
 
 const router = useRouter()
 const { loading, error, fetchStoresAndKiosks, getStoresWithIssues } = useFetchData()
@@ -21,11 +21,11 @@ const getStoreStatus = (store) => {
   return store.status === 'active' ? 'Active' : 'Inactive'
 }
 
-const getStatusColor = (store) => {
-  return store.status === 'active'
-    ? 'bg-green-100 text-green-700 border-green-200'
-    : 'bg-gray-100 text-gray-700 border-gray-200'
-}
+// const getStatusColor = (store) => {
+//   return store.status === 'active'
+//     ? 'bg-green-100 text-green-700 border-green-200'
+//     : 'bg-gray-100 text-gray-700 border-gray-200'
+// }
 
 const navigateToStoreDetail = (storeId) => {
   router.push(`/stores/${storeId}`)
@@ -37,7 +37,7 @@ const navigateToStoreDetail = (storeId) => {
     class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-smooth overflow-hidden h-auto"
   >
     <!-- Header -->
-    <div class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-red-50/50 to-white">
+    <div class="px-6 py-5 border-b border-gray-100 bg-linear-to-r from-red-50/50 to-white">
       <div class="flex items-center gap-3">
         <div class="p-2 bg-red-100 rounded-lg">
           <AlertCircle class="w-5 h-5 text-red-600" />

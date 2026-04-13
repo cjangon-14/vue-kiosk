@@ -1,5 +1,5 @@
 <script setup>
-import RecentActivity from '@/components/RecentActivity.vue'
+import RecentActivity from '@/components/admin/RecentActivity.vue'
 </script>
 
 <template>

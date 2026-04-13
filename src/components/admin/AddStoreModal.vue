@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { useFetchData } from '../composables/useFetchData'
+import { useFetchData } from '../../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {
@@ -116,14 +116,14 @@ const handleClose = () => {
         <button
           @click="handleClose"
           :disabled="isSubmitting"
-          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           @click="handleSubmit"
           :disabled="isSubmitting"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:cursor-pointer transition disabled:opacity-50"
         >
           {{ isSubmitting ? 'Creating...' : 'Create Store' }}
         </button>

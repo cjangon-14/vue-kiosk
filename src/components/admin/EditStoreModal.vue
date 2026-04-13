@@ -1,23 +1,23 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { useFetchData } from '../composables/useFetchData'
+import { useFetchData } from '../../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {
     type: Boolean,
     default: false,
   },
-  kiosk: {
+  store: {
     type: Object,
     default: null,
   },
 })
 
 const emit = defineEmits(['close', 'submit'])
-const { addRecentActivity, updateStoreLastActivity } = useFetchData()
+const { addRecentActivity } = useFetchData()
 
 const formData = ref({
-  kioskNumber: '',
+  name: '',
   status: 'active',
 })
 
@@ -25,11 +25,11 @@ const errors = ref({})
 const isSubmitting = ref(false)
 
 watch(
-  () => props.kiosk,
+  () => props.store,
   (newVal) => {
     if (newVal) {
       formData.value = {
-        kioskNumber: newVal.kioskNumber,
+        name: newVal.name,
         status: newVal.status,
       }
     }
@@ -40,8 +40,8 @@ watch(
 const validateForm = () => {
   errors.value = {}
 
-  if (!formData.value.kioskNumber.trim()) {
-    errors.value.kioskNumber = 'Kiosk number is required'
+  if (!formData.value.name.trim()) {
+    errors.value.name = 'Store name is required'
   }
 
   return Object.keys(errors.value).length === 0
@@ -53,57 +53,38 @@ const handleSubmit = async () => {
   try {
     isSubmitting.value = true
 
-    const statusChanged = props.kiosk.status !== formData.value.status
+    const statusChanged = props.store.status !== formData.value.status
 
-    // 1. Fetch the existing data first
-    const getRes = await fetch(`http://localhost:3005/kiosks`)
-    const currentData = await getRes.json()
-
-    // 2. Get the specific list for this store
-    const storeList = currentData[props.kiosk.storeId] || []
-
-    // 3. Find and update the kiosk
-    const updatedList = storeList.map((kiosk) =>
-      kiosk.id === props.kiosk.id
-        ? {
-            ...kiosk,
-            kioskNumber: formData.value.kioskNumber,
-            status: formData.value.status,
-            lastUpdated: new Date().toISOString(),
-          }
-        : kiosk,
-    )
-
-    // 4. PATCH the specific key with the updated array
-    const response = await fetch(`http://localhost:3005/kiosks`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch(`http://localhost:3005/stores/${props.store.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
-        [props.kiosk.storeId]: updatedList,
+        ...props.store, // 1. Keep existing ID, counts, etc.
+        name: formData.value.name, // 2. Overwrite with new name
+        status: formData.value.status, // 3. Overwrite with new status
+        lastActivity: new Date().toISOString(), // 4. Update activity time
       }),
     })
 
-    if (!response.ok) throw new Error('Failed to update kiosk')
-
-    // Update store's last activity
-    await updateStoreLastActivity(props.kiosk.storeId)
+    if (!response.ok) throw new Error('Failed to update store')
 
     // Add recent activity if status changed
     if (statusChanged) {
-      const statusDesc =
-        formData.value.status === 'maintenance'
-          ? 'scheduled for maintenance'
-          : `status changed to ${formData.value.status}`
-      await addRecentActivity('Status Change', `${props.kiosk.kioskNumber} ${statusDesc}`)
+      await addRecentActivity(
+        'Status Change',
+        `${props.store.name} status changed to ${formData.value.status}`,
+      )
     }
 
-    const updatedKiosk = updatedList.find((kiosk) => kiosk.id === props.kiosk.id)
-    emit('submit', updatedKiosk)
+    const updatedStore = await response.json()
+    emit('submit', updatedStore)
 
     handleClose()
   } catch (error) {
-    console.error('Error updating kiosk:', error)
-    errors.value.submit = 'Failed to update kiosk. Please try again.'
+    console.error('Error updating store:', error)
+    errors.value.submit = 'Failed to update store. Please try again.'
   } finally {
     isSubmitting.value = false
   }
@@ -120,7 +101,7 @@ const handleClose = () => {
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4">
-        <h2 class="text-xl font-bold text-gray-900">Edit Kiosk</h2>
+        <h2 class="text-xl font-bold text-gray-900">Edit Store</h2>
       </div>
 
       <!-- Form -->
@@ -130,23 +111,21 @@ const handleClose = () => {
           <p class="text-sm text-red-700">{{ errors.submit }}</p>
         </div>
 
-        <!-- Kiosk Number Field -->
+        <!-- Store Name Field -->
         <div class="mb-5">
           <label class="block text-sm font-medium text-gray-700 mb-2">
-            Kiosk Number <span class="text-red-500">*</span>
+            Store Name <span class="text-red-500">*</span>
           </label>
           <input
-            v-model="formData.kioskNumber"
+            v-model="formData.name"
             type="text"
-            placeholder="e.g., K-001"
+            placeholder="Enter store name"
             :class="[
               'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
-              errors.kioskNumber ? 'border-red-500' : 'border-gray-300',
+              errors.name ? 'border-red-500' : 'border-gray-300',
             ]"
           />
-          <p v-if="errors.kioskNumber" class="text-sm text-red-500 mt-1">
-            {{ errors.kioskNumber }}
-          </p>
+          <p v-if="errors.name" class="text-sm text-red-500 mt-1">{{ errors.name }}</p>
         </div>
 
         <!-- Status Field -->
@@ -160,8 +139,7 @@ const handleClose = () => {
             ]"
           >
             <option value="active">Active</option>
-            <option value="offline">Offline</option>
-            <option value="maintenance">Maintenance</option>
+            <option value="inactive">Inactive</option>
           </select>
         </div>
       </div>
@@ -178,7 +156,7 @@ const handleClose = () => {
         <button
           @click="handleSubmit"
           :disabled="isSubmitting"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:cursor-pointer hover:bg-blue-700 transition disabled:opacity-50"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 hover:cursor-pointer transition disabled:opacity-50"
         >
           {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
         </button>

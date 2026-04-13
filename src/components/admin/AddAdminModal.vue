@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { useFetchData } from '../composables/useFetchData'
+import { useFetchData } from '../../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {

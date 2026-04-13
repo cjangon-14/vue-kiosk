@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { AlertTriangle } from '@lucide/vue'
-import { useFetchData } from '../composables/useFetchData'
+import { useFetchData } from '../../composables/useFetchData'
 
 const { fetchStoresAndKiosks, getStoresWithIssues } = useFetchData()
 const priorityAlerts = ref([])

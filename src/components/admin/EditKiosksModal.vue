@@ -1,19 +1,15 @@
 <script setup>
-import { ref } from 'vue'
-import { useFetchData } from '../composables/useFetchData'
+import { ref, watch } from 'vue'
+import { useFetchData } from '../../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {
     type: Boolean,
     default: false,
   },
-  storeId: {
-    type: [String, Number],
-    required: true,
-  },
-  existingKiosks: {
-    type: Array,
-    default: () => [],
+  kiosk: {
+    type: Object,
+    default: null,
   },
 })
 
@@ -28,17 +24,24 @@ const formData = ref({
 const errors = ref({})
 const isSubmitting = ref(false)
 
+watch(
+  () => props.kiosk,
+  (newVal) => {
+    if (newVal) {
+      formData.value = {
+        kioskNumber: newVal.kioskNumber,
+        status: newVal.status,
+      }
+    }
+  },
+  { immediate: true },
+)
+
 const validateForm = () => {
   errors.value = {}
 
   if (!formData.value.kioskNumber.trim()) {
     errors.value.kioskNumber = 'Kiosk number is required'
-  } else if (
-    props.existingKiosks.some(
-      (k) => k.kioskNumber.toLowerCase() === formData.value.kioskNumber.toLowerCase(),
-    )
-  ) {
-    errors.value.kioskNumber = 'A kiosk with this number already exists in this store'
   }
 
   return Object.keys(errors.value).length === 0
@@ -50,49 +53,63 @@ const handleSubmit = async () => {
   try {
     isSubmitting.value = true
 
-    // 1. Fetch the existing data first to avoid overwriting other users
+    const statusChanged = props.kiosk.status !== formData.value.status
+
+    // 1. Fetch the existing data first
     const getRes = await fetch(`http://localhost:3005/kiosks`)
     const currentData = await getRes.json()
 
-    // 2. Get the specific list for this store (e.g., list "1")
-    const storeList = currentData[props.storeId] || []
+    // 2. Get the specific list for this store
+    const storeList = currentData[props.kiosk.storeId] || []
 
-    // 3. Create the new user/kiosk object
-    const newKioskData = {
-      id: Date.now().toString(),
-      kioskNumber: formData.value.kioskNumber,
-      status: 'active',
-      lastUpdated: new Date().toISOString(),
-    }
+    // 3. Find and update the kiosk
+    const updatedList = storeList.map((kiosk) =>
+      kiosk.id === props.kiosk.id
+        ? {
+            ...kiosk,
+            kioskNumber: formData.value.kioskNumber,
+            status: formData.value.status,
+            lastUpdated: new Date().toISOString(),
+          }
+        : kiosk,
+    )
 
     // 4. PATCH the specific key with the updated array
     const response = await fetch(`http://localhost:3005/kiosks`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        [props.storeId]: [...storeList, newKioskData], // This adds the new group to list 1
+        [props.kiosk.storeId]: updatedList,
       }),
     })
 
-    if (!response.ok) throw new Error('Failed to update')
+    if (!response.ok) throw new Error('Failed to update kiosk')
 
     // Update store's last activity
-    await updateStoreLastActivity(props.storeId)
+    await updateStoreLastActivity(props.kiosk.storeId)
 
-    // Add recent activity
-    await addRecentActivity('Kiosk Added', `New kiosk ${formData.value.kioskNumber} added`)
+    // Add recent activity if status changed
+    if (statusChanged) {
+      const statusDesc =
+        formData.value.status === 'maintenance'
+          ? 'scheduled for maintenance'
+          : `status changed to ${formData.value.status}`
+      await addRecentActivity('Status Change', `${props.kiosk.kioskNumber} ${statusDesc}`)
+    }
 
-    emit('submit', newKioskData)
+    const updatedKiosk = updatedList.find((kiosk) => kiosk.id === props.kiosk.id)
+    emit('submit', updatedKiosk)
+
     handleClose()
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error updating kiosk:', error)
+    errors.value.submit = 'Failed to update kiosk. Please try again.'
   } finally {
     isSubmitting.value = false
   }
 }
 
 const handleClose = () => {
-  formData.value = { kioskNumber: '', status: 'active' }
   errors.value = {}
   emit('close')
 }
@@ -103,7 +120,7 @@ const handleClose = () => {
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4">
-        <h2 class="text-xl font-bold text-gray-900">Add New Kiosk</h2>
+        <h2 class="text-xl font-bold text-gray-900">Edit Kiosk</h2>
       </div>
 
       <!-- Form -->
@@ -123,7 +140,7 @@ const handleClose = () => {
             type="text"
             placeholder="e.g., K-001"
             :class="[
-              'w-full px-4 py-2 border rounded-lg  focus:outline-none focus:ring-2 focus:ring-blue-500',
+              'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
               errors.kioskNumber ? 'border-red-500' : 'border-gray-300',
             ]"
           />
@@ -133,7 +150,7 @@ const handleClose = () => {
         </div>
 
         <!-- Status Field -->
-        <!-- <div class="mb-6">
+        <div class="mb-6">
           <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
           <select
             v-model="formData.status"
@@ -146,7 +163,7 @@ const handleClose = () => {
             <option value="offline">Offline</option>
             <option value="maintenance">Maintenance</option>
           </select>
-        </div> -->
+        </div>
       </div>
 
       <!-- Footer -->
@@ -163,7 +180,7 @@ const handleClose = () => {
           :disabled="isSubmitting"
           class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:cursor-pointer hover:bg-blue-700 transition disabled:opacity-50"
         >
-          {{ isSubmitting ? 'Adding...' : 'Add Kiosk' }}
+          {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
         </button>
       </div>
     </div>

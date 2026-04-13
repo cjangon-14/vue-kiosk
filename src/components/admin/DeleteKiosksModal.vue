@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from 'vue'
-import { useFetchData } from '../composables/useFetchData'
+import { useFetchData } from '../../composables/useFetchData'
 
 const props = defineProps({
   isOpen: {
     type: Boolean,
     default: false,
   },
-  adminId: {
+  kioskId: {
     type: [String, Number],
     required: true,
   },
@@ -27,17 +27,17 @@ const handleConfirmDelete = async () => {
     isSubmitting.value = true
 
     // 1. Get the current state of the database
-    const getRes = await fetch(`http://localhost:3005/admins`)
+    const getRes = await fetch(`http://localhost:3005/kiosks`)
     const currentData = await getRes.json()
 
     // 2. Get the specific list (e.g., list "1")
     const storeList = currentData[props.storeId] || []
 
     // 3. Filter out the item you want to delete
-    const updatedList = storeList.filter((item) => item.id !== props.adminId)
+    const updatedList = storeList.filter((item) => item.id !== props.kioskId)
 
     // 4. PATCH the root with the new, shorter list
-    const response = await fetch(`http://localhost:3005/admins`, {
+    const response = await fetch(`http://localhost:3005/kiosks`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -50,10 +50,10 @@ const handleConfirmDelete = async () => {
     // Update store's last activity
     await updateStoreLastActivity(props.storeId)
 
-    emit('submit', props.adminId)
+    emit('submit', props.kioskId)
     handleClose()
   } catch (error) {
-    console.error('Error deleting admin:', error)
+    console.error('Error deleting kiosk:', error)
   } finally {
     isSubmitting.value = false
   }
@@ -69,7 +69,7 @@ const handleClose = () => {
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
       <!-- Header -->
       <div class="border-b border-gray-200 px-6 py-4">
-        <h2 class="text-xl font-bold text-gray-900">Delete Admin</h2>
+        <h2 class="text-xl font-bold text-gray-900">Delete Kiosk</h2>
       </div>
 
       <!-- Content -->
@@ -88,7 +88,7 @@ const handleClose = () => {
           <div class="flex-1">
             <h3 class="text-lg font-medium text-gray-900">Are you sure?</h3>
             <p class="mt-2 text-sm text-gray-600">
-              This action cannot be undone. The admin will be permanently removed from this store.
+              This action cannot be undone. The kiosk will be permanently removed from this store.
             </p>
           </div>
         </div>
@@ -99,16 +99,16 @@ const handleClose = () => {
         <button
           @click="handleClose"
           :disabled="isSubmitting"
-          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 hover:cursor-pointer transition disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           @click="handleConfirmDelete"
           :disabled="isSubmitting"
-          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition disabled:opacity-50"
+          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 hover:cursor-pointer transition disabled:opacity-50"
         >
-          {{ isSubmitting ? 'Deleting...' : 'Delete Admin' }}
+          {{ isSubmitting ? 'Deleting...' : 'Delete Kiosk' }}
         </button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 <script setup>
 import { RouterView, useRouter } from 'vue-router'
 import { ref } from 'vue'
-import PageLoader from '@/components/PageLoader.vue'
+import PageLoader from '@/components/admin/PageLoader.vue'
 
 const router = useRouter()
 const loaderRef = ref(null)

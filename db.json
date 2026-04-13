@@ -6,7 +6,7 @@
       "kiosksCount": 5,
       "adminsCount": 3,
       "status": "active",
-      "lastActivity": "2026-04-10T06:41:42.465Z"
+      "lastActivity": "2026-04-13T02:19:20.684Z"
     },
     {
       "id": "2",
@@ -14,7 +14,7 @@
       "kiosksCount": 8,
       "adminsCount": 4,
       "status": "active",
-      "lastActivity": "2025-11-10T03:09:36.390Z"
+      "lastActivity": "2026-04-13T03:33:55.612Z"
     },
     {
       "id": "3",
@@ -37,8 +37,8 @@
       "name": "Train Station",
       "kiosksCount": 4,
       "adminsCount": 2,
-      "status": "inactive",
-      "lastActivity": "2026-02-10T03:09:36.390Z"
+      "status": "active",
+      "lastActivity": "2026-04-13T02:15:32.605Z"
     },
     {
       "id": "VxVIMmgagYQ",
@@ -54,39 +54,7 @@
       "status": "inactive",
       "kiosksCount": 0,
       "adminsCount": 0,
-      "lastActivity": "2026-04-10T06:44:49.742Z"
-    },
-    {
-      "id": "YlK8AtkFuoI",
-      "name": "teeeeeeeeeeeeeeeeeeee",
-      "status": "active",
-      "kiosksCount": 0,
-      "adminsCount": 0,
-      "lastActivity": "2026-04-10T06:18:49.512Z"
-    },
-    {
-      "id": "wdzqHQDECxE",
-      "name": "test2",
-      "status": "active",
-      "kiosksCount": 0,
-      "adminsCount": 0,
-      "lastActivity": "2026-04-10T06:19:15.935Z"
-    },
-    {
-      "id": "CxuPaLentZU",
-      "name": "teeeeeeee",
-      "status": "active",
-      "kiosksCount": 0,
-      "adminsCount": 0,
-      "lastActivity": "2026-04-10T06:19:31.815Z"
-    },
-    {
-      "id": "JmTGPEtlkvo",
-      "name": "testttt",
-      "status": "inactive",
-      "kiosksCount": 0,
-      "adminsCount": 0,
-      "lastActivity": "2026-04-10T06:27:55.724Z"
+      "lastActivity": "2026-04-13T02:16:24.161Z"
     }
   ],
   "admins": {
@@ -309,12 +277,6 @@
         "kioskNumber": "k-998",
         "status": "active",
         "lastUpdated": "2026-04-10T05:59:11.823Z"
-      },
-      {
-        "id": "1775802021919",
-        "kioskNumber": "k-009",
-        "status": "active",
-        "lastUpdated": "2026-04-10T06:20:21.919Z"
       }
     ],
     "2": [
@@ -327,7 +289,7 @@
       {
         "id": "7",
         "kioskNumber": "K-007",
-        "status": "active",
+        "status": "offline",
         "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
@@ -371,7 +333,7 @@
       {
         "id": "14",
         "kioskNumber": "K-014",
-        "status": "active",
+        "status": "offline",
         "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
@@ -401,7 +363,7 @@
       {
         "id": "19",
         "kioskNumber": "K-019",
-        "status": "active",
+        "status": "offline",
         "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
@@ -469,13 +431,13 @@
       {
         "id": "30",
         "kioskNumber": "K-030",
-        "status": "active",
+        "status": "offline",
         "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
         "id": "31",
         "kioskNumber": "K-031",
-        "status": "active",
+        "status": "offline",
         "lastUpdated": "2026-04-10T03:09:36.390Z"
       }
     ],
@@ -483,7 +445,7 @@
       {
         "id": "32",
         "kioskNumber": "K-032",
-        "status": "active",
+        "status": "offline",
         "lastUpdated": "2026-04-10T03:09:36.390Z"
       },
       {
@@ -511,6 +473,14 @@
         "kioskNumber": "k-001",
         "status": "active",
         "lastUpdated": "2026-04-10T03:09:36.390Z"
+      }
+    ],
+    "RZ8WN81SM1Q": [
+      {
+        "id": "1776046584143",
+        "kioskNumber": "k-55",
+        "status": "active",
+        "lastUpdated": "2026-04-13T02:16:24.143Z"
       }
     ]
   },
@@ -598,6 +568,24 @@
       "type": "Admin Updated",
       "description": "johnny1 doey admin info updated",
       "timestamp": "2026-04-10T06:44:49.752Z"
+    },
+    {
+      "id": "G6mX0lyCpvQ",
+      "type": "Status Change",
+      "description": "Train Station status changed to active",
+      "timestamp": "2026-04-13T02:15:32.622Z"
+    },
+    {
+      "id": "dLvwoI25X5g",
+      "type": "Kiosk Added",
+      "description": "New kiosk k-55 added",
+      "timestamp": "2026-04-13T02:16:24.170Z"
+    },
+    {
+      "id": "u7z7N_cEI7I",
+      "type": "Status Change",
+      "description": "Mall Plaza status changed to active",
+      "timestamp": "2026-04-13T03:33:55.626Z"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

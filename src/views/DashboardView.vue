@@ -1,9 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Store, AlertCircle, Activity, Monitor } from '@lucide/vue'
-import StatCard from '../components/StatCard.vue'
-import StoresWithIssues from '../components/StoresWithIssues.vue'
-import RecentActivity from '../components/RecentActivity.vue'
+import StatCard from '../components/admin/StatCard.vue'
+import StoresWithIssues from '../components/admin/StoresWithIssues.vue'
+import RecentActivity from '../components/admin/RecentActivity.vue'
 import { useFetchData } from '../composables/useFetchData'
 
 const { fetchStoresAndKiosks, calculateKioskStats } = useFetchData()
@@ -48,7 +48,7 @@ const calculateTrendValue = (current, previous) => {
 </script>
 
 <template>
-  <div class="flex ml-64 bg-gradient-to-br from-gray-50 to-gray-100">
+  <div class="flex mt-8 ml-64 bg-linear-to-br from-gray-50 to-gray-100">
     <div class="p-8 flex flex-col mx-auto w-[85%]">
       <div class="space-y-6 h-auto">
         <!-- Header Section -->
@@ -102,7 +102,7 @@ const calculateTrendValue = (current, previous) => {
         </div>
 
         <!-- Divider -->
-        <div class="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-2"></div>
+        <div class="h-px bg-linear-to-r from-transparent via-gray-200 to-transparent my-2"></div>
 
         <!-- Stores with Issues -->
         <div style="animation-delay: 0.2s" class="animate-slide-in">
@@ -111,7 +111,7 @@ const calculateTrendValue = (current, previous) => {
 
         <!-- Recent Activity -->
         <div style="animation-delay: 0.3s" class="animate-slide-in">
-          <RecentActivity :show-pagination="false" :max-items="5" />
+          <RecentActivity :show-pagination="false" :max-items="5" :show-view-all-link="true" />
         </div>
       </div>
     </div>
