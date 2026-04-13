@@ -2,7 +2,7 @@
   "stores": [
     {
       "id": "1",
-      "name": "McDonalds",
+      "name": "Mc",
       "kiosksCount": 5,
       "adminsCount": 3,
       "status": "active",
@@ -681,6 +681,12 @@
       "description": "Kiosk \"K-009\" updated",
       "timestamp": "2026-04-13T09:07:44.573Z",
       "id": "JaBdzlmn21o"
+    },
+    {
+      "type": "Store Updated",
+      "description": "Store name changed to \"Mc\"",
+      "timestamp": "2026-04-13T09:19:12.657Z",
+      "id": "OhYvrsGO18Q"
     }
   ],
   "categories": [
