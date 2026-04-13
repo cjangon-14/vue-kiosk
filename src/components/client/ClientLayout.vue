@@ -1,20 +1,12 @@
 <script setup>
-import DashboardNavLinks from './DashboardNavLinks.vue'
+import ClientNavLinks from './ClientNavLinks.vue'
 import { useRoute } from 'vue-router'
-import NotificationBell from './NotificationBell.vue'
+import NotificationBell from '../admin/NotificationBell.vue'
 import UserMenu from '../auth/UserMenu.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const isScrolled = ref(false)
 const route = useRoute()
-
-const props = defineProps({
-  seed: { type: String, default: 'SAdmin' },
-})
-
-const handleScroll = () => {
-  isScrolled.value = window.scrollY > 60
-}
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
@@ -23,12 +15,17 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
+
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 60
+}
 </script>
+
 <template>
   <div>
     <div class="grid grid-cols-[250px_1fr]">
       <!-- sidebar -->
-      <DashboardNavLinks />
+      <ClientNavLinks />
 
       <!-- header -->
       <header
@@ -40,7 +37,7 @@ onUnmounted(() => {
         <div class="flex items-center gap-8">
           <NotificationBell />
           <!-- User Menu Dropdown -->
-          <UserMenu :seed="props.seed" />
+          <UserMenu />
         </div>
       </header>
     </div>

@@ -2,7 +2,7 @@
   "stores": [
     {
       "id": "1",
-      "name": "Downtown Store",
+      "name": "McDonalds",
       "kiosksCount": 5,
       "adminsCount": 3,
       "status": "active",
@@ -64,6 +64,7 @@
         "firstName": "John1",
         "lastName": "Doe",
         "email": "john.doe@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -71,6 +72,7 @@
         "firstName": "Jane",
         "lastName": "Smith",
         "email": "jane.smith@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -78,6 +80,7 @@
         "firstName": "Bob",
         "lastName": "Johnson",
         "email": "bob.johnson@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -85,6 +88,7 @@
         "firstName": "111",
         "lastName": "11",
         "email": "asd@g.c",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -92,6 +96,7 @@
         "firstName": "test",
         "lastName": "test",
         "email": "test@test.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -99,6 +104,7 @@
         "firstName": "rtew",
         "lastName": "test",
         "email": "teeest@gmail.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -106,6 +112,7 @@
         "firstName": "john",
         "lastName": "milagros",
         "email": "test@g.com",
+        "password": "password123",
         "role": "Admin"
       }
     ],
@@ -115,6 +122,7 @@
         "firstName": "Alice",
         "lastName": "Williams",
         "email": "alice.w@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -122,6 +130,7 @@
         "firstName": "Charlie",
         "lastName": "Brown",
         "email": "charlie.b@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -129,6 +138,7 @@
         "firstName": "Diana",
         "lastName": "Davis",
         "email": "diana.d@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -136,6 +146,7 @@
         "firstName": "Eve",
         "lastName": "Miller",
         "email": "eve.m@example.com",
+        "password": "password123",
         "role": "Admin"
       }
     ],
@@ -145,6 +156,7 @@
         "firstName": "Frank",
         "lastName": "Wilson",
         "email": "frank.w@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -152,6 +164,7 @@
         "firstName": "Grace",
         "lastName": "Taylor",
         "email": "grace.t@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -159,6 +172,7 @@
         "firstName": "Henry",
         "lastName": "Anderson",
         "email": "henry.a@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -166,6 +180,7 @@
         "firstName": "Ivy",
         "lastName": "Thomas",
         "email": "ivy.t@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -173,6 +188,7 @@
         "firstName": "Jack",
         "lastName": "Moore",
         "email": "jack.m@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -180,6 +196,7 @@
         "firstName": "Kate",
         "lastName": "Martin",
         "email": "kate.m@example.com",
+        "password": "password123",
         "role": "Admin"
       }
     ],
@@ -189,6 +206,7 @@
         "firstName": "Leo",
         "lastName": "Garcia",
         "email": "leo.g@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -196,6 +214,7 @@
         "firstName": "Mia",
         "lastName": "Rodriguez",
         "email": "mia.r@example.com",
+        "password": "password123",
         "role": "Admin"
       }
     ],
@@ -205,6 +224,7 @@
         "firstName": "Noah",
         "lastName": "Martinez",
         "email": "noah.m@example.com",
+        "password": "password123",
         "role": "Admin"
       },
       {
@@ -212,6 +232,7 @@
         "firstName": "Olivia",
         "lastName": "Hernandez",
         "email": "olivia.h@example.com",
+        "password": "password123",
         "role": "Admin"
       }
     ],
@@ -221,6 +242,7 @@
         "firstName": "test",
         "lastName": "test",
         "email": "test@gmail.com",
+        "password": "password123",
         "role": "Admin"
       }
     ],
@@ -230,23 +252,34 @@
         "firstName": "johnny1",
         "lastName": "doey",
         "email": "jd@g.com",
+        "password": "password123",
         "role": "Admin"
       }
     ]
+  },
+  "superadmin": {
+    "id": "1",
+    "firstName": "System",
+    "lastName": "Admin",
+    "email": "superadmin@example.com",
+    "password": "password123",
+    "role": "Super Admin"
   },
   "kiosks": {
     "1": [
       {
         "id": "2",
         "kioskNumber": "K-002",
-        "status": "active",
-        "lastUpdated": "2026-04-10T03:09:36.390Z"
+        "status": "offline",
+        "lastUpdated": "2026-04-13T07:57:38.630Z",
+        "location": "Main Entrance"
       },
       {
         "id": "3",
         "kioskNumber": "K-003",
-        "status": "offline",
-        "lastUpdated": "2026-04-10T03:09:36.390Z"
+        "status": "active",
+        "lastUpdated": "2026-04-13T08:54:01.866Z",
+        "location": ""
       },
       {
         "id": "4",
@@ -586,6 +619,206 @@
       "type": "Status Change",
       "description": "Mall Plaza status changed to active",
       "timestamp": "2026-04-13T03:33:55.626Z"
+    },
+    {
+      "type": "Store Updated",
+      "description": "Store name changed to \"McDonalds\"",
+      "timestamp": "2026-04-13T08:53:18.304Z",
+      "id": "nBF8M-X5B0c"
+    },
+    {
+      "type": "Category Added",
+      "description": "Category \"test\" added",
+      "timestamp": "2026-04-13T08:53:24.544Z",
+      "id": "snkAPOD8Geg"
+    },
+    {
+      "type": "Product Added",
+      "description": "Product \"test\" added",
+      "timestamp": "2026-04-13T08:53:38.512Z",
+      "id": "__A03B0ZwCQ"
+    },
+    {
+      "type": "Menu Added",
+      "description": "Menu \"test\" added",
+      "timestamp": "2026-04-13T08:53:48.007Z",
+      "id": "VHXlC1S-k-Q"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat-001",
+      "storeId": "1",
+      "name": "Burgers",
+      "description": "Delicious beef and chicken burgers",
+      "image": "https://via.placeholder.com/150?text=Burgers",
+      "createdAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "id": "cat-002",
+      "storeId": "1",
+      "name": "Drinks",
+      "description": "Soft drinks, juices, and beverages",
+      "image": "https://via.placeholder.com/150?text=Drinks",
+      "createdAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "id": "cat-003",
+      "storeId": "1",
+      "name": "Sides",
+      "description": "Fries, salads, and other sides",
+      "image": "https://via.placeholder.com/150?text=Sides",
+      "createdAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "name": "Burgers",
+      "description": "",
+      "image": "",
+      "storeId": "2",
+      "id": "euLUV2WQAHc",
+      "createdAt": "2026-04-13T07:52:31.235Z"
+    },
+    {
+      "name": "test",
+      "description": "",
+      "image": "",
+      "storeId": "1",
+      "id": "p_9sc3uyab0",
+      "createdAt": "2026-04-13T08:53:24.530Z"
+    }
+  ],
+  "products": [
+    {
+      "id": "prod-001",
+      "storeId": "1",
+      "name": "Big Mac",
+      "category": "Burgers",
+      "price": 9.99,
+      "description": "Double beef patty with special sauce",
+      "image": "https://via.placeholder.com/300?text=Big+Mac",
+      "isAvailable": true,
+      "createdAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "id": "prod-002",
+      "storeId": "1",
+      "name": "Quarter Pounder",
+      "category": "Burgers",
+      "price": 8.99,
+      "description": "Quarter pound fresh beef patty",
+      "image": "https://via.placeholder.com/300?text=Quarter+Pounder",
+      "isAvailable": true,
+      "createdAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "id": "prod-003",
+      "storeId": "1",
+      "name": "Coca Cola",
+      "category": "Drinks",
+      "price": 2.99,
+      "description": "Cold refreshing cola",
+      "image": "https://via.placeholder.com/300?text=Coca+Cola",
+      "isAvailable": true,
+      "createdAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "id": "prod-004",
+      "storeId": "1",
+      "name": "French Fries",
+      "category": "Sides",
+      "price": 3.49,
+      "description": "Hot and crispy golden fries",
+      "image": "https://via.placeholder.com/300?text=French+Fries",
+      "isAvailable": true,
+      "createdAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "name": "test",
+      "category": "test",
+      "price": 998.99,
+      "description": "test",
+      "image": "",
+      "isAvailable": true,
+      "storeId": "1",
+      "id": "iBhZUPIw3UM",
+      "createdAt": "2026-04-13T08:53:38.498Z"
+    }
+  ],
+  "menus": [
+    {
+      "id": "menu-001",
+      "storeId": "1",
+      "name": "Classic Burger Combo",
+      "description": "Big Mac with fries and drink",
+      "price": 14.99,
+      "items": [
+        "Big Mac",
+        "French Fries",
+        "Coca Cola"
+      ],
+      "isActive": true,
+      "createdAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "id": "menu-002",
+      "storeId": "1",
+      "name": "Value Menu",
+      "description": "Budget-friendly combo",
+      "price": 11.99,
+      "items": [
+        "Quarter Pounder",
+        "French Fries"
+      ],
+      "isActive": true,
+      "createdAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "name": "test",
+      "description": "test",
+      "price": 998.99,
+      "items": [],
+      "isActive": true,
+      "storeId": "1",
+      "id": "hSmmF4udHSc",
+      "createdAt": "2026-04-13T08:53:47.995Z"
+    }
+  ],
+  "inventory": [
+    {
+      "id": "inv-001",
+      "storeId": "1",
+      "productId": "prod-001",
+      "quantity": 45,
+      "minThreshold": 10,
+      "maxCapacity": 100,
+      "updatedAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "id": "inv-002",
+      "storeId": "1",
+      "productId": "prod-002",
+      "quantity": 5,
+      "minThreshold": 10,
+      "maxCapacity": 80,
+      "updatedAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "id": "inv-003",
+      "storeId": "1",
+      "productId": "prod-003",
+      "quantity": 120,
+      "minThreshold": 50,
+      "maxCapacity": 200,
+      "updatedAt": "2026-04-13T00:00:00.000Z"
+    },
+    {
+      "id": "inv-004",
+      "storeId": "1",
+      "productId": "prod-004",
+      "quantity": 8,
+      "minThreshold": 10,
+      "maxCapacity": 60,
+      "updatedAt": "2026-04-13T00:00:00.000Z"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

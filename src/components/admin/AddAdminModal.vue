@@ -20,6 +20,8 @@ const formData = ref({
   firstName: '',
   lastName: '',
   email: '',
+  password: '',
+  confirmPassword: '',
 })
 
 const errors = ref({})
@@ -47,6 +49,18 @@ const validateForm = () => {
     errors.value.email = 'Please enter a valid email address'
   }
 
+  if (!formData.value.password.trim()) {
+    errors.value.password = 'Password is required'
+  } else if (formData.value.password.length < 6) {
+    errors.value.password = 'Password must be at least 6 characters'
+  }
+
+  if (!formData.value.confirmPassword.trim()) {
+    errors.value.confirmPassword = 'Please confirm your password'
+  } else if (formData.value.password !== formData.value.confirmPassword) {
+    errors.value.confirmPassword = 'Passwords do not match'
+  }
+
   return Object.keys(errors.value).length === 0
 }
 
@@ -69,6 +83,7 @@ const handleSubmit = async () => {
       firstName: formData.value.firstName,
       lastName: formData.value.lastName,
       email: formData.value.email,
+      password: formData.value.password,
       role: 'Admin',
     }
 
@@ -102,7 +117,7 @@ const handleSubmit = async () => {
 }
 
 const handleClose = () => {
-  formData.value = { firstName: '', lastName: '', email: '' }
+  formData.value = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' }
   errors.value = {}
   emit('close')
 }
@@ -172,6 +187,42 @@ const handleClose = () => {
             ]"
           />
           <p v-if="errors.email" class="text-sm text-red-500 mt-1">{{ errors.email }}</p>
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Password <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="formData.password"
+            type="password"
+            placeholder="Enter password (min 6 characters)"
+            :class="[
+              'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
+              errors.password ? 'border-red-500' : 'border-gray-300',
+            ]"
+          />
+          <p v-if="errors.password" class="text-sm text-red-500 mt-1">{{ errors.password }}</p>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Confirm Password <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="formData.confirmPassword"
+            type="password"
+            placeholder="Confirm password"
+            :class="[
+              'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
+              errors.confirmPassword ? 'border-red-500' : 'border-gray-300',
+            ]"
+          />
+          <p v-if="errors.confirmPassword" class="text-sm text-red-500 mt-1">
+            {{ errors.confirmPassword }}
+          </p>
         </div>
 
         <!-- Role Field -->
