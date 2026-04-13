@@ -76,6 +76,8 @@ onMounted(async () => {
 const getActivityColor = (type) => {
   const colorMap = {
     'Kiosk Added': 'text-blue-600',
+    'Kiosk Status Changed': 'text-blue-600',
+    'Kiosk Updated': 'text-blue-600',
     'Admin Created': 'text-green-600',
     'Status Change': 'text-orange-600',
     'Store Created': 'text-purple-600',
@@ -100,6 +102,8 @@ const getActivityColor = (type) => {
 const getActivityIcon = (type) => {
   const iconMap = {
     'Kiosk Added': MonitorUp,
+    'Kiosk Status Changed': MonitorUp,
+    'Kiosk Updated': MonitorUp,
     'Admin Created': UserPlus,
     'Status Change': AlertTriangle,
     'Store Created': Home,
@@ -124,6 +128,8 @@ const getActivityIcon = (type) => {
 const getActivityBgColor = (type) => {
   const colorMap = {
     'Kiosk Added': 'bg-blue-50',
+    'Kiosk Status Changed': 'bg-blue-50',
+    'Kiosk Updated': 'bg-blue-50',
     'Admin Created': 'bg-green-50',
     'Status Change': 'bg-orange-50',
     'Store Created': 'bg-purple-50',

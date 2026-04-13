@@ -66,6 +66,8 @@ export const useActivityLog = () => {
   const logKioskAdded = (kioskNumber) => logActivity('Kiosk Added', `Kiosk "${kioskNumber}" added`)
   const logKioskUpdated = (kioskNumber) =>
     logActivity('Kiosk Updated', `Kiosk "${kioskNumber}" updated`)
+  const logKioskStatusChanged = (kioskNumber, status) =>
+    logActivity('Kiosk Status Changed', `Kiosk "${kioskNumber}" status changed to ${status}`)
   const logKioskDeleted = (kioskNumber) =>
     logActivity('Kiosk Deleted', `Kiosk "${kioskNumber}" deleted`)
 
@@ -89,6 +91,7 @@ export const useActivityLog = () => {
     logStaffDeleted,
     logKioskAdded,
     logKioskUpdated,
+    logKioskStatusChanged,
     logKioskDeleted,
     logColorSchemeChanged,
   }

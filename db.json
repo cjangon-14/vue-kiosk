@@ -10,7 +10,7 @@
     },
     {
       "id": "2",
-      "name": "Mall Plaza",
+      "name": "Jollibee",
       "kiosksCount": 8,
       "adminsCount": 4,
       "status": "active",
@@ -316,8 +316,9 @@
       {
         "id": "6",
         "kioskNumber": "K-006",
-        "status": "active",
-        "lastUpdated": "2026-04-10T03:09:36.390Z"
+        "status": "offline",
+        "lastUpdated": "2026-04-13T09:03:15.604Z",
+        "location": ""
       },
       {
         "id": "7",
@@ -334,8 +335,9 @@
       {
         "id": "9",
         "kioskNumber": "K-009",
-        "status": "active",
-        "lastUpdated": "2026-04-10T03:09:36.390Z"
+        "status": "offline",
+        "lastUpdated": "2026-04-13T09:07:44.562Z",
+        "location": ""
       },
       {
         "id": "10",
@@ -643,6 +645,42 @@
       "description": "Menu \"test\" added",
       "timestamp": "2026-04-13T08:53:48.007Z",
       "id": "VHXlC1S-k-Q"
+    },
+    {
+      "type": "Category Added",
+      "description": "Category \"Rice Meals\" added",
+      "timestamp": "2026-04-13T09:02:26.365Z",
+      "id": "Gb7cgunxQGc"
+    },
+    {
+      "type": "Product Added",
+      "description": "Product \"Chicken\" added",
+      "timestamp": "2026-04-13T09:02:42.833Z",
+      "id": "RiVEF1F7cN4"
+    },
+    {
+      "type": "Menu Added",
+      "description": "Menu \"Combo Meal A1\" added",
+      "timestamp": "2026-04-13T09:02:58.521Z",
+      "id": "WNF5BSCihmQ"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Rose\"",
+      "timestamp": "2026-04-13T09:03:30.717Z",
+      "id": "9zTB_jGa_no"
+    },
+    {
+      "type": "Store Updated",
+      "description": "Store name changed to \"Jollibee\"",
+      "timestamp": "2026-04-13T09:03:37.777Z",
+      "id": "QFI8Fy2KARo"
+    },
+    {
+      "type": "Kiosk Updated",
+      "description": "Kiosk \"K-009\" updated",
+      "timestamp": "2026-04-13T09:07:44.573Z",
+      "id": "JaBdzlmn21o"
     }
   ],
   "categories": [
@@ -685,6 +723,14 @@
       "storeId": "1",
       "id": "p_9sc3uyab0",
       "createdAt": "2026-04-13T08:53:24.530Z"
+    },
+    {
+      "name": "Rice Meals",
+      "description": "",
+      "image": "",
+      "storeId": "2",
+      "id": "kI3Fi2cyawQ",
+      "createdAt": "2026-04-13T09:02:26.349Z"
     }
   ],
   "products": [
@@ -742,6 +788,17 @@
       "storeId": "1",
       "id": "iBhZUPIw3UM",
       "createdAt": "2026-04-13T08:53:38.498Z"
+    },
+    {
+      "name": "Chicken",
+      "category": "Rice Meals",
+      "price": 12.54,
+      "description": "",
+      "image": "",
+      "isAvailable": true,
+      "storeId": "2",
+      "id": "SkZ4R_4m6tA",
+      "createdAt": "2026-04-13T09:02:42.821Z"
     }
   ],
   "menus": [
@@ -781,6 +838,16 @@
       "storeId": "1",
       "id": "hSmmF4udHSc",
       "createdAt": "2026-04-13T08:53:47.995Z"
+    },
+    {
+      "name": "Combo Meal A1",
+      "description": "",
+      "price": 18.99,
+      "items": [],
+      "isActive": true,
+      "storeId": "2",
+      "id": "xXkeyc91-hE",
+      "createdAt": "2026-04-13T09:02:58.509Z"
     }
   ],
   "inventory": [

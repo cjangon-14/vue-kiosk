@@ -2,8 +2,10 @@
 import { ref, onMounted, computed } from 'vue'
 import { Search, Edit, CheckCircle, AlertCircle } from '@lucide/vue'
 import { useAuth } from '../composables/useAuth'
+import { useActivityLog } from '../composables/useActivityLog'
 
 const { getUser } = useAuth()
+const { logKioskStatusChanged, logKioskUpdated } = useActivityLog()
 const currentUser = getUser()
 
 const kiosks = ref([])
@@ -80,6 +82,9 @@ const toggleStatus = async (kiosk) => {
 
     if (!patchRes.ok) throw new Error('Failed to update kiosk status')
 
+    // Log activity
+    await logKioskStatusChanged(kiosk.kioskNumber, newStatus)
+
     await loadKiosks()
   } catch (err) {
     console.error('Failed to update kiosk status:', err)
@@ -152,6 +157,9 @@ const saveKiosk = async () => {
     })
 
     if (!patchRes.ok) throw new Error('Failed to save kiosk')
+
+    // Log activity
+    await logKioskUpdated(formData.value.kioskNumber)
 
     await loadKiosks()
     closeModal()

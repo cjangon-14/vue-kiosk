@@ -20,6 +20,7 @@ defineProps({
 const gradients = {
   blue: 'from-blue-500 to-blue-600',
   green: 'from-emerald-500 to-emerald-600',
+  emerald: 'from-emerald-500 to-emerald-600',
   purple: 'from-purple-500 to-purple-600',
   red: 'from-red-500 to-red-600',
 }
@@ -27,6 +28,7 @@ const gradients = {
 const lightBgs = {
   blue: 'from-blue-50 to-blue-100/50',
   green: 'from-emerald-50 to-emerald-100/50',
+  emerald: 'from-emerald-50 to-emerald-100/50',
   purple: 'from-purple-50 to-purple-100/50',
   red: 'from-red-50 to-red-100/50',
 }
@@ -34,6 +36,7 @@ const lightBgs = {
 const iconBgClasses = {
   blue: 'bg-blue-100 text-blue-600',
   green: 'bg-emerald-100 text-emerald-600',
+  emerald: 'bg-emerald-100 text-emerald-600',
   purple: 'bg-purple-100 text-purple-600',
   red: 'bg-red-100 text-red-600',
 }

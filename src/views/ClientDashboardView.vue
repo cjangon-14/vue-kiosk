@@ -99,7 +99,7 @@ onMounted(async () => {
               title="Total Products"
               :value="stats.totalProducts"
               :icon="PackageOpen"
-              color="emerald"
+              color="purple"
             />
             <StatCard
               title="Categories"
