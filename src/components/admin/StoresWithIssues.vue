@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { AlertCircle, CircleCheck } from '@lucide/vue'
+import { AlertCircle, CircleCheck, ChevronRight } from '@lucide/vue'
 import { useFetchData } from '../../composables/useFetchData'
 
 const router = useRouter()
@@ -37,7 +37,7 @@ const navigateToStoreDetail = (storeId) => {
     class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-smooth overflow-hidden h-auto"
   >
     <!-- Header -->
-    <div class="px-6 py-5 border-b border-gray-100 bg-linear-to-r from-red-50/50 to-white">
+    <div class="px-6 py-5 border-b border-gray-200">
       <div class="flex items-center gap-3">
         <div class="p-2 bg-red-100 rounded-lg">
           <AlertCircle class="w-5 h-5 text-red-600" />
@@ -163,10 +163,10 @@ const navigateToStoreDetail = (storeId) => {
             <td class="py-4 px-6 text-right">
               <button
                 @click.stop="navigateToStoreDetail(store.id)"
-                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium text-sm transition-smooth hover:bg-blue-50 text-blue-600 hover:text-blue-700"
+                class="inline-flex items-center justify-center p-2 rounded-lg transition-smooth hover:bg-blue-50 text-blue-600 hover:text-blue-700 hover:bg-opacity-50 group"
+                title="View Details"
               >
-                View Details
-                <span>→</span>
+                <ChevronRight class="w-5 h-5" />
               </button>
             </td>
           </tr>

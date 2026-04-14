@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { Settings, Save, Store, Clock, Bell, Palette, Monitor, AlertCircle } from '@lucide/vue'
+import { ref, onMounted, computed } from 'vue'
+import { Save, Store, Clock, Bell, Palette, Monitor, AlertCircle, Check } from '@lucide/vue'
 import { useAuth } from '../composables/useAuth'
 import { useColorScheme } from '../composables/useColorScheme'
 import { useStoreData } from '../composables/useStoreData'
@@ -26,9 +26,19 @@ const storeSettings = ref({
   maintenanceMode: false,
 })
 
+const tempCustomColor = ref(null)
+let colorInputTimeout = null
+const showSaveSuccess = ref(false)
+
+// Track selected color for UI purposes
+const selectedColorType = computed(() => {
+  return customColor.value ? 'custom' : currentScheme.value
+})
+
 onMounted(async () => {
   await fetchStoreData()
   storeSettings.value.storeName = storeName.value
+  tempCustomColor.value = customColor.value
 })
 
 const saveSettings = async () => {
@@ -47,9 +57,36 @@ const handleColorSchemeChange = (schemeName) => {
   logColorSchemeChanged(colorSchemes[schemeName]?.name || schemeName)
 }
 
+const isValidHexColor = (hex) => {
+  // Check if it's a valid hex color (with or without #)
+  return /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)
+}
+
+const normalizeHexColor = (hex) => {
+  // Ensure hex starts with #
+  if (!hex.startsWith('#')) {
+    return '#' + hex
+  }
+  return hex
+}
+
 const handleCustomColorChange = (hexColor) => {
-  setCustomColor(hexColor)
-  logColorSchemeChanged(`Custom (${hexColor})`)
+  // Update the temporary color for real-time UI feedback
+  tempCustomColor.value = hexColor
+
+  // Clear existing timeout
+  if (colorInputTimeout) {
+    clearTimeout(colorInputTimeout)
+  }
+
+  // Apply with 3000ms debounce for instant feedback while typing
+  colorInputTimeout = setTimeout(() => {
+    if (isValidHexColor(hexColor)) {
+      const normalizedColor = normalizeHexColor(hexColor)
+      setCustomColor(normalizedColor)
+      logColorSchemeChanged(`Custom (${normalizedColor})`)
+    }
+  }, 2000)
 }
 
 const sections = [
@@ -77,7 +114,7 @@ const sections = [
 </script>
 
 <template>
-  <div class="flex mt-8 ml-64 bg-linear-to-br from-gray-50 to-gray-100">
+  <div class="flex mt-12 ml-64 bg-linear-to-br from-gray-50 to-gray-100">
     <div class="p-8 flex flex-col mx-auto w-[85%]">
       <div class="space-y-6">
         <!-- Header -->
@@ -207,68 +244,138 @@ const sections = [
               <Palette class="w-5 h-5 text-cyan-600" />
               <h2 class="text-lg font-semibold text-gray-900">Color Scheme</h2>
             </div>
-            <div class="p-6 space-y-4">
-              <p class="text-sm text-gray-600">Choose a color theme for your admin interface</p>
-
-              <!-- Preset Color Schemes -->
-              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div
-                  v-for="scheme in availableSchemes"
-                  :key="scheme"
-                  @click="handleColorSchemeChange(scheme)"
-                  :class="
-                    currentScheme === scheme && !customColor
-                      ? 'ring-2 ring-offset-2 ring-gray-400'
-                      : 'ring-1 ring-gray-200 hover:ring-gray-300'
-                  "
-                  class="p-4 rounded-lg cursor-pointer transition-all"
-                  :style="{ backgroundColor: colorSchemes[scheme].light }"
-                >
-                  <div class="flex items-center gap-3">
+            <div class="p-6 space-y-6">
+              <div>
+                <p class="text-sm font-medium text-gray-900 mb-4">Choose a preset theme</p>
+                <!-- Preset Color Schemes Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <button
+                    v-for="scheme in availableSchemes"
+                    :key="scheme"
+                    @click="handleColorSchemeChange(scheme)"
+                    :aria-label="`Select ${colorSchemes[scheme].name} color scheme`"
+                    :aria-pressed="selectedColorType === scheme && !customColor"
+                    type="button"
+                    class="relative group p-4 rounded-lg border-2 transition-all cursor-pointer duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+                    :class="
+                      selectedColorType === scheme && !customColor
+                        ? 'border-gray-400 shadow-md scale-105'
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-md hover:scale-102'
+                    "
+                    :style="{ backgroundColor: colorSchemes[scheme].light }"
+                  >
+                    <!-- Check icon for selected state -->
                     <div
-                      class="w-6 h-6 rounded-full"
-                      :style="{ backgroundColor: colorSchemes[scheme].primary }"
-                    ></div>
-                    <span class="font-medium text-sm text-gray-900">{{
-                      colorSchemes[scheme].name
-                    }}</span>
-                  </div>
+                      v-if="selectedColorType === scheme && !customColor"
+                      class="absolute top-2 right-2 flex items-center justify-center w-6 h-6 rounded-full bg-white shadow-sm"
+                    >
+                      <Check class="w-4 h-4 text-emerald-600" />
+                    </div>
+
+                    <!-- Color swatch and label -->
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-8 h-8 rounded-full border-2 border-white shadow-sm transition-transform group-hover:scale-110"
+                        :style="{ backgroundColor: colorSchemes[scheme].primary }"
+                      ></div>
+                      <span class="font-semibold text-sm text-gray-900">{{
+                        colorSchemes[scheme].name
+                      }}</span>
+                    </div>
+                  </button>
                 </div>
               </div>
 
-              <!-- Custom Color Picker -->
-              <div class="mt-6 pt-6 border-t border-gray-200">
-                <p class="text-sm font-medium text-gray-900 mb-3">Or create a custom color</p>
-                <div class="flex items-center gap-4">
-                  <div class="flex items-center gap-3">
-                    <label class="text-sm font-medium text-gray-700">Pick a color:</label>
+              <!-- Custom Color Section -->
+              <div class="pt-4 border-t border-gray-200">
+                <p class="flex justify-center text-sm font-medium text-gray-900 mb-4">
+                  Create a custom color
+                </p>
+
+                <!-- Combined Custom Color Input Controls -->
+                <div class="flex flex-col justify-center lg:flex-row gap-4">
+                  <!-- Color Picker -->
+                  <div class="flex flex-col">
+                    <label class="text-xs font-medium text-gray-700 mb-2 uppercase tracking-wide"
+                      >Color Picker</label
+                    >
                     <input
-                      :value="customColor || '#059669'"
-                      @input="
-                        (e) => {
-                          handleCustomColorChange(e.target.value)
-                        }
-                      "
+                      :value="tempCustomColor || customColor || '#059669'"
+                      @input="(e) => handleCustomColorChange(e.target.value)"
                       type="color"
-                      class="w-16 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                      aria-label="Select custom color"
+                      class="w-20 h-12 rounded-lg border-2 border-gray-300 cursor-pointer transition-all hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
                     />
                   </div>
-                  <div
-                    v-if="customColor"
-                    class="text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg font-mono"
-                  >
-                    {{ customColor }}
+
+                  <!-- Hex Color Input -->
+                  <div>
+                    <label
+                      class="text-xs font-medium text-gray-700 mb-2 uppercase tracking-wide block"
+                      >Hex Code</label
+                    >
+                    <input
+                      :value="tempCustomColor || customColor || ''"
+                      @input="(e) => handleCustomColorChange(e.target.value)"
+                      type="text"
+                      placeholder="#FF5733"
+                      aria-label="Enter hex color code"
+                      class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg font-mono text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 focus:border-transparent hover:border-gray-400"
+                    />
+                  </div>
+
+                  <!-- Live Preview -->
+                  <div class="flex flex-col">
+                    <label class="text-xs font-medium text-gray-700 mb-2 uppercase tracking-wide"
+                      >Preview</label
+                    >
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-12 h-12 rounded-lg border-2 border-gray-300 shadow-sm transition-all"
+                        :style="{
+                          backgroundColor: isValidHexColor(tempCustomColor || customColor)
+                            ? tempCustomColor || customColor
+                            : '#e5e7eb',
+                        }"
+                      ></div>
+                      <div class="text-right">
+                        <p
+                          v-if="isValidHexColor(tempCustomColor || customColor)"
+                          class="font-mono text-sm font-medium text-gray-900"
+                        >
+                          {{ normalizeHexColor(tempCustomColor || customColor) }}
+                        </p>
+                        <p v-else class="text-sm text-red-500 font-medium">Invalid</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-3">
-                  The color picker automatically generates complementary shades for your interface
-                </p>
+
+                <!-- Helper Text Below -->
+                <p class="text-xs text-gray-500 mt-2">Format: #RRGGBB (e.g., #FF5733) or RRGGBB</p>
+
+                <!-- Validation Message -->
+                <div
+                  v-if="
+                    (tempCustomColor || customColor) &&
+                    !isValidHexColor(tempCustomColor || customColor)
+                  "
+                  class="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2"
+                >
+                  <AlertCircle class="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                  <p class="text-sm text-red-700">
+                    Invalid hex color format. Use #RRGGBB or RRGGBB format (e.g., #FF5733)
+                  </p>
+                </div>
               </div>
 
-              <p class="text-xs text-gray-500 mt-4">
-                Your color preference is automatically saved and will apply to all interface
-                elements
-              </p>
+              <!-- Info Section -->
+              <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                <p class="text-sm text-emerald-900">
+                  <span class="font-semibold">✓ Changes apply instantly</span> to your admin
+                  interface across all sessions.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -302,13 +409,13 @@ const sections = [
           <div class="flex gap-4">
             <button
               @click="saveSettings"
-              class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+              class="flex items-center gap-2 bg-emerald-600 hover:cursor-pointer hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
             >
               <Save class="w-4 h-4" />
               Save Settings
             </button>
             <button
-              class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+              class="px-6 py-2 border border-gray-300 text-gray-700 hover:cursor-pointer hover:bg-gray-50 rounded-lg font-medium transition-colors"
             >
               Cancel
             </button>
@@ -318,3 +425,32 @@ const sections = [
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Smooth transitions for color scheme selection */
+button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Subtle scale effect on hover for preset buttons */
+button:hover {
+  --tw-scale: 1.02;
+}
+
+/* Smooth animation for color updates */
+@keyframes colorUpdate {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Apply animation to preview color swatch */
+.animate-color-update {
+  animation: colorUpdate 0.3s ease-out;
+}
+</style>

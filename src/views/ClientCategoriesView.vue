@@ -117,7 +117,7 @@ const deleteCategory = async (id) => {
 </script>
 
 <template>
-  <div class="flex mt-8 ml-64 bg-linear-to-br from-gray-50 to-gray-100">
+  <div class="flex mt-12 ml-64 bg-linear-to-br from-gray-50 to-gray-100 min-h-screen">
     <div class="p-8 flex flex-col mx-auto w-[85%]">
       <div class="space-y-6">
         <!-- Header -->

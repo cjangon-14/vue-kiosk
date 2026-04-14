@@ -63,7 +63,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex mt-8 ml-64 bg-linear-to-br from-gray-50 to-gray-100">
+  <div class="flex mt-12 ml-64 bg-linear-to-br from-gray-50 to-gray-100 min-h-screen">
     <div class="p-8 flex flex-col mx-auto w-[85%]">
       <div v-if="loading" class="flex items-center justify-center h-96">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>

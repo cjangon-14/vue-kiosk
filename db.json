@@ -2,7 +2,7 @@
   "stores": [
     {
       "id": "1",
-      "name": "Mc",
+      "name": "McDonalds",
       "kiosksCount": 5,
       "adminsCount": 3,
       "status": "active",
@@ -270,8 +270,8 @@
       {
         "id": "2",
         "kioskNumber": "K-002",
-        "status": "offline",
-        "lastUpdated": "2026-04-13T07:57:38.630Z",
+        "status": "active",
+        "lastUpdated": "2026-04-14T01:56:15.246Z",
         "location": "Main Entrance"
       },
       {
@@ -687,6 +687,162 @@
       "description": "Store name changed to \"Mc\"",
       "timestamp": "2026-04-13T09:19:12.657Z",
       "id": "OhYvrsGO18Q"
+    },
+    {
+      "type": "Kiosk Updated",
+      "description": "Kiosk \"K-002\" updated",
+      "timestamp": "2026-04-14T01:56:15.261Z",
+      "id": "GCelTp2o9XQ"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Orange\"",
+      "timestamp": "2026-04-14T01:56:22.827Z",
+      "id": "g2MCrFifHsw"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Indigo\"",
+      "timestamp": "2026-04-14T01:56:25.267Z",
+      "id": "l2rPrD5Ie50"
+    },
+    {
+      "type": "Store Updated",
+      "description": "Store name changed to \"McDonalds\"",
+      "timestamp": "2026-04-14T01:56:33.255Z",
+      "id": "pCQS8Cis1yU"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Orange\"",
+      "timestamp": "2026-04-14T01:56:36.187Z",
+      "id": "yATM7tI-ZJc"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#029669)\"",
+      "timestamp": "2026-04-14T01:56:50.191Z",
+      "id": "vdQDgNI_Tpk"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#199669)\"",
+      "timestamp": "2026-04-14T01:56:54.931Z",
+      "id": "S7t227URihg"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#029669)\"",
+      "timestamp": "2026-04-14T01:56:58.957Z",
+      "id": "tpPM68PCF4Y"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#199669)\"",
+      "timestamp": "2026-04-14T01:57:05.094Z",
+      "id": "nV8Ws8xmwg0"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#ffc72c)\"",
+      "timestamp": "2026-04-14T02:00:52.790Z",
+      "id": "xsTYNaJ3pSQ"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#ffc)\"",
+      "timestamp": "2026-04-14T02:03:29.854Z",
+      "id": "CxIdqtCQICY"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#ffc72c)\"",
+      "timestamp": "2026-04-14T02:03:39.819Z",
+      "id": "LRelKRGREPw"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#ffc)\"",
+      "timestamp": "2026-04-14T02:07:14.838Z",
+      "id": "DAPr2gKK710"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#ffc72c)\"",
+      "timestamp": "2026-04-14T02:07:19.404Z",
+      "id": "vrUSXw_EOhY"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#ffc72c)\"",
+      "timestamp": "2026-04-14T02:07:26.621Z",
+      "id": "G10Yx5yjw_M"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Orange\"",
+      "timestamp": "2026-04-14T02:07:31.622Z",
+      "id": "8WGqscQ5W3Q"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#ff9669)\"",
+      "timestamp": "2026-04-14T02:07:35.419Z",
+      "id": "eHzKvt5VQVE"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#ffc72c)\"",
+      "timestamp": "2026-04-14T02:07:41.923Z",
+      "id": "j5_IxmZps7M"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Orange\"",
+      "timestamp": "2026-04-14T02:08:13.606Z",
+      "id": "Z2GTqLtkmxI"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Custom (#ffc72c)\"",
+      "timestamp": "2026-04-14T02:08:21.720Z",
+      "id": "rc_kxud93os"
+    },
+    {
+      "type": "Category Updated",
+      "description": "Category \"Burgers\" updated",
+      "timestamp": "2026-04-14T02:24:31.204Z",
+      "id": "Zc-S1pBS8Go"
+    },
+    {
+      "type": "Category Updated",
+      "description": "Category \"Burgers\" updated",
+      "timestamp": "2026-04-14T02:24:46.617Z",
+      "id": "dlmvq04oVDE"
+    },
+    {
+      "type": "Category Updated",
+      "description": "Category \"Drinks\" updated",
+      "timestamp": "2026-04-14T02:25:54.833Z",
+      "id": "npuri47TSV4"
+    },
+    {
+      "type": "Category Updated",
+      "description": "Category \"Sides\" updated",
+      "timestamp": "2026-04-14T02:26:39.105Z",
+      "id": "LxS52BUL9hs"
+    },
+    {
+      "type": "Inventory Updated",
+      "description": "\"Quarter Pounder\" quantity updated to 80",
+      "timestamp": "2026-04-14T02:27:06.227Z",
+      "id": "1jIN3UjAcOw"
+    },
+    {
+      "type": "Color Scheme Changed",
+      "description": "Color scheme changed to \"Emerald\"",
+      "timestamp": "2026-04-14T07:28:59.643Z",
+      "id": "fUNmHLsZ3Qw"
     }
   ],
   "categories": [
@@ -695,7 +851,7 @@
       "storeId": "1",
       "name": "Burgers",
       "description": "Delicious beef and chicken burgers",
-      "image": "https://via.placeholder.com/150?text=Burgers",
+      "image": "https://pub-aaa82e9851064d22b954c3ebbafc9ae6.r2.dev/legacy/webp/burger-with-melted-cheese-m-Y1i3jpYYJZYfOEfX5dX.webp",
       "createdAt": "2026-04-13T00:00:00.000Z"
     },
     {
@@ -703,7 +859,7 @@
       "storeId": "1",
       "name": "Drinks",
       "description": "Soft drinks, juices, and beverages",
-      "image": "https://via.placeholder.com/150?text=Drinks",
+      "image": "https://pub-aaa82e9851064d22b954c3ebbafc9ae6.r2.dev/legacy/webp/colorful-cocktails-3Uqu14eVUQco20F3FsaUP.webp",
       "createdAt": "2026-04-13T00:00:00.000Z"
     },
     {
@@ -711,7 +867,7 @@
       "storeId": "1",
       "name": "Sides",
       "description": "Fries, salads, and other sides",
-      "image": "https://via.placeholder.com/150?text=Sides",
+      "image": "https://pub-aaa82e9851064d22b954c3ebbafc9ae6.r2.dev/legacy/webp/small-vegetable-side-salad-MK5YNuWMQL-IQ5IaVtMPH.webp",
       "createdAt": "2026-04-13T00:00:00.000Z"
     },
     {
@@ -870,10 +1026,10 @@
       "id": "inv-002",
       "storeId": "1",
       "productId": "prod-002",
-      "quantity": 5,
+      "quantity": 80,
       "minThreshold": 10,
       "maxCapacity": 80,
-      "updatedAt": "2026-04-13T00:00:00.000Z"
+      "updatedAt": "2026-04-14T02:27:06.214Z"
     },
     {
       "id": "inv-003",

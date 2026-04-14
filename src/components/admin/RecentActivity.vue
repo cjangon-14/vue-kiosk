@@ -1,6 +1,28 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { UserPlus, AlertTriangle, Home, Wrench, Activity, MonitorUp, UserCog } from '@lucide/vue'
+import {
+  UserPlus,
+  AlertTriangle,
+  Home,
+  Activity,
+  UserCog,
+  Monitor,
+  Power,
+  MonitorCog,
+  FolderPlus,
+  FolderX,
+  FolderCog,
+  PackagePlus,
+  PackageX,
+  PackageCheck,
+  ListPlus,
+  ListX,
+  ListCheck,
+  Boxes,
+  Palette,
+  RefreshCw,
+  Bolt,
+} from '@lucide/vue'
 import { useFetchData } from '../../composables/useFetchData'
 
 const props = defineProps({
@@ -101,26 +123,26 @@ const getActivityColor = (type) => {
 
 const getActivityIcon = (type) => {
   const iconMap = {
-    'Kiosk Added': MonitorUp,
-    'Kiosk Status Changed': MonitorUp,
-    'Kiosk Updated': MonitorUp,
+    'Kiosk Added': Monitor,
+    'Kiosk Status Changed': Power,
+    'Kiosk Updated': MonitorCog,
     'Admin Created': UserPlus,
+    'Admin Updated': UserCog,
     'Status Change': AlertTriangle,
     'Store Created': Home,
-    'Store Updated': Activity,
-    'Category Added': Activity,
-    'Category Updated': Activity,
-    'Category Deleted': Activity,
-    'Product Added': Activity,
-    'Product Updated': Activity,
-    'Product Deleted': Activity,
-    'Menu Added': Activity,
-    'Menu Updated': Activity,
-    'Menu Deleted': Activity,
-    'Inventory Updated': Activity,
-    'Color Scheme Changed': Activity,
-    'Kiosk Maintenance': Wrench,
-    'Admin Updated': UserCog,
+    'Store Updated': Bolt,
+    'Category Added': FolderPlus,
+    'Category Updated': FolderCog,
+    'Category Deleted': FolderX,
+    'Product Added': PackagePlus,
+    'Product Updated': PackageCheck,
+    'Product Deleted': PackageX,
+    'Menu Added': ListPlus,
+    'Menu Updated': ListCheck,
+    'Menu Deleted': ListX,
+    'Inventory Updated': Boxes,
+    'Color Scheme Changed': Palette,
+    'Kiosk Maintenance': RefreshCw,
   }
   return iconMap[type] || null
 }
@@ -189,7 +211,7 @@ onUnmounted(() => {
     class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-smooth overflow-hidden"
   >
     <!-- Header -->
-    <div class="px-6 py-5 border-b border-gray-100 bg-linear-to-r from-gray-50 to-white">
+    <div class="px-6 py-5 border-b border-gray-200">
       <div class="flex items-center gap-3 justify-between">
         <div class="flex items-center gap-3">
           <div class="p-2 bg-blue-100 rounded-lg">
@@ -296,7 +318,7 @@ onUnmounted(() => {
     <!-- Pagination Controls -->
     <div
       v-if="activities.length > 0 && showPagination"
-      class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between hover:cursor-pointer transition-smooth"
+      class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex items-center justify-between hover:cursor-pointer transition-smooth"
     >
       <div class="text-sm text-gray-600">
         Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to

@@ -32,8 +32,8 @@ onUnmounted(() => {
 
       <!-- header -->
       <header
-        class="h-16 border-b border-gray-100 fixed top-0 right-0 left-64 z-50 flex items-center justify-between px-8"
-        :class="isScrolled ? 'bg-white/70 backdrop-blur-sm' : 'bg-white'"
+        class="h-16 fixed top-0 right-0 left-64 z-50 flex items-center justify-between px-8"
+        :class="isScrolled ? ' backdrop-blur-xl' : 'bg-white'"
       >
         <h1 class="flex-1 text-lg font-semibold">{{ route.name }}</h1>
 

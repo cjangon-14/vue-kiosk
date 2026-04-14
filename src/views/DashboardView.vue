@@ -74,7 +74,7 @@ const calculateTrendValue = (current, previous) => {
               <p class="text-sm text-gray-500">Real-time overview of your infrastructure</p>
             </div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 bg-color-[#1c252e]">
             <StatCard title="Total Stores" :value="stats.totalStores" :icon="Store" color="blue" />
             <StatCard
               title="Total Kiosks"
