@@ -92,6 +92,11 @@
   }
 }
 
+/* Global Dark Mode Transitions */
+html * {
+  @apply transition-colors duration-300 ease-in-out;
+}
+
 /* Dark Mode Styles - Professional & Refined */
 html.dark {
   color-scheme: dark;
@@ -115,7 +120,7 @@ html.dark body {
 }
 
 /* Main containers & backgrounds */
-html.dark .bg-linear-to-br {
+html.dark .ml-64.bg-linear-to-br {
   background: linear-gradient(135deg, #0d1620 0%, #152636 100%);
 }
 
@@ -195,6 +200,10 @@ html.dark .bg-teal-50 {
 }
 
 /* Text colors with proper contrast */
+html.dark .text-gray-900.truncate {
+  color: #0e1420;
+}
+
 html.dark .text-gray-900 {
   color: #e8eef6;
 }
@@ -367,59 +376,59 @@ html.dark .hover\:bg-red-600:hover {
 /* Badge and tag colors - preserve light mode colors for stat cards */
 html.dark .bg-red-100 {
   background-color: #fee2e2;
-  color: #dc2626;
+  color: #dc2626 !important;
 }
 
 html.dark .bg-green-100,
 html.dark .bg-emerald-100 {
   background-color: #dcfce7;
-  color: #16a34a;
+  color: #16a34a !important;
 }
 
 html.dark .bg-blue-100 {
   background-color: #dbeafe;
-  color: #2563eb;
+  color: #2563eb !important;
 }
 
 html.dark .bg-yellow-100,
 html.dark .bg-amber-100 {
   background-color: #fef3c7;
-  color: #d97706;
+  color: #d97706 !important;
 }
 
 html.dark .bg-orange-100 {
   background-color: #ffedd5;
-  color: #ea580c;
+  color: #ea580c !important;
 }
 
 html.dark .bg-purple-100 {
   background-color: #f3e8ff;
-  color: #a855f7;
+  color: #a855f7 !important;
 }
 
 html.dark .bg-indigo-100 {
   background-color: #e0e7ff;
-  color: #4f46e5;
+  color: #4f46e5 !important;
 }
 
 html.dark .bg-cyan-100 {
   background-color: #cffafe;
-  color: #0891b2;
+  color: #0891b2 !important;
 }
 
 html.dark .bg-fuchsia-100 {
   background-color: #f3e8ff;
-  color: #d946ef;
+  color: #d946ef !important;
 }
 
 html.dark .bg-rose-100 {
   background-color: #ffe4e6;
-  color: #e11d48;
+  color: #e11d48 !important;
 }
 
 html.dark .bg-teal-100 {
   background-color: #ccfbf1;
-  color: #0d9488;
+  color: #0d9488 !important;
 }
 
 /* Shadows */
@@ -531,10 +540,10 @@ html.dark .inline-block {
 }
 
 /* Better text contrast on various backgrounds */
-html.dark .text-gray-900,
+/* html.dark .text-gray-900,
 html.dark .text-gray-800 {
   color: #f0f6fc;
-}
+} */
 
 /* Ensure proper contrast for focus elements */
 html.dark button:focus,
@@ -586,7 +595,7 @@ html.dark tbody tr {
 }
 
 html.dark th {
-  background-color: #0d1117;
+  background-color: rgb(48, 63, 83);
   color: #8b949e;
   font-weight: 600;
 }
@@ -619,6 +628,10 @@ html.dark .space-y-4 > * + * {
 /* Improve spacing backgrounds */
 html.dark .space-y-6 > * + * {
   margin-top: 1.5rem;
+}
+
+html.dark .border.border-gray-100.p-6 {
+  border: #45556c 1px solid;
 }
 
 /* Alert header styling for dark mode */

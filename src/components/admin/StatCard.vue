@@ -1,4 +1,8 @@
 <script setup>
+import { useDarkMode } from '@/composables/useDarkMode'
+
+const { isDarkMode } = useDarkMode()
+
 defineProps({
   title: String,
   value: [String, Number],
@@ -33,6 +37,14 @@ const lightBgs = {
   red: 'from-red-50 to-red-100/50',
 }
 
+const darkBgs = {
+  blue: 'from-blue-900/40 to-blue-800/20',
+  green: 'from-emerald-900/40 to-emerald-800/20',
+  emerald: 'from-emerald-900/40 to-emerald-800/20',
+  purple: 'from-purple-900/40 to-purple-800/20',
+  red: 'from-red-900/40 to-red-800/20',
+}
+
 const iconBgClasses = {
   blue: 'bg-blue-100 text-blue-600',
   green: 'bg-emerald-100 text-emerald-600',
@@ -49,10 +61,12 @@ const trendColorClasses = {
 
 <template>
   <div
-    class="relative overflow-hidden rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-smooth group cursor-default animate-slide-in"
+    class="relative overflow-hidden rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all duration-300 group cursor-default animate-slide-in"
   >
     <!-- Gradient background -->
-    <div :class="`absolute inset-0 bg-linear-to-br ${lightBgs[color]} opacity-40`"></div>
+    <div
+      :class="`absolute inset-0 bg-linear-to-br ${isDarkMode ? darkBgs[color] : lightBgs[color]} opacity-40 transition-all duration-300`"
+    ></div>
 
     <!-- Gradient accent in top-right -->
     <div
@@ -128,5 +142,10 @@ const trendColorClasses = {
 
 .animate-slide-in:nth-child(4) {
   animation-delay: 0.4s;
+}
+
+/* Smooth dark mode transitions */
+:deep(div) {
+  @apply transition-all duration-300;
 }
 </style>
