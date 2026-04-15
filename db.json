@@ -65,7 +65,8 @@
         "lastName": "Doe",
         "email": "john.doe@example.com",
         "password": "password123",
-        "role": "Admin"
+        "role": "Admin",
+        "darkMode": false
       },
       {
         "id": "2",
@@ -73,7 +74,8 @@
         "lastName": "Smith",
         "email": "jane.smith@example.com",
         "password": "password123",
-        "role": "Admin"
+        "role": "Admin",
+        "darkMode": false
       },
       {
         "id": "3",
@@ -81,7 +83,8 @@
         "lastName": "Johnson",
         "email": "bob.johnson@example.com",
         "password": "password123",
-        "role": "Admin"
+        "role": "Admin",
+        "darkMode": false
       },
       {
         "id": "1775628893250",
@@ -263,7 +266,8 @@
     "lastName": "Admin",
     "email": "superadmin@example.com",
     "password": "password123",
-    "role": "Super Admin"
+    "role": "Super Admin",
+    "darkMode": false
   },
   "kiosks": {
     "1": [
@@ -970,11 +974,7 @@
       "name": "Classic Burger Combo",
       "description": "Big Mac with fries and drink",
       "price": 14.99,
-      "items": [
-        "Big Mac",
-        "French Fries",
-        "Coca Cola"
-      ],
+      "items": ["Big Mac", "French Fries", "Coca Cola"],
       "isActive": true,
       "createdAt": "2026-04-13T00:00:00.000Z"
     },
@@ -984,10 +984,7 @@
       "name": "Value Menu",
       "description": "Budget-friendly combo",
       "price": 11.99,
-      "items": [
-        "Quarter Pounder",
-        "French Fries"
-      ],
+      "items": ["Quarter Pounder", "French Fries"],
       "isActive": true,
       "createdAt": "2026-04-13T00:00:00.000Z"
     },

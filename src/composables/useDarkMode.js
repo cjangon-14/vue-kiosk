@@ -1,19 +1,28 @@
 import { ref, computed } from 'vue'
+import { useAuth } from './useAuth'
 
 const darkMode = ref(false)
 
 export const useDarkMode = () => {
+  const { getUser, updateUserPreference } = useAuth()
   const isDarkMode = computed(() => darkMode.value)
 
   const initializeDarkMode = () => {
     if (typeof window !== 'undefined') {
-      // Load dark mode preference from localStorage
-      const saved = localStorage.getItem('darkMode')
-      if (saved !== null) {
-        darkMode.value = saved === 'true'
+      const user = getUser()
+
+      // Load from user account if available
+      if (user && user.darkMode !== undefined) {
+        darkMode.value = user.darkMode
       } else {
-        // Check system preference
-        darkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+        // Fall back to localStorage
+        const saved = localStorage.getItem('darkMode')
+        if (saved !== null) {
+          darkMode.value = saved === 'true'
+        } else {
+          // Check system preference
+          darkMode.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+        }
       }
       applyDarkMode(darkMode.value)
     }
@@ -21,18 +30,28 @@ export const useDarkMode = () => {
 
   const toggleDarkMode = () => {
     darkMode.value = !darkMode.value
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('darkMode', darkMode.value.toString())
-    }
     applyDarkMode(darkMode.value)
+    savePreference(darkMode.value)
   }
 
   const setDarkMode = (value) => {
     darkMode.value = value
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('darkMode', value.toString())
-    }
     applyDarkMode(value)
+    savePreference(value)
+  }
+
+  const savePreference = async (isDark) => {
+    if (typeof window !== 'undefined') {
+      // Save to localStorage as backup
+      localStorage.setItem('darkMode', isDark.toString())
+
+      // Save to user account
+      try {
+        await updateUserPreference('darkMode', isDark)
+      } catch (err) {
+        console.error('Failed to save dark mode preference:', err)
+      }
+    }
   }
 
   const applyDarkMode = (isDark) => {
@@ -48,6 +67,11 @@ export const useDarkMode = () => {
 
   return {
     isDarkMode,
+    initializeDarkMode,
+    toggleDarkMode,
+    setDarkMode,
+  }
+}
     toggleDarkMode,
     setDarkMode,
     initializeDarkMode,
