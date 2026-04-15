@@ -163,7 +163,7 @@ const deleteCategory = async (id) => {
             <div class="flex items-start justify-between mb-4">
               <div
                 v-if="category.image"
-                class="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0"
+                class="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden shrink-0"
               >
                 <img
                   :src="category.image"
@@ -173,7 +173,7 @@ const deleteCategory = async (id) => {
               </div>
               <div
                 v-else
-                class="w-16 h-16 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0"
+                class="w-16 h-16 bg-emerald-100 rounded-lg flex items-center justify-center shrink-0"
               >
                 <LayoutGrid class="w-8 h-8 text-emerald-600" />
               </div>

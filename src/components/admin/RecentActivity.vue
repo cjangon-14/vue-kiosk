@@ -365,8 +365,9 @@ onUnmounted(() => {
       <router-link
         to="/activity"
         class="text-xs text-blue-600 hover:text-blue-700 font-semibold hover:underline"
-        >View All →</router-link
       >
+        View All →
+      </router-link>
     </div>
   </div>
 </template>
