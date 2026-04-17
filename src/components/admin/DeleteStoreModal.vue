@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { useToast } from '../../composables/useToast'
 
 const props = defineProps({
   isOpen: {
@@ -13,6 +14,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'submit'])
+const { success, error: showError } = useToast()
 
 const isSubmitting = ref(false)
 
@@ -26,10 +28,12 @@ const handleConfirmDelete = async () => {
 
     if (!response.ok) throw new Error('Failed to delete store')
 
+    success('Store deleted successfully!')
     emit('submit', props.storeId)
     handleClose()
   } catch (error) {
     console.error('Error deleting store:', error)
+    showError('Failed to delete store')
   } finally {
     isSubmitting.value = false
   }

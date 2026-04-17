@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useFetchData } from '../../composables/useFetchData'
+import { useToast } from '../../composables/useToast'
 
 const props = defineProps({
   isOpen: {
@@ -15,6 +16,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'submit'])
 const { addRecentActivity, updateStoreLastActivity } = useFetchData()
+const { success, error: showError } = useToast()
 
 const formData = ref({
   firstName: '',

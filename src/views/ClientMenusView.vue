@@ -3,15 +3,20 @@ import { ref, onMounted, computed } from 'vue'
 import { Search, Plus, Edit, Trash2, LayoutList } from '@lucide/vue'
 import { useAuth } from '../composables/useAuth'
 import { useActivityLog } from '../composables/useActivityLog'
+import { useToast } from '../composables/useToast'
 
 const { getUser } = useAuth()
 const { logMenuAdded, logMenuUpdated, logMenuDeleted } = useActivityLog()
+const { success, error: showError } = useToast()
 const currentUser = getUser()
 
 const menus = ref([])
 const products = ref([])
 const loading = ref(false)
 const searchQuery = ref('')
+const statusFilter = ref('')
+const currentPage = ref(1)
+const itemsPerPage = 10
 const showModal = ref(false)
 const editingId = ref(null)
 const formData = ref({
@@ -23,10 +28,36 @@ const formData = ref({
 })
 
 const filteredMenus = computed(() => {
-  return menus.value.filter((menu) =>
-    menu.name.toLowerCase().includes(searchQuery.value.toLowerCase()),
-  )
+  return menus.value.filter((menu) => {
+    const matchesSearch = menu.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    const matchesStatus = !statusFilter.value || menu.isActive.toString() === statusFilter.value
+    return matchesSearch && matchesStatus
+  })
 })
+
+const totalPages = computed(() => Math.ceil(filteredMenus.value.length / itemsPerPage))
+
+const paginatedMenus = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredMenus.value.slice(start, end)
+})
+
+const goToPage = (page) => {
+  currentPage.value = Math.max(1, Math.min(page, totalPages.value))
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+const clearFilters = () => {
+  searchQuery.value = ''
+  statusFilter.value = ''
+  currentPage.value = 1
+}
 
 onMounted(async () => {
   await loadData()
@@ -49,6 +80,8 @@ const loadData = async () => {
       const allProducts = await productsRes.json()
       products.value = allProducts.filter((p) => p.storeId === currentUser.storeId)
     }
+
+    currentPage.value = 1
   } catch (err) {
     console.error('Failed to load data:', err)
   } finally {
@@ -80,7 +113,7 @@ const closeModal = () => {
 
 const saveMenu = async () => {
   if (!formData.value.name || !formData.value.price) {
-    alert('Menu name and price are required')
+    showError('Menu name and price are required')
     return
   }
 
@@ -100,6 +133,7 @@ const saveMenu = async () => {
         body: JSON.stringify(dataToSave),
       })
       await logMenuUpdated(formData.value.name)
+      success(`Menu "${formData.value.name}" updated successfully!`)
     } else {
       await fetch('http://localhost:3005/menus', {
         method: 'POST',
@@ -107,12 +141,14 @@ const saveMenu = async () => {
         body: JSON.stringify(dataToSave),
       })
       await logMenuAdded(formData.value.name)
+      success(`Menu "${formData.value.name}" created successfully!`)
     }
 
     await loadData()
     closeModal()
   } catch (err) {
     console.error('Failed to save menu:', err)
+    showError('Failed to save menu. Please try again.')
   }
 }
 
@@ -125,10 +161,12 @@ const deleteMenu = async (id) => {
       })
       if (menuToDelete) {
         await logMenuDeleted(menuToDelete.name)
+        success(`Menu "${menuToDelete.name}" deleted successfully!`)
       }
       await loadData()
     } catch (err) {
       console.error('Failed to delete menu:', err)
+      showError('Failed to delete menu. Please try again.')
     }
   }
 }
@@ -140,9 +178,12 @@ const toggleActive = async (menu) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ isActive: !menu.isActive }),
     })
+    const statusText = !menu.isActive ? 'activated' : 'deactivated'
+    success(`Menu "${menu.name}" ${statusText}!`)
     await loadData()
   } catch (err) {
     console.error('Failed to update menu:', err)
+    showError('Failed to update menu status')
   }
 }
 </script>
@@ -171,8 +212,8 @@ const toggleActive = async (menu) => {
           <span class="font-semibold text-gray-900">Menus</span>
         </nav>
 
-        <!-- Search -->
-        <div class="bg-white rounded-lg border border-gray-200 p-4">
+        <!-- Search and Filter -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
           <div class="relative">
             <Search class="absolute left-3 top-3 w-4 h-4 text-gray-400" />
             <input
@@ -182,11 +223,28 @@ const toggleActive = async (menu) => {
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
+          <div class="flex gap-3">
+            <select
+              v-model="statusFilter"
+              class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+            >
+              <option value="">All Status</option>
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+            <button
+              v-if="searchQuery || statusFilter"
+              @click="clearFilters"
+              class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
         </div>
 
         <!-- Menus Table -->
         <div v-if="!loading" class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div v-if="filteredMenus.length > 0" class="overflow-x-auto">
+          <div v-if="paginatedMenus.length > 0" class="overflow-x-auto">
             <table class="w-full">
               <thead class="bg-gray-50 border-b border-gray-200">
                 <tr>
@@ -208,7 +266,7 @@ const toggleActive = async (menu) => {
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200">
-                <tr v-for="menu in filteredMenus" :key="menu.id" class="hover:bg-gray-50">
+                <tr v-for="menu in paginatedMenus" :key="menu.id" class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ menu.name }}</td>
                   <td class="px-6 py-4 text-sm font-semibold text-gray-900">${{ menu.price }}</td>
                   <td class="px-6 py-4 text-sm text-gray-600">

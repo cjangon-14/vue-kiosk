@@ -42,14 +42,16 @@ router.beforeEach((to, from) => {
   const { isAuthenticated, getUser } = useAuth()
   const user = getUser()
 
-  // If trying to access a protected route
+  // If trying to access a protected route but not authenticated, redirect to login
   if (to.meta.requiresAuth && !isAuthenticated.value) {
-    // Redirect to login
-    return '/login'
+    // Show loader to prevent content flash
+    if (to.path !== '/login') {
+      // Trigger loader in App.vue via navigation
+      return '/login'
+    }
   }
-  // If already logged in and trying to access login page
+  // If already logged in and trying to access login page, redirect to dashboard
   else if (to.path === '/login' && isAuthenticated.value) {
-    // Redirect to appropriate dashboard based on role
     if (user?.role === 'Super Admin') {
       return '/dashboard'
     } else {
@@ -69,7 +71,16 @@ router.beforeEach((to, from) => {
   ) {
     return '/client'
   }
-  // return nothing/undefined to allow navigation
+})
+
+// Ensure authentication check completes before resolving route
+router.beforeResolve((to, _from) => {
+  const { isAuthenticated } = useAuth()
+
+  // Protected routes must wait for auth verification
+  if (to.meta.requiresAuth && !isAuthenticated.value) {
+    return '/login'
+  }
 })
 
 // Prevent back button after login

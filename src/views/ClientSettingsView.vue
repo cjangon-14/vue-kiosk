@@ -5,6 +5,7 @@ import { useAuth } from '../composables/useAuth'
 import { useColorScheme } from '../composables/useColorScheme'
 import { useStoreData } from '../composables/useStoreData'
 import { useActivityLog } from '../composables/useActivityLog'
+import { useToast } from '../composables/useToast'
 
 const { getUser } = useAuth()
 const currentUser = getUser()
@@ -12,6 +13,7 @@ const { currentScheme, customColor, setScheme, setCustomColor, colorSchemes, ava
   useColorScheme()
 const { storeName, updateStoreName, fetchStoreData } = useStoreData()
 const { logColorSchemeChanged } = useActivityLog()
+const { success, error: showError } = useToast()
 
 const storeSettings = ref({
   storeName: '',
@@ -46,15 +48,16 @@ const saveSettings = async () => {
     if (storeSettings.value.storeName !== storeName.value) {
       await updateStoreName(storeSettings.value.storeName)
     }
-    alert('Settings saved successfully!')
+    success('Settings saved successfully!')
   } catch (err) {
-    alert(`Error saving settings: ${err.message}`)
+    showError(`Error saving settings: ${err.message}`)
   }
 }
 
 const handleColorSchemeChange = (schemeName) => {
   setScheme(schemeName)
   logColorSchemeChanged(colorSchemes[schemeName]?.name || schemeName)
+  success(`Color scheme changed to ${colorSchemes[schemeName]?.name || schemeName}`)
 }
 
 const isValidHexColor = (hex) => {

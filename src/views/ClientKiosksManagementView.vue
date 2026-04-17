@@ -1,18 +1,23 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { Search, Edit, CheckCircle, AlertCircle } from '@lucide/vue'
+import { Search, Edit, CheckCircle, AlertCircle, ChevronLeft, ChevronRight } from '@lucide/vue'
 import { useAuth } from '../composables/useAuth'
 import { useActivityLog } from '../composables/useActivityLog'
+import { useToast } from '../composables/useToast'
 
 const { getUser } = useAuth()
 const { logKioskStatusChanged, logKioskUpdated } = useActivityLog()
+const { success, error: showError, warning } = useToast()
 const currentUser = getUser()
 
 const kiosks = ref([])
 const loading = ref(false)
 const searchQuery = ref('')
+const selectedStatus = ref('all')
 const showModal = ref(false)
 const editingId = ref(null)
+const currentPage = ref(1)
+const itemsPerPage = 10
 const formData = ref({
   kioskNumber: '',
   status: 'active',
@@ -22,10 +27,43 @@ const formData = ref({
 const filteredKiosks = computed(() => {
   return kiosks.value.filter(
     (kiosk) =>
-      kiosk.kioskNumber.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      (kiosk.location && kiosk.location.toLowerCase().includes(searchQuery.value.toLowerCase())),
+      (kiosk.kioskNumber.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        (kiosk.location && kiosk.location.toLowerCase().includes(searchQuery.value.toLowerCase()))) &&
+      (selectedStatus.value === 'all' || kiosk.status === selectedStatus.value),
   )
 })
+
+const totalPages = computed(() => Math.ceil(filteredKiosks.value.length / itemsPerPage))
+
+const paginatedItems = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredKiosks.value.slice(start, end)
+})
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+
+const clearFilters = () => {
+  searchQuery.value = ''
+  selectedStatus.value = 'all'
+  currentPage.value = 1
+}
 
 onMounted(async () => {
   await loadKiosks()
@@ -42,6 +80,7 @@ const loadKiosks = async () => {
         kiosks.value = allKiosks[storeId] || []
       }
     }
+    currentPage.value = 1
   } catch (err) {
     console.error('Failed to load kiosks:', err)
   } finally {
@@ -84,10 +123,13 @@ const toggleStatus = async (kiosk) => {
 
     // Log activity
     await logKioskStatusChanged(kiosk.kioskNumber, newStatus)
+    const statusMsg = newStatus === 'active' ? 'activated' : 'taken offline'
+    success(`Kiosk "${kiosk.kioskNumber}" ${statusMsg}!`)
 
     await loadKiosks()
   } catch (err) {
     console.error('Failed to update kiosk status:', err)
+    showError('Failed to update kiosk status')
   }
 }
 
@@ -161,11 +203,17 @@ const saveKiosk = async () => {
     // Log activity
     await logKioskUpdated(formData.value.kioskNumber)
 
+    if (editingId.value) {
+      success(`Kiosk "${formData.value.kioskNumber}" updated successfully!`)
+    } else {
+      success(`Kiosk "${formData.value.kioskNumber}" added successfully!`)
+    }
+
     await loadKiosks()
     closeModal()
   } catch (err) {
     console.error('Failed to save kiosk:', err)
-    alert('Failed to save kiosk. Please try again.')
+    showError('Failed to save kiosk. Please try again.')
   }
 }
 </script>
@@ -187,14 +235,31 @@ const saveKiosk = async () => {
 
         <!-- Search -->
         <div class="bg-white rounded-lg border border-gray-200 p-4">
-          <div class="relative">
-            <Search class="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search by kiosk number or location..."
-              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            />
+          <div class="flex gap-4">
+            <div class="flex-1 relative">
+              <Search class="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search by kiosk number or location..."
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              />
+            </div>
+            <select
+              v-model="selectedStatus"
+              class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="offline">Offline</option>
+              <option value="maintenance">Maintenance</option>
+            </select>
+            <button
+              @click="clearFilters"
+              class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition-colors"
+            >
+              Clear Filters
+            </button>
           </div>
         </div>
 
@@ -222,7 +287,7 @@ const saveKiosk = async () => {
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200">
-                <tr v-for="kiosk in filteredKiosks" :key="kiosk.id" class="hover:bg-gray-50">
+                <tr v-for="kiosk in paginatedItems" :key="kiosk.id" class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium text-gray-900">
                     {{ kiosk.kioskNumber }}
                   </td>
@@ -260,6 +325,48 @@ const saveKiosk = async () => {
 
         <div v-if="loading" class="flex items-center justify-center h-64">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div v-if="!loading && totalPages > 1" class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-600">
+              Showing <span class="font-semibold">{{ paginatedItems.length }}</span> of
+              <span class="font-semibold">{{ filteredKiosks.length }}</span>
+              kiosks
+            </p>
+            <div class="flex items-center gap-2">
+              <button
+                @click="previousPage"
+                :disabled="currentPage === 1"
+                class="p-2 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 rounded-lg transition-colors"
+              >
+                <ChevronLeft class="w-4 h-4" />
+              </button>
+              <div class="flex gap-1">
+                <button
+                  v-for="page in totalPages"
+                  :key="page"
+                  @click="goToPage(page)"
+                  :class="[
+                    'px-3 py-1 rounded-lg text-sm font-medium transition-colors',
+                    currentPage === page
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+                  ]"
+                >
+                  {{ page }}
+                </button>
+              </div>
+              <button
+                @click="nextPage"
+                :disabled="currentPage === totalPages"
+                class="p-2 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 rounded-lg transition-colors"
+              >
+                <ChevronRight class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

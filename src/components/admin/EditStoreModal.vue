@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useFetchData } from '../../composables/useFetchData'
+import { useToast } from '../../composables/useToast'
 
 const props = defineProps({
   isOpen: {
@@ -15,6 +16,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'submit'])
 const { addRecentActivity } = useFetchData()
+const { success, error: showError } = useToast()
 
 const formData = ref({
   name: '',
@@ -79,11 +81,13 @@ const handleSubmit = async () => {
     }
 
     const updatedStore = await response.json()
+    success(`Store "${props.store.name}" updated successfully!`)
     emit('submit', updatedStore)
 
     handleClose()
   } catch (error) {
     console.error('Error updating store:', error)
+    showError('Failed to update store. Please try again.')
     errors.value.submit = 'Failed to update store. Please try again.'
   } finally {
     isSubmitting.value = false

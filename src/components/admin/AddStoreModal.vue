@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useFetchData } from '../../composables/useFetchData'
+import { useToast } from '../../composables/useToast'
 
 const props = defineProps({
   isOpen: {
@@ -11,6 +12,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'submit'])
 const { addRecentActivity } = useFetchData()
+const { success, error: showError } = useToast()
 
 const formData = ref({
   name: '',
@@ -60,11 +62,13 @@ const handleSubmit = async () => {
     // Add recent activity
     await addRecentActivity('Store Created', `New store "${formData.value.name}" created`)
 
+    success(`Store "${formData.value.name}" created successfully!`)
     emit('submit', newStore || newStoreData)
 
     handleClose()
   } catch (error) {
     console.error('Error creating store:', error)
+    showError('Failed to create store. Please try again.')
     errors.value.submit = 'Failed to create store. Please try again.'
   } finally {
     isSubmitting.value = false

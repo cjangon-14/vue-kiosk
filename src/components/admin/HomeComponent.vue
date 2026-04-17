@@ -28,7 +28,7 @@ onUnmounted(() => {
   <div>
     <div class="grid grid-cols-[250px_1fr]">
       <!-- sidebar -->
-      <DashboardNavLinks />
+      <DashboardNavLinks class="z-50"/>
 
       <!-- header -->
       <header

@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { Search, Edit, Trash2, AlertTriangle, Boxes, TrendingDown } from '@lucide/vue'
+import { Search, Edit, Trash2, AlertTriangle, Boxes, TrendingDown, ChevronLeft, ChevronRight } from '@lucide/vue'
 import { useAuth } from '../composables/useAuth'
 import { useActivityLog } from '../composables/useActivityLog'
+import { useToast } from '../composables/useToast'
 
 const { getUser } = useAuth()
 const { logInventoryUpdated } = useActivityLog()
+const { success, error: showError, warning } = useToast()
 const currentUser = getUser()
 
 const inventory = ref([])
@@ -14,6 +16,8 @@ const loading = ref(false)
 const searchQuery = ref('')
 const showModal = ref(false)
 const editingId = ref(null)
+const currentPage = ref(1)
+const itemsPerPage = 10
 const formData = ref({
   productId: '',
   quantity: 0,
@@ -27,6 +31,32 @@ const filteredInventory = computed(() => {
     return product && product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   })
 })
+
+const totalPages = computed(() => Math.ceil(filteredInventory.value.length / itemsPerPage))
+
+const paginatedItems = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredInventory.value.slice(start, end)
+})
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
 
 const lowStockItems = computed(() => {
   return filteredInventory.value.filter((item) => item.quantity < item.minThreshold)
@@ -57,6 +87,8 @@ const loadData = async () => {
       const allInventory = await inventoryRes.json()
       inventory.value = allInventory.filter((i) => i.storeId === currentUser.storeId)
     }
+
+    currentPage.value = 1
   } catch (err) {
     console.error('Failed to load data:', err)
   } finally {
@@ -87,7 +119,7 @@ const closeModal = () => {
 
 const saveInventory = async () => {
   if (!formData.value.productId) {
-    alert('Product selection is required')
+    showError('Product selection is required')
     return
   }
 
@@ -109,12 +141,14 @@ const saveInventory = async () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSave),
       })
+      success(`Inventory for "${product.name}" updated successfully!`)
     } else {
       await fetch('http://localhost:3005/inventory', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSave),
       })
+      success(`Inventory for "${product.name}" added successfully!`)
     }
 
     if (product) {
@@ -125,18 +159,27 @@ const saveInventory = async () => {
     closeModal()
   } catch (err) {
     console.error('Failed to save inventory:', err)
+    showError('Failed to save inventory. Please try again.')
   }
 }
 
 const deleteInventory = async (id) => {
   if (confirm('Are you sure you want to remove this item?')) {
     try {
+      const item = inventory.value.find((i) => i.id === id)
+      const product = item ? getProduct(item.productId) : null
       await fetch(`http://localhost:3005/inventory/${id}`, {
         method: 'DELETE',
       })
+      if (product) {
+        success(`Inventory for "${product.name}" deleted successfully!`)
+      } else {
+        success('Inventory item deleted successfully!')
+      }
       await loadData()
     } catch (err) {
       console.error('Failed to delete inventory:', err)
+      showError('Failed to delete inventory. Please try again.')
     }
   }
 }
@@ -181,7 +224,7 @@ const getStockPercentage = (item) => {
           v-if="lowStockItems.length > 0"
           class="bg-red-50 border border-red-200 rounded-lg p-4 flex gap-3"
         >
-          <AlertTriangle class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+          <AlertTriangle class="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
           <div>
             <h3 class="font-semibold text-red-900">Low Stock Warning</h3>
             <p class="text-sm text-red-700">
@@ -227,7 +270,7 @@ const getStockPercentage = (item) => {
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200">
-                <tr v-for="item in filteredInventory" :key="item.id" class="hover:bg-gray-50">
+                <tr v-for="item in paginatedItems" :key="item.id" class="hover:bg-gray-50">
                   <td class="px-6 py-4 text-sm font-medium text-gray-900">
                     {{ getProduct(item.productId)?.name || 'Unknown Product' }}
                   </td>
@@ -289,6 +332,48 @@ const getStockPercentage = (item) => {
 
         <div v-if="loading" class="flex items-center justify-center h-64">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div v-if="!loading && totalPages > 1" class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-600">
+              Showing <span class="font-semibold">{{ paginatedItems.length }}</span> of
+              <span class="font-semibold">{{ filteredInventory.length }}</span>
+              items
+            </p>
+            <div class="flex items-center gap-2">
+              <button
+                @click="previousPage"
+                :disabled="currentPage === 1"
+                class="p-2 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 rounded-lg transition-colors"
+              >
+                <ChevronLeft class="w-4 h-4" />
+              </button>
+              <div class="flex gap-1">
+                <button
+                  v-for="page in totalPages"
+                  :key="page"
+                  @click="goToPage(page)"
+                  :class="[
+                    'px-3 py-1 rounded-lg text-sm font-medium transition-colors',
+                    currentPage === page
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+                  ]"
+                >
+                  {{ page }}
+                </button>
+              </div>
+              <button
+                @click="nextPage"
+                :disabled="currentPage === totalPages"
+                class="p-2 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 rounded-lg transition-colors"
+              >
+                <ChevronRight class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

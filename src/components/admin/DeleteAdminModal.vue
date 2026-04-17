@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useFetchData } from '../../composables/useFetchData'
+import { useToast } from '../../composables/useToast'
 
 const props = defineProps({
   isOpen: {
@@ -19,6 +20,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'submit'])
 const { updateStoreLastActivity } = useFetchData()
+const { success, error: showError } = useToast()
 
 const isSubmitting = ref(false)
 
@@ -50,10 +52,12 @@ const handleConfirmDelete = async () => {
     // Update store's last activity
     await updateStoreLastActivity(props.storeId)
 
+    success('Admin deleted successfully!')
     emit('submit', props.adminId)
     handleClose()
   } catch (error) {
     console.error('Error deleting admin:', error)
+    showError('Failed to delete admin')
   } finally {
     isSubmitting.value = false
   }

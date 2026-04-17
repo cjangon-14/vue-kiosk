@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useFetchData } from '../../composables/useFetchData'
+import { useToast } from '../../composables/useToast'
 
 const props = defineProps({
   isOpen: {
@@ -15,6 +16,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'submit'])
 const { addRecentActivity, updateStoreLastActivity } = useFetchData()
+const { success, error: showError } = useToast()
 
 const formData = ref({
   kioskNumber: '',
@@ -98,11 +100,13 @@ const handleSubmit = async () => {
     }
 
     const updatedKiosk = updatedList.find((kiosk) => kiosk.id === props.kiosk.id)
+    success(`Kiosk "${props.kiosk.kioskNumber}" updated successfully!`)
     emit('submit', updatedKiosk)
 
     handleClose()
   } catch (error) {
     console.error('Error updating kiosk:', error)
+    showError('Failed to update kiosk. Please try again.')
     errors.value.submit = 'Failed to update kiosk. Please try again.'
   } finally {
     isSubmitting.value = false

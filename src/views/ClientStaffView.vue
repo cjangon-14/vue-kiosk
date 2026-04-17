@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { Search, Plus, Edit, Trash2, Users, Mail, Shield } from '@lucide/vue'
+import { Search, Plus, Edit, Trash2, Users, Mail, Shield, ChevronLeft, ChevronRight } from '@lucide/vue'
 import { useAuth } from '../composables/useAuth'
 
 const { getUser } = useAuth()
@@ -9,16 +9,53 @@ const currentUser = getUser()
 const staffMembers = ref([])
 const loading = ref(false)
 const searchQuery = ref('')
+const selectedRole = ref('All Roles')
+const currentPage = ref(1)
+const itemsPerPage = 10
 
 const filteredStaff = computed(() => {
   return staffMembers.value.filter((staff) => {
     const fullName = `${staff.firstName} ${staff.lastName}`.toLowerCase()
     const email = staff.email.toLowerCase()
     const query = searchQuery.value.toLowerCase()
+    const matchesSearch = fullName.includes(query) || email.includes(query)
+    const matchesRole = selectedRole.value === 'All Roles' || staff.role === selectedRole.value
 
-    return fullName.includes(query) || email.includes(query)
+    return matchesSearch && matchesRole
   })
 })
+
+const totalPages = computed(() => Math.ceil(filteredStaff.value.length / itemsPerPage))
+
+const paginatedItems = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredStaff.value.slice(start, end)
+})
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+
+const clearFilters = () => {
+  searchQuery.value = ''
+  selectedRole.value = 'All Roles'
+  currentPage.value = 1
+}
 
 onMounted(async () => {
   try {
@@ -30,6 +67,7 @@ onMounted(async () => {
         staffMembers.value = adminsList[currentUser.storeId] || []
       }
     }
+    currentPage.value = 1
   } catch (err) {
     console.error('Failed to load staff:', err)
   } finally {
@@ -91,6 +129,21 @@ const getRoleColor = (role) => {
               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
+          <select
+            v-model="selectedRole"
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <option>All Roles</option>
+            <option>Staff</option>
+            <option>Manager</option>
+            <option>Admin</option>
+          </select>
+          <button
+            @click="clearFilters"
+            class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg font-medium transition-colors"
+          >
+            Clear Filters
+          </button>
         </div>
 
         <!-- Staff Table -->
@@ -123,7 +176,7 @@ const getRoleColor = (role) => {
               </thead>
               <tbody class="divide-y divide-gray-200">
                 <tr
-                  v-for="staff in filteredStaff"
+                  v-for="staff in paginatedItems"
                   :key="staff.id"
                   class="hover:bg-gray-50 transition-colors"
                 >
@@ -180,13 +233,46 @@ const getRoleColor = (role) => {
           </div>
         </div>
 
-        <!-- Summary -->
+        <!-- Summary and Pagination -->
         <div class="bg-white rounded-lg border border-gray-200 p-4">
-          <p class="text-sm text-gray-600">
-            Showing <span class="font-semibold">{{ filteredStaff.length }}</span> of
-            <span class="font-semibold">{{ staffMembers.length }}</span>
-            staff members
-          </p>
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-600">
+              Showing <span class="font-semibold">{{ paginatedItems.length }}</span> of
+              <span class="font-semibold">{{ filteredStaff.length }}</span>
+              staff members
+            </p>
+            <div v-if="totalPages > 1" class="flex items-center gap-2">
+              <button
+                @click="previousPage"
+                :disabled="currentPage === 1"
+                class="p-2 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 rounded-lg transition-colors"
+              >
+                <ChevronLeft class="w-4 h-4" />
+              </button>
+              <div class="flex gap-1">
+                <button
+                  v-for="page in totalPages"
+                  :key="page"
+                  @click="goToPage(page)"
+                  :class="[
+                    'px-3 py-1 rounded-lg text-sm font-medium transition-colors',
+                    currentPage === page
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+                  ]"
+                >
+                  {{ page }}
+                </button>
+              </div>
+              <button
+                @click="nextPage"
+                :disabled="currentPage === totalPages"
+                class="p-2 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 rounded-lg transition-colors"
+              >
+                <ChevronRight class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

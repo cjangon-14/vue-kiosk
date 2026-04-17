@@ -72,8 +72,3 @@ export const useDarkMode = () => {
     setDarkMode,
   }
 }
-    toggleDarkMode,
-    setDarkMode,
-    initializeDarkMode,
-  }
-}

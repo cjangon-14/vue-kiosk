@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { Search, Filter, Plus, Edit, Trash2, CheckCircle, AlertCircle } from '@lucide/vue'
+import { Search, Filter, Plus, Edit, Trash2, CheckCircle, AlertCircle, ChevronLeft, ChevronRight } from '@lucide/vue'
 import { useAuth } from '../composables/useAuth'
 
 const { getUser } = useAuth()
@@ -10,6 +10,8 @@ const kiosks = ref([])
 const loading = ref(false)
 const searchQuery = ref('')
 const selectedStatus = ref('all')
+const currentPage = ref(1)
+const itemsPerPage = 10
 
 const filteredKiosks = computed(() => {
   return kiosks.value.filter((kiosk) => {
@@ -22,6 +24,32 @@ const filteredKiosks = computed(() => {
   })
 })
 
+const totalPages = computed(() => Math.ceil(filteredKiosks.value.length / itemsPerPage))
+
+const paginatedItems = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredKiosks.value.slice(start, end)
+})
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+
 onMounted(async () => {
   try {
     loading.value = true
@@ -33,6 +61,7 @@ onMounted(async () => {
         kiosks.value = allKiosks[storeId] || []
       }
     }
+    currentPage.value = 1
   } catch (err) {
     console.error('Failed to load kiosks:', err)
   } finally {
@@ -142,7 +171,7 @@ const getStatusIcon = (status) => {
               </thead>
               <tbody class="divide-y divide-gray-200">
                 <tr
-                  v-for="kiosk in filteredKiosks"
+                  v-for="kiosk in paginatedItems"
                   :key="kiosk.id"
                   class="hover:bg-gray-50 transition-colors"
                 >
@@ -186,13 +215,46 @@ const getStatusIcon = (status) => {
           </div>
         </div>
 
-        <!-- Summary -->
+        <!-- Summary and Pagination -->
         <div class="bg-white rounded-lg border border-gray-200 p-4">
-          <p class="text-sm text-gray-600">
-            Showing <span class="font-semibold">{{ filteredKiosks.length }}</span> of
-            <span class="font-semibold">{{ kiosks.length }}</span>
-            kiosks
-          </p>
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-600">
+              Showing <span class="font-semibold">{{ paginatedItems.length }}</span> of
+              <span class="font-semibold">{{ filteredKiosks.length }}</span>
+              kiosks
+            </p>
+            <div v-if="totalPages > 1" class="flex items-center gap-2">
+              <button
+                @click="previousPage"
+                :disabled="currentPage === 1"
+                class="p-2 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 rounded-lg transition-colors"
+              >
+                <ChevronLeft class="w-4 h-4" />
+              </button>
+              <div class="flex gap-1">
+                <button
+                  v-for="page in totalPages"
+                  :key="page"
+                  @click="goToPage(page)"
+                  :class="[
+                    'px-3 py-1 rounded-lg text-sm font-medium transition-colors',
+                    currentPage === page
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+                  ]"
+                >
+                  {{ page }}
+                </button>
+              </div>
+              <button
+                @click="nextPage"
+                :disabled="currentPage === totalPages"
+                class="p-2 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 rounded-lg transition-colors"
+              >
+                <ChevronRight class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

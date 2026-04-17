@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { Search, Plus, Edit, Trash2, LayoutGrid } from '@lucide/vue'
+import { Search, Plus, Edit, Trash2, LayoutGrid, ChevronLeft, ChevronRight } from '@lucide/vue'
 import { useAuth } from '../composables/useAuth'
 import { useActivityLog } from '../composables/useActivityLog'
+import { useToast } from '../composables/useToast'
 
 const { getUser } = useAuth()
 const { logCategoryAdded, logCategoryUpdated, logCategoryDeleted } = useActivityLog()
+const { success, error: showError } = useToast()
 const currentUser = getUser()
 
 const categories = ref([])
@@ -13,6 +15,8 @@ const loading = ref(false)
 const searchQuery = ref('')
 const showModal = ref(false)
 const editingId = ref(null)
+const currentPage = ref(1)
+const itemsPerPage = 10
 const formData = ref({
   name: '',
   description: '',
@@ -24,6 +28,32 @@ const filteredCategories = computed(() => {
     cat.name.toLowerCase().includes(searchQuery.value.toLowerCase()),
   )
 })
+
+const totalPages = computed(() => Math.ceil(filteredCategories.value.length / itemsPerPage))
+
+const paginatedItems = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredCategories.value.slice(start, end)
+})
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
+}
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
 
 onMounted(async () => {
   await loadCategories()
@@ -37,6 +67,7 @@ const loadCategories = async () => {
       const allCategories = await res.json()
       categories.value = allCategories.filter((c) => c.storeId === currentUser.storeId)
     }
+    currentPage.value = 1
   } catch (err) {
     console.error('Failed to load categories:', err)
   } finally {
@@ -63,7 +94,7 @@ const closeModal = () => {
 
 const saveCategory = async () => {
   if (!formData.value.name) {
-    alert('Category name is required')
+    showError('Category name is required')
     return
   }
 
@@ -82,6 +113,7 @@ const saveCategory = async () => {
         body: JSON.stringify(dataToSave),
       })
       await logCategoryUpdated(formData.value.name)
+      success(`Category "${formData.value.name}" updated successfully!`)
     } else {
       await fetch('http://localhost:3005/categories', {
         method: 'POST',
@@ -89,12 +121,14 @@ const saveCategory = async () => {
         body: JSON.stringify(dataToSave),
       })
       await logCategoryAdded(formData.value.name)
+      success(`Category "${formData.value.name}" created successfully!`)
     }
 
     await loadCategories()
     closeModal()
   } catch (err) {
     console.error('Failed to save category:', err)
+    showError('Failed to save category. Please try again.')
   }
 }
 
@@ -105,12 +139,11 @@ const deleteCategory = async (id) => {
       await fetch(`http://localhost:3005/categories/${id}`, {
         method: 'DELETE',
       })
-      if (categoryToDelete) {
-        await logCategoryDeleted(categoryToDelete.name)
-      }
+      success(`Category "${categoryToDelete.name}" deleted successfully!`)
       await loadCategories()
     } catch (err) {
       console.error('Failed to delete category:', err)
+      showError('Failed to delete category. Please try again.')
     }
   }
 }
@@ -156,7 +189,7 @@ const deleteCategory = async (id) => {
         <!-- Categories Grid -->
         <div v-if="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div
-            v-for="category in filteredCategories"
+            v-for="category in paginatedItems"
             :key="category.id"
             class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow"
           >
@@ -200,6 +233,48 @@ const deleteCategory = async (id) => {
         <div v-if="!loading && filteredCategories.length === 0" class="text-center py-12">
           <LayoutGrid class="w-12 h-12 text-gray-300 mx-auto mb-3" />
           <p class="text-gray-500">No categories found</p>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div v-if="!loading && totalPages > 1" class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-600">
+              Showing <span class="font-semibold">{{ paginatedItems.length }}</span> of
+              <span class="font-semibold">{{ filteredCategories.length }}</span>
+              categories
+            </p>
+            <div class="flex items-center gap-2">
+              <button
+                @click="previousPage"
+                :disabled="currentPage === 1"
+                class="p-2 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 rounded-lg transition-colors"
+              >
+                <ChevronLeft class="w-4 h-4" />
+              </button>
+              <div class="flex gap-1">
+                <button
+                  v-for="page in totalPages"
+                  :key="page"
+                  @click="goToPage(page)"
+                  :class="[
+                    'px-3 py-1 rounded-lg text-sm font-medium transition-colors',
+                    currentPage === page
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+                  ]"
+                >
+                  {{ page }}
+                </button>
+              </div>
+              <button
+                @click="nextPage"
+                :disabled="currentPage === totalPages"
+                class="p-2 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 rounded-lg transition-colors"
+              >
+                <ChevronRight class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
 
         <div v-if="loading" class="flex items-center justify-center h-64">

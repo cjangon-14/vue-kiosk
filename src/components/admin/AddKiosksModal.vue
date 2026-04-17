@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useFetchData } from '../../composables/useFetchData'
+import { useToast } from '../../composables/useToast'
 
 const props = defineProps({
   isOpen: {
@@ -19,6 +20,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'submit'])
 const { addRecentActivity, updateStoreLastActivity } = useFetchData()
+const { success, error: showError } = useToast()
 
 const formData = ref({
   kioskNumber: '',
@@ -82,10 +84,12 @@ const handleSubmit = async () => {
     // Add recent activity
     await addRecentActivity('Kiosk Added', `New kiosk ${formData.value.kioskNumber} added`)
 
+    success(`Kiosk "${formData.value.kioskNumber}" added successfully!`)
     emit('submit', newKioskData)
     handleClose()
   } catch (error) {
     console.error('Error:', error)
+    showError('Failed to add kiosk')
   } finally {
     isSubmitting.value = false
   }
