@@ -19,6 +19,7 @@ const { addRecentActivity, updateStoreLastActivity } = useFetchData()
 const { success, error: showError } = useToast()
 
 const formData = ref({
+  username: '',
   firstName: '',
   lastName: '',
   email: '',
@@ -36,6 +37,10 @@ const validateEmail = (email) => {
 
 const validateForm = () => {
   errors.value = {}
+
+  if (!formData.value.username.trim()) {
+    errors.value.username = 'Username is required'
+  }
 
   if (!formData.value.firstName.trim()) {
     errors.value.firstName = 'First name is required'
@@ -82,6 +87,7 @@ const handleSubmit = async () => {
     // 3. Create the new user/kiosk object
     const newEntry = {
       id: Date.now().toString(),
+      username: formData.value.username,
       firstName: formData.value.firstName,
       lastName: formData.value.lastName,
       email: formData.value.email,
@@ -119,7 +125,7 @@ const handleSubmit = async () => {
 }
 
 const handleClose = () => {
-  formData.value = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' }
+  formData.value = { username: '', firstName: '', lastName: '', email: '', password: '', confirmPassword: '' }
   errors.value = {}
   emit('close')
 }
@@ -138,6 +144,23 @@ const handleClose = () => {
         <!-- Error Message -->
         <div v-if="errors.submit" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
           <p class="text-sm text-red-700">{{ errors.submit }}</p>
+        </div>
+
+        <!-- Username Field -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Username <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="formData.username"
+            type="text"
+            placeholder="Enter username"
+            :class="[
+              'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
+              errors.username ? 'border-red-500' : 'border-gray-300',
+            ]"
+          />
+          <p v-if="errors.username" class="text-sm text-red-500 mt-1">{{ errors.username }}</p>
         </div>
 
         <!-- First Name Field -->

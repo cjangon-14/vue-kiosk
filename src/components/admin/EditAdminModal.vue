@@ -19,6 +19,7 @@ const { addRecentActivity, updateStoreLastActivity } = useFetchData()
 const { success, error: showError } = useToast()
 
 const formData = ref({
+  username: '',
   firstName: '',
   lastName: '',
   email: '',
@@ -32,6 +33,7 @@ watch(
   (newVal) => {
     if (newVal) {
       formData.value = {
+        username: newVal.username,
         firstName: newVal.firstName,
         lastName: newVal.lastName,
         email: newVal.email,
@@ -84,6 +86,7 @@ const handleSubmit = async () => {
       admin.id === props.admin.id
         ? {
             ...admin,
+            username: formData.value.username,
             firstName: formData.value.firstName,
             lastName: formData.value.lastName,
             email: formData.value.email,
@@ -145,6 +148,24 @@ const handleClose = () => {
         <!-- Error Message -->
         <div v-if="errors.submit" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
           <p class="text-sm text-red-700">{{ errors.submit }}</p>
+        </div>
+
+        <!-- Username Field -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Username <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="formData.username"
+            type="text"
+            placeholder="Enter username"
+            :class="[
+              'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
+              errors.username ? 'border-red-500' : 'border-gray-300',
+            ]"
+            disabled
+          />
+          <p class="text-xs text-gray-500 mt-1">Username cannot be changed</p>
         </div>
 
         <!-- First Name Field -->

@@ -46,7 +46,7 @@
       "status": "active",
       "kiosksCount": 0,
       "adminsCount": 0,
-      "lastActivity": "2026-04-20T12:52:01.994Z"
+      "lastActivity": "2026-04-20T15:05:24.923Z"
     },
     {
       "id": "BQ-n_2nFSc4",
@@ -278,6 +278,17 @@
         "firstName": "johnny1",
         "lastName": "doey",
         "email": "jd@g.com",
+        "password": "password123",
+        "role": "Admin"
+      }
+    ],
+    "1_zDA53RYEU": [
+      {
+        "id": "1776697524914",
+        "username": "test1",
+        "firstName": "Test",
+        "lastName": "Test",
+        "email": "test@gmail.com",
         "password": "password123",
         "role": "Admin"
       }
@@ -985,6 +996,42 @@
       "type": "Store Created",
       "description": "New store \"test\" created",
       "timestamp": "2026-04-20T12:52:50.383Z"
+    },
+    {
+      "type": "Staff Added",
+      "description": "Staff member \"Chris John Angon\" added",
+      "timestamp": "2026-04-20T13:56:41.516Z",
+      "id": "rOqLgjhgt7o"
+    },
+    {
+      "type": "Staff Added",
+      "description": "Staff member \"test test\" added",
+      "timestamp": "2026-04-20T14:57:40.107Z",
+      "id": "bTuiYJ4-9xM"
+    },
+    {
+      "id": "TT1x1rAHI9k",
+      "type": "Admin Created",
+      "description": "Test test added as admin",
+      "timestamp": "2026-04-20T15:03:01.174Z"
+    },
+    {
+      "id": "OVMOGBGdcUA",
+      "type": "Admin Created",
+      "description": "Test Test added as admin",
+      "timestamp": "2026-04-20T15:05:24.930Z"
+    },
+    {
+      "type": "Staff Added",
+      "description": "Staff member \"test test\" added",
+      "timestamp": "2026-04-20T15:07:38.646Z",
+      "id": "42cXeJj2s-M"
+    },
+    {
+      "type": "Staff Updated",
+      "description": "Staff member \"test test\" updated",
+      "timestamp": "2026-04-20T15:07:45.325Z",
+      "id": "zxKNBKiNQxQ"
     }
   ],
   "categories": [
@@ -1190,6 +1237,75 @@
       "minThreshold": 10,
       "maxCapacity": 60,
       "updatedAt": "2026-04-13T00:00:00.000Z"
+    }
+  ],
+  "staff": [
+    {
+      "id": "i36qaClhcZo",
+      "storeId": "1",
+      "status": "active",
+      "firstName": "Chris John",
+      "lastName": "Angon",
+      "email": "angon.chrisjohn014@gmail.com",
+      "phone": "63-966-987-1365",
+      "position": "Cashier",
+      "createdAt": "2026-04-20T13:56:41.506Z"
+    },
+    {
+      "id": "bEIsG96EyZk",
+      "storeId": "1",
+      "status": "active",
+      "firstName": "test",
+      "lastName": "test",
+      "email": "test@g.com",
+      "phone": "63-123-123-1234",
+      "position": "Manager",
+      "createdAt": "2026-04-20T14:57:40.098Z"
+    },
+    {
+      "id": "KySqQgkEQgw",
+      "storeId": "1_zDA53RYEU",
+      "status": "active",
+      "firstName": "test",
+      "lastName": "test",
+      "email": "test@g.com",
+      "phone": "63-123-123-1234",
+      "position": "Manager",
+      "createdAt": "2026-04-20T15:07:38.637Z"
+    }
+  ],
+  "staffActivityLogs": [
+    {
+      "id": "mJOwH1rEiDw",
+      "storeId": "1",
+      "staffId": null,
+      "type": "Staff Added",
+      "description": "Chris John Angon added to staff",
+      "timestamp": "2026-04-20T13:56:41.524Z"
+    },
+    {
+      "id": "PgVOxaDkaqg",
+      "storeId": "1",
+      "staffId": null,
+      "type": "Staff Added",
+      "description": "test test added to staff",
+      "timestamp": "2026-04-20T14:57:40.115Z"
+    },
+    {
+      "id": "CaRV-b3ws1M",
+      "storeId": "1_zDA53RYEU",
+      "staffId": null,
+      "type": "Staff Added",
+      "description": "test test added to staff",
+      "timestamp": "2026-04-20T15:07:38.653Z"
+    },
+    {
+      "id": "PlC93sW8a48",
+      "storeId": "1_zDA53RYEU",
+      "staffId": null,
+      "type": "Staff Updated",
+      "description": "test test profile updated",
+      "timestamp": "2026-04-20T15:07:45.332Z"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

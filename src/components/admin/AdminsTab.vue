@@ -4,7 +4,7 @@ import AddAdminModal from './AddAdminModal.vue'
 import EditAdminModal from './EditAdminModal.vue'
 import DeleteAdminModal from './DeleteAdminModal.vue'
 
-defineProps({
+const props = defineProps({
   admins: {
     type: Array,
     required: true,
@@ -107,6 +107,7 @@ const handleDeleteAdminSubmit = (adminId) => {
           <tr>
             <th class="px-6 py-5 text-left text-sm font-semibold text-gray-700">NAME</th>
             <th class="px-6 py-5 text-left text-sm font-semibold text-gray-700">EMAIL</th>
+            <th class="px-6 py-5 text-left text-sm font-semibold text-gray-700">USERNAME</th>
             <th class="px-6 py-5 text-left text-sm font-semibold text-gray-700">ROLE</th>
             <th class="px-6 py-5 text-left text-sm font-semibold text-gray-700">ACTIONS</th>
           </tr>
@@ -120,6 +121,9 @@ const handleDeleteAdminSubmit = (adminId) => {
             </td>
             <td class="px-6 py-5">
               <span class="text-gray-700">{{ admin.email }}</span>
+            </td>
+            <td class="px-6 py-5">
+              <span class="text-gray-700">{{ admin.username }}</span>
             </td>
             <td class="px-6 py-5">
               <span class="text-gray-700">{{ admin.role }}</span>

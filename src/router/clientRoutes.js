@@ -82,6 +82,30 @@ export const clientSettingsRoute = {
   },
 }
 
+export const clientStaffRoute = {
+  path: 'staff',
+  name: 'ClientStaff',
+  component: () => import('@/views/StaffManagementView.vue'),
+  meta: {
+    requiresAuth: true,
+    title: 'Staff',
+    icon: 'Users',
+    category: 'Operations',
+  },
+}
+
+export const clientStaffActivityRoute = {
+  path: 'staff-activity',
+  name: 'ClientStaffActivity',
+  component: () => import('@/views/StaffActivityView.vue'),
+  meta: {
+    requiresAuth: true,
+    title: 'Staff Activity',
+    icon: 'Activity',
+    category: 'Operations',
+  },
+}
+
 export const clientRoutes = [
   clientDashboardRoute,
   clientCategoriesRoute,
@@ -89,5 +113,7 @@ export const clientRoutes = [
   clientMenusRoute,
   clientInventoryRoute,
   clientKiosksManagementRoute,
+  clientStaffRoute,
+  clientStaffActivityRoute,
   clientSettingsRoute,
 ]

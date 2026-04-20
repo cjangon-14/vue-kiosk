@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { PackageOpen, UtensilsCrossed, LayoutList, TrendingUp, AlertCircle } from '@lucide/vue'
 import StatCard from '../components/admin/StatCard.vue'
+import StaffActivityWidget from '../components/admin/StaffActivityWidget.vue'
 import { useAuth } from '../composables/useAuth'
 
 const { getUser } = useAuth()
@@ -209,6 +210,11 @@ onMounted(async () => {
               <span>→</span>
             </router-link>
           </div>
+        </div>
+
+        <!-- Staff Activity -->
+        <div style="animation-delay: 0.3s" class="animate-slide-in">
+          <StaffActivityWidget />
         </div>
       </div>
     </div>

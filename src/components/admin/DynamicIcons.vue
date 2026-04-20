@@ -1,6 +1,7 @@
-<!-- src/components/DynamicIcon.vue -->
+<!-- src/components/admin/DynamicIcons.vue -->
 <script setup lang="ts">
-import { defineAsyncComponent, computed } from 'vue'
+import { computed } from 'vue'
+import * as Icons from '@lucide/vue'
 
 const props = defineProps({
   name: {
@@ -9,14 +10,14 @@ const props = defineProps({
   },
 })
 
-// Dynamically import the SVG component
+// Map icon name to Lucide icon component
 const iconComponent = computed(() => {
   if (!props.name) return null
-  return defineAsyncComponent(() => import(`@/assets/icons/${props.name}.svg`))
+  return Icons[props.name] || null
 })
 </script>
 
 <template>
   <component :is="iconComponent" v-if="iconComponent" v-bind="$attrs" />
-  <span v-else>Icon not found: {{ name }}</span>
+  <span v-else class="text-xs text-gray-500">Icon not found</span>
 </template>
