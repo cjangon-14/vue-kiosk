@@ -41,12 +41,20 @@
       "lastActivity": "2026-04-13T02:15:32.605Z"
     },
     {
-      "id": "VxVIMmgagYQ",
-      "name": "Test",
+      "id": "1_zDA53RYEU",
+      "name": "test",
       "status": "active",
-      "kiosksCount": 999,
-      "adminsCount": 999,
-      "lastActivity": "2026-03-10T03:09:36.390Z"
+      "kiosksCount": 0,
+      "adminsCount": 0,
+      "lastActivity": "2026-04-20T12:52:01.994Z"
+    },
+    {
+      "id": "BQ-n_2nFSc4",
+      "name": "test",
+      "status": "active",
+      "kiosksCount": 0,
+      "adminsCount": 0,
+      "lastActivity": "2026-04-20T12:52:50.372Z"
     }
   ],
   "admins": {
@@ -875,6 +883,108 @@
       "type": "Store Created",
       "description": "New store \"test\" created",
       "timestamp": "2026-04-17T10:20:03.670Z"
+    },
+    {
+      "id": "reeI4SBKh4M",
+      "type": "Store Created",
+      "description": "New store \"test\" created",
+      "timestamp": "2026-04-20T12:22:15.454Z"
+    },
+    {
+      "id": "YuuI_3BFu5I",
+      "type": "Store Created",
+      "description": "New store \"test\" created",
+      "timestamp": "2026-04-20T12:23:43.095Z"
+    },
+    {
+      "id": "i92Wpn0AjXA",
+      "type": "Store Created",
+      "description": "New store \"test\" created",
+      "timestamp": "2026-04-20T12:23:58.272Z"
+    },
+    {
+      "id": "TYZ9o0-iF50",
+      "type": "Store Created",
+      "description": "New store \"asd\" created",
+      "timestamp": "2026-04-20T12:27:42.219Z"
+    },
+    {
+      "id": "AkSapweZNgA",
+      "type": "Store Created",
+      "description": "New store \"asd\" created",
+      "timestamp": "2026-04-20T12:27:47.240Z"
+    },
+    {
+      "id": "8rohbselpKU",
+      "type": "Store Created",
+      "description": "New store \"a\" created",
+      "timestamp": "2026-04-20T12:27:49.484Z"
+    },
+    {
+      "id": "yFxKslvhqwY",
+      "type": "Store Created",
+      "description": "New store \"asd\" created",
+      "timestamp": "2026-04-20T12:27:56.045Z"
+    },
+    {
+      "id": "zOab6VFmTAY",
+      "type": "Store Created",
+      "description": "New store \"test\" created",
+      "timestamp": "2026-04-20T12:34:59.972Z"
+    },
+    {
+      "id": "SluCCHbyzbk",
+      "type": "Store Created",
+      "description": "New store \"asd\" created",
+      "timestamp": "2026-04-20T12:36:39.186Z"
+    },
+    {
+      "id": "NyVWzK-SCS8",
+      "type": "Store Created",
+      "description": "New store \"asd\" created",
+      "timestamp": "2026-04-20T12:37:05.124Z"
+    },
+    {
+      "id": "bsIuAmCjFTw",
+      "type": "Store Created",
+      "description": "New store \"asd\" created",
+      "timestamp": "2026-04-20T12:38:53.780Z"
+    },
+    {
+      "id": "osZO-ry5VD0",
+      "type": "Store Created",
+      "description": "New store \"asd\" created",
+      "timestamp": "2026-04-20T12:41:41.545Z"
+    },
+    {
+      "id": "r4GPhZ2nCjA",
+      "type": "Store Created",
+      "description": "New store \"asd\" created",
+      "timestamp": "2026-04-20T12:42:07.079Z"
+    },
+    {
+      "id": "NUVrzJd3eG4",
+      "type": "Store Created",
+      "description": "New store \"test\" created",
+      "timestamp": "2026-04-20T12:44:58.542Z"
+    },
+    {
+      "id": "RmtZisZ-_7I",
+      "type": "Store Created",
+      "description": "New store \"test\" created",
+      "timestamp": "2026-04-20T12:50:17.861Z"
+    },
+    {
+      "id": "cLoNKY_hy9o",
+      "type": "Store Created",
+      "description": "New store \"test\" created",
+      "timestamp": "2026-04-20T12:52:02.004Z"
+    },
+    {
+      "id": "qcc_i24gm48",
+      "type": "Store Created",
+      "description": "New store \"test\" created",
+      "timestamp": "2026-04-20T12:52:50.383Z"
     }
   ],
   "categories": [
