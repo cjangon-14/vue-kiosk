@@ -1032,6 +1032,12 @@
       "description": "Staff member \"test test\" updated",
       "timestamp": "2026-04-20T15:07:45.325Z",
       "id": "zxKNBKiNQxQ"
+    },
+    {
+      "type": "Login",
+      "description": "User \"admin\" logged in",
+      "timestamp": "2026-04-21T02:36:45.586Z",
+      "id": "Gz9jtewlbKk"
     }
   ],
   "categories": [
@@ -1306,6 +1312,30 @@
       "type": "Staff Updated",
       "description": "test test profile updated",
       "timestamp": "2026-04-20T15:07:45.332Z"
+    },
+    {
+      "id": "d6qRF1HBm5k",
+      "storeId": "1",
+      "staffId": null,
+      "type": "Logout",
+      "description": "User \"john1\" logged out",
+      "timestamp": "2026-04-21T02:24:05.097Z"
+    },
+    {
+      "id": "2qvRFIE43rw",
+      "storeId": "1",
+      "staffId": null,
+      "type": "Login",
+      "description": "User \"john1\" logged in",
+      "timestamp": "2026-04-21T02:24:12.019Z"
+    },
+    {
+      "id": "jOxUBbR4PtY",
+      "storeId": "1",
+      "staffId": null,
+      "type": "Logout",
+      "description": "User \"john1\" logged out",
+      "timestamp": "2026-04-21T02:42:28.854Z"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

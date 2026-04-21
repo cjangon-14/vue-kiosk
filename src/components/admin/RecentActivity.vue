@@ -22,6 +22,8 @@ import {
   Palette,
   RefreshCw,
   Bolt,
+  LogIn,
+  LogOut,
 } from '@lucide/vue'
 import { useFetchData } from '../../composables/useFetchData'
 
@@ -117,6 +119,8 @@ const getActivityColor = (type) => {
     'Color Scheme Changed': 'text-rose-600',
     'Kiosk Maintenance': 'text-red-600',
     'Admin Updated': 'text-teal-600',
+    Login: 'text-green-600',
+    Logout: 'text-orange-600',
   }
   return colorMap[type] || 'text-gray-600'
 }
@@ -143,6 +147,8 @@ const getActivityIcon = (type) => {
     'Inventory Updated': Boxes,
     'Color Scheme Changed': Palette,
     'Kiosk Maintenance': RefreshCw,
+    Login: LogIn,
+    Logout: LogOut,
   }
   return iconMap[type] || null
 }
@@ -169,6 +175,8 @@ const getActivityBgColor = (type) => {
     'Color Scheme Changed': 'bg-rose-50',
     'Kiosk Maintenance': 'bg-red-50',
     'Admin Updated': 'bg-teal-50',
+    Login: 'bg-green-50',
+    Logout: 'bg-orange-50',
   }
   return colorMap[type] || 'bg-gray-50'
 }

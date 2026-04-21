@@ -3,10 +3,12 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../composables/useAuth'
 import { useToast } from '../composables/useToast'
+import { useActivityLog } from '../composables/useActivityLog'
 
 const router = useRouter()
 const { login } = useAuth()
 const { success, error: showError } = useToast()
+const { logUserLoggedIn } = useActivityLog()
 const username = ref('')
 const password = ref('')
 const isLoading = ref(false)
@@ -32,7 +34,10 @@ const handleLogin = async () => {
       const superadminRes = await fetch('http://localhost:3005/superadmin')
       const superadminData = await superadminRes.json()
 
-      if (superadminData.username === username.value && superadminData.password === password.value) {
+      if (
+        superadminData.username === username.value &&
+        superadminData.password === password.value
+      ) {
         isValidUser = true
         adminData = superadminData
       } else {
@@ -77,6 +82,9 @@ const handleLogin = async () => {
 
       // Clear history and navigate
       window.history.pushState(null, null, window.location.href)
+
+      // Log login activity
+      await logUserLoggedIn(adminData.username, adminData.role, storeId)
 
       // Redirect based on role
       success(`Welcome back, ${adminData.firstName}!`)
@@ -156,9 +164,7 @@ const handleKeydown = (e) => {
       </form>
 
       <!-- Footer -->
-      <p class="text-center text-sm text-gray-600 mt-6">
-        Demo credentials: admin / password123
-      </p>
+      <p class="text-center text-sm text-gray-600 mt-6">Demo credentials: admin / password123</p>
     </div>
   </div>
 </template>

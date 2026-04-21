@@ -3,10 +3,10 @@ import { useAuth } from './useAuth'
 export const useActivityLog = () => {
   const { getUser } = useAuth()
 
-  const logActivity = async (type, description) => {
+  const logActivity = async (type, description, allowWithoutUser = false) => {
     try {
       const user = getUser()
-      if (!user) {
+      if (!user && !allowWithoutUser) {
         console.warn('No user found for activity logging')
         return
       }
@@ -74,6 +74,76 @@ export const useActivityLog = () => {
   const logColorSchemeChanged = (schemeName) =>
     logActivity('Color Scheme Changed', `Color scheme changed to "${schemeName}"`)
 
+  const logUserLoggedIn = async (username, role, storeId) => {
+    if (role === 'Super Admin') {
+      // Log to recentActivities for super admin
+      return logActivity('Login', `User "${username}" logged in`, true)
+    } else {
+      // Log to staffActivityLogs for client/staff
+      try {
+        const activityLog = {
+          id: `log_${Date.now()}`,
+          storeId: String(storeId),
+          staffId: null,
+          type: 'Login',
+          description: `User "${username}" logged in`,
+          timestamp: new Date().toISOString(),
+        }
+
+        const res = await fetch('http://localhost:3005/staffActivityLogs', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(activityLog),
+        })
+
+        if (!res.ok) {
+          throw new Error('Failed to log activity')
+        }
+
+        return await res.json()
+      } catch (err) {
+        console.error('Error logging login activity:', err)
+      }
+    }
+  }
+
+  const logUserLoggedOut = async (username, role, storeId) => {
+    if (role === 'Super Admin') {
+      // Log to recentActivities for super admin
+      return logActivity('Logout', `User "${username}" logged out`, true)
+    } else {
+      // Log to staffActivityLogs for client/staff
+      try {
+        const activityLog = {
+          id: `log_${Date.now()}`,
+          storeId: String(storeId),
+          staffId: null,
+          type: 'Logout',
+          description: `User "${username}" logged out`,
+          timestamp: new Date().toISOString(),
+        }
+
+        const res = await fetch('http://localhost:3005/staffActivityLogs', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(activityLog),
+        })
+
+        if (!res.ok) {
+          throw new Error('Failed to log activity')
+        }
+
+        return await res.json()
+      } catch (err) {
+        console.error('Error logging logout activity:', err)
+      }
+    }
+  }
+
   return {
     logActivity,
     logCategoryAdded,
@@ -94,5 +164,7 @@ export const useActivityLog = () => {
     logKioskStatusChanged,
     logKioskDeleted,
     logColorSchemeChanged,
+    logUserLoggedIn,
+    logUserLoggedOut,
   }
 }

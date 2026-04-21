@@ -1,13 +1,15 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ChevronDown, Moon, Sun } from '@lucide/vue'
+import { ChevronDown } from '@lucide/vue'
 import { useAuth } from '../../composables/useAuth'
 import { useDarkMode } from '../../composables/useDarkMode'
+import { useActivityLog } from '../../composables/useActivityLog'
 
 const router = useRouter()
 const { logout, getUser } = useAuth()
-const { isDarkMode, toggleDarkMode, initializeDarkMode } = useDarkMode()
+const { initializeDarkMode } = useDarkMode()
+const { logUserLoggedOut } = useActivityLog()
 const isDropdownOpen = ref(false)
 const dropdownRef = ref(null)
 const currentUser = computed(() => getUser())
@@ -23,8 +25,15 @@ const src = computed(() => {
   return url.href
 })
 
-const handleLogout = () => {
+const handleLogout = async () => {
+  const currentUserData = currentUser.value
   logout()
+
+  // Log logout activity before navigating
+  if (currentUserData?.username) {
+    await logUserLoggedOut(currentUserData.username, currentUserData.role, currentUserData.storeId)
+  }
+
   isDropdownOpen.value = false
   window.history.pushState(null, null, window.location.href)
   router.push('/login')
@@ -103,28 +112,6 @@ onUnmounted(() => {
             class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:cursor-pointer hover:bg-gray-50 transition"
           >
             Help & Support
-          </button>
-
-          <!-- Dark Mode Toggle -->
-          <button
-            @click="toggleDarkMode"
-            class="w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-between gap-3 rounded-lg border-l-4 border-l-transparent hover:border-l-emerald-500 dark:hover:border-l-emerald-400"
-          >
-            <span class="flex items-center gap-2">
-              <span v-if="isDarkMode">☀️</span>
-              <span v-else>🌙</span>
-              {{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}
-            </span>
-            <span
-              v-if="isDarkMode"
-              class="text-xs bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 px-2 py-1 rounded"
-              >On</span
-            >
-            <span
-              v-else
-              class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-1 rounded"
-              >Off</span
-            >
           </button>
         </div>
 
