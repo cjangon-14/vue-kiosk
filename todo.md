@@ -1,4 +1,6 @@
-thursday-fri todo
+fri todo
+
+improve design
 
 -make a backend for the project
 -use laravel

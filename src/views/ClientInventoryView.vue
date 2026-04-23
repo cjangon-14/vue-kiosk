@@ -1,6 +1,15 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { Search, Edit, Trash2, AlertTriangle, Boxes, TrendingDown, ChevronLeft, ChevronRight } from '@lucide/vue'
+import {
+  Search,
+  Edit,
+  Trash2,
+  AlertTriangle,
+  Boxes,
+  TrendingDown,
+  ChevronLeft,
+  ChevronRight,
+} from '@lucide/vue'
 import { useAuth } from '../composables/useAuth'
 import { useActivityLog } from '../composables/useActivityLog'
 import { useToast } from '../composables/useToast'
@@ -335,7 +344,10 @@ const getStockPercentage = (item) => {
         </div>
 
         <!-- Pagination Controls -->
-        <div v-if="!loading && totalPages > 1" class="bg-white rounded-lg border border-gray-200 p-4">
+        <div
+          v-if="!loading && totalPages > 1"
+          class="bg-white rounded-lg border border-gray-200 p-4"
+        >
           <div class="flex items-center justify-between">
             <p class="text-sm text-gray-600">
               Showing <span class="font-semibold">{{ paginatedItems.length }}</span> of
@@ -399,7 +411,7 @@ const getStockPercentage = (item) => {
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Current Quantity</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Current Quantity </label>
               <input
                 v-model.number="formData.quantity"
                 type="number"

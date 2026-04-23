@@ -1,8 +1,10 @@
 # Kiosk Admin Project - Remaining Tasks
 
-## THURSDAY: Laravel Backend Setup & Database Migration
+## THURSDAY: Migrate Local Data to a Laravel API Backend and Database
 
 ### 1. Laravel Project Initialization
+
+✅❌
 
 - [ ] Install XAMPP (if not already installed)
 - [ ] Install Composer (if not already installed)
@@ -65,7 +67,7 @@
 
 ---
 
-## FRIDAY: Frontend Integration & Testing
+## FRIDAY: Vue Frontend Integration with Laravel API and End-to-End Testing
 
 ### 1. Update Vue API Endpoints
 
