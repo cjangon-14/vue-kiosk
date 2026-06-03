@@ -49,6 +49,7 @@ function getMockData(endpoint, options = {}) {
   if (!options.body) {
     if (path === 'stores') return db.stores;
     if (path === 'admins') return db.admins;
+    if (path === 'superadmin') return db.superadmin;
     if (path === 'kiosks') return db.kiosks;
     if (path === 'recentActivities') return db.recentActivities;
     if (path === 'staff') return db.staff;
@@ -167,6 +168,9 @@ export const apiService = {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }),
+
+  // Superadmin
+  getSuperadmin: () => apiCall('/api/superadmin'),
 
   // Kiosks
   getKiosks: () => apiCall('/api/kiosks'),
