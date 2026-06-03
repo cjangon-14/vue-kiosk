@@ -278,10 +278,10 @@ const handleKeydown = (e) => {
               <button
                 type="button"
                 @click="fillDemoCredentials('admin', 'password123')"
-                class="w-full p-4 bg-blue-50 border border-blue-200 rounded-xl hover:bg-blue-100 hover:border-blue-300 transition-all text-left group"
+                class="w-full px-6 py-4 bg-slate-800 border-l-2 border-l-blue-500 rounded-xl hover:bg-slate-700 transition-all text-left group"
               >
-                <p class="text-xs font-semibold text-blue-900 mb-2">Super Admin</p>
-                <p class="text-xs font-mono text-blue-700 group-hover:text-blue-900 font-medium">
+                <p class="text-xs font-semibold text-slate-100 mb-2">Super Admin</p>
+                <p class="text-xs font-mono text-slate-400 group-hover:text-slate-300 font-medium">
                   admin / password123
                 </p>
               </button>
@@ -290,10 +290,10 @@ const handleKeydown = (e) => {
               <button
                 type="button"
                 @click="fillDemoCredentials('john1', 'password123')"
-                class="w-full p-4 bg-emerald-50 border border-emerald-200 rounded-xl hover:bg-emerald-100 hover:border-emerald-300 transition-all text-left group"
+                class="w-full px-6 py-4 bg-slate-800 border-l-2 border-l-emerald-500 rounded-xl hover:bg-slate-700 transition-all text-left group"
               >
-                <p class="text-xs font-semibold text-emerald-900 mb-2">Store Admin (McDonald's)</p>
-                <p class="text-xs font-mono text-emerald-700 group-hover:text-emerald-900 font-medium">
+                <p class="text-xs font-semibold text-slate-100 mb-2">Store Admin (McDonald's)</p>
+                <p class="text-xs font-mono text-slate-400 group-hover:text-slate-300 font-medium">
                   john1 / password123
                 </p>
               </button>
