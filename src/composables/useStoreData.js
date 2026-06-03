@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue'
 import { useAuth } from './useAuth'
 import { useActivityLog } from './useActivityLog'
+import { apiService } from '../api/apiService.js'
 
 const storeData = ref({
   id: null,
@@ -20,12 +21,11 @@ export const useStoreData = () => {
         return
       }
 
-      const res = await fetch('http://localhost:3005/stores')
-      if (!res.ok) {
+      const stores = await apiService.getStores()
+      if (!stores) {
         throw new Error('Failed to fetch stores')
       }
 
-      const stores = await res.json()
       const currentStore = stores.find((s) => s.id === user.storeId)
 
       if (currentStore) {
@@ -47,19 +47,11 @@ export const useStoreData = () => {
         throw new Error('No store ID available')
       }
 
-      const res = await fetch(`http://localhost:3005/stores/${storeData.value.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: newName }),
-      })
-
-      if (!res.ok) {
+      const updatedStore = await apiService.updateStore(storeData.value.id, { name: newName })
+      if (!updatedStore) {
         throw new Error('Failed to update store name')
       }
 
-      const updatedStore = await res.json()
       storeData.value.name = updatedStore.name
 
       // Log activity

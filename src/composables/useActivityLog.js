@@ -1,4 +1,5 @@
 import { useAuth } from './useAuth'
+import { apiService } from '../api/apiService.js'
 
 export const useActivityLog = () => {
   const { getUser } = useAuth()
@@ -11,23 +12,16 @@ export const useActivityLog = () => {
         return
       }
 
-      const res = await fetch('http://localhost:3005/recentActivities', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type,
-          description,
-          timestamp: new Date().toISOString(),
-        }),
+      const result = await apiService.createActivity({
+        type,
+        description,
       })
 
-      if (!res.ok) {
+      if (!result) {
         throw new Error('Failed to log activity')
       }
 
-      return await res.json()
+      return result
     } catch (err) {
       console.error('Error logging activity:', err)
       // Don't throw - activity logging should not break the main operation
@@ -76,33 +70,21 @@ export const useActivityLog = () => {
 
   const logUserLoggedIn = async (username, role, storeId) => {
     if (role === 'Super Admin') {
-      // Log to recentActivities for super admin
       return logActivity('Login', `User "${username}" logged in`, true)
     } else {
-      // Log to staffActivityLogs for client/staff
       try {
         const activityLog = {
-          id: `log_${Date.now()}`,
           storeId: String(storeId),
           staffId: null,
           type: 'Login',
           description: `User "${username}" logged in`,
-          timestamp: new Date().toISOString(),
         }
 
-        const res = await fetch('http://localhost:3005/staffActivityLogs', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(activityLog),
-        })
-
-        if (!res.ok) {
+        const result = await apiService.createStaffActivityLog(activityLog)
+        if (!result) {
           throw new Error('Failed to log activity')
         }
-
-        return await res.json()
+        return result
       } catch (err) {
         console.error('Error logging login activity:', err)
       }
@@ -111,33 +93,21 @@ export const useActivityLog = () => {
 
   const logUserLoggedOut = async (username, role, storeId) => {
     if (role === 'Super Admin') {
-      // Log to recentActivities for super admin
       return logActivity('Logout', `User "${username}" logged out`, true)
     } else {
-      // Log to staffActivityLogs for client/staff
       try {
         const activityLog = {
-          id: `log_${Date.now()}`,
           storeId: String(storeId),
           staffId: null,
           type: 'Logout',
           description: `User "${username}" logged out`,
-          timestamp: new Date().toISOString(),
         }
 
-        const res = await fetch('http://localhost:3005/staffActivityLogs', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(activityLog),
-        })
-
-        if (!res.ok) {
+        const result = await apiService.createStaffActivityLog(activityLog)
+        if (!result) {
           throw new Error('Failed to log activity')
         }
-
-        return await res.json()
+        return result
       } catch (err) {
         console.error('Error logging logout activity:', err)
       }

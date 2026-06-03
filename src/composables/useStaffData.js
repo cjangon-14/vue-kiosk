@@ -2,10 +2,10 @@ import { ref, computed } from 'vue'
 import { useAuth } from './useAuth'
 import { useActivityLog } from './useActivityLog'
 import { useToast } from './useToast'
+import { apiService } from '../api/apiService.js'
 
 const staffList = ref([])
 const staffActivityLogs = ref([])
-let nextStaffId = 1
 
 export const useStaffData = () => {
   const { getUser } = useAuth()
@@ -22,12 +22,11 @@ export const useStaffData = () => {
       }
 
       const storeId = String(user.storeId)
-      const res = await fetch(`http://localhost:3005/staff`)
-      if (!res.ok) {
+      const allData = await apiService.getStaff()
+      if (!allData) {
         throw new Error('Failed to fetch staff')
       }
 
-      const allData = await res.json()
       // Filter by current store ID on client side
       const filteredData = allData.filter(staff => String(staff.storeId) === storeId)
       staffList.value = filteredData
@@ -44,14 +43,11 @@ export const useStaffData = () => {
       if (!user?.storeId) return
 
       const storeId = String(user.storeId)
-      const res = await fetch(
-        `http://localhost:3005/staffActivityLogs`
-      )
-      if (!res.ok) {
+      const allLogs = await apiService.getStaffActivityLogs()
+      if (!allLogs) {
         throw new Error('Failed to fetch staff activity logs')
       }
 
-      const allLogs = await res.json()
       // Filter by store ID on client side
       const filteredLogs = allLogs
         .filter(log => String(log.storeId) === storeId)
@@ -72,25 +68,16 @@ export const useStaffData = () => {
       }
 
       const newStaff = {
-        id: `staff_${Date.now()}`,
         storeId: String(user.storeId),
         status: 'active',
         ...staffData,
       }
 
-      const res = await fetch('http://localhost:3005/staff', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newStaff),
-      })
-
-      if (!res.ok) {
+      const addedStaff = await apiService.createStaff(newStaff)
+      if (!addedStaff) {
         throw new Error('Failed to add staff')
       }
 
-      const addedStaff = await res.json()
       staffList.value.push(addedStaff)
 
       // Log activity
@@ -116,19 +103,11 @@ export const useStaffData = () => {
         throw new Error('No store ID available')
       }
 
-      const res = await fetch(`http://localhost:3005/staff/${staffId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(staffData),
-      })
-
-      if (!res.ok) {
+      const updatedStaff = await apiService.updateStaff(staffId, staffData)
+      if (!updatedStaff) {
         throw new Error('Failed to update staff')
       }
 
-      const updatedStaff = await res.json()
       const index = staffList.value.findIndex((s) => s.id === staffId)
       if (index >= 0) {
         staffList.value[index] = updatedStaff
@@ -160,13 +139,8 @@ export const useStaffData = () => {
         throw new Error('No store ID available')
       }
 
-      const res = await fetch(`http://localhost:3005/staff/${staffId}`, {
-        method: 'DELETE',
-      })
-
-      if (!res.ok) {
-        throw new Error('Failed to delete staff')
-      }
+      // Make the delete request via apiService
+      await apiService.updateStaff(staffId, { deleted: true })
 
       staffList.value = staffList.value.filter((s) => s.id !== staffId)
 
@@ -191,27 +165,17 @@ export const useStaffData = () => {
       if (!user?.storeId) return
 
       const activityLog = {
-        id: `log_${Date.now()}`,
         storeId: String(user.storeId),
         staffId,
         type,
         description,
-        timestamp: new Date().toISOString(),
       }
 
-      const res = await fetch('http://localhost:3005/staffActivityLogs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(activityLog),
-      })
-
-      if (!res.ok) {
+      const log = await apiService.createStaffActivityLog(activityLog)
+      if (!log) {
         throw new Error('Failed to log activity')
       }
 
-      const log = await res.json()
       staffActivityLogs.value.unshift(log)
       return log
     } catch (err) {

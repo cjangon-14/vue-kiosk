@@ -10,13 +10,11 @@
     "lint": "run-s lint:*",
     "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
-    "format": "prettier --write --experimental-cli src/",
-    "server": "json-server --watch db.json --port 3005"
+    "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
     "@lucide/vue": "^1.7.0",
     "@tailwindcss/vite": "^4.2.2",
-    "json-server": "^1.0.0-beta.15",
     "tailwindcss": "^4.2.2",
     "vue": "^3.5.31",
     "vue-router": "^5.0.4"
